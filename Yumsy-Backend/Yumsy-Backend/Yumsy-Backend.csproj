@@ -47,7 +47,6 @@
       <Folder Include="Features\Users\ReportUser\" />
       <Folder Include="Features\Users\SavePost\" />
       <Folder Include="Features\Users\ShareUserProfile\" />
-      <Folder Include="Persistance\" />
       <Folder Include="Persistence\DbContext\" />
       <Folder Include="Persistence\Migrations\" />
       <Folder Include="Persistence\Models\" />
