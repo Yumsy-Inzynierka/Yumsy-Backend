@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Yumsy_Backend</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Comments\GetCommentReplies\" />
+      <Folder Include="Features\Comments\LikeComment\" />
+      <Folder Include="Features\Comments\ReplyToComment\" />
+      <Folder Include="Features\Comments\ReportComment\" />
+      <Folder Include="Features\Ingredients\SearchForIngredient\" />
+      <Folder Include="Features\Posts\ChangePost\" />
+      <Folder Include="Features\Posts\CommentPost\" />
+      <Folder Include="Features\Posts\CreatePost\" />
+      <Folder Include="Features\Posts\DeletePost\" />
+      <Folder Include="Features\Posts\GetAllPosts\" />
+      <Folder Include="Features\Posts\GetPostComments\" />
+      <Folder Include="Features\Posts\GetPostIngredients\" />
+      <Folder Include="Features\Posts\GetPost\" />
+      <Folder Include="Features\Posts\GetRecipeMacro\" />
+      <Folder Include="Features\Posts\GetRecipe\" />
+      <Folder Include="Features\Posts\LikePost\" />
+      <Folder Include="Features\Posts\SearchRecipes\SearchRecipesByTags\" />
+      <Folder Include="Features\Posts\SearchRecipes\SearchRecipesByText\" />
+      <Folder Include="Features\Posts\SearchRecipes\SolveQuiz\" />
+      <Folder Include="Features\SearchRecipes\SearchRecipesByTags\" />
+      <Folder Include="Features\SearchRecipes\SearchRecipesByText\" />
+      <Folder Include="Features\SearchRecipes\SolveQuiz\" />
+      <Folder Include="Features\ShoppingLists\DeleteShoppingList\" />
+      <Folder Include="Features\ShoppingLists\ExportIngredientsToShoppingList\" />
+      <Folder Include="Features\ShoppingLists\GetShoppingList\" />
+      <Folder Include="Features\ShoppingLists\MarkItemInShoppingList\" />
+      <Folder Include="Features\Users\BlockUser\" />
+      <Folder Include="Features\Users\FollowUser\" />
+      <Folder Include="Features\Users\GetProfile\" />
+      <Folder Include="Features\Users\GetUserPosts\" />
+      <Folder Include="Features\Users\Login\" />
+      <Folder Include="Features\Users\Register\" />
+      <Folder Include="Features\Users\ReportUser\" />
+      <Folder Include="Features\Users\SavePost\" />
+      <Folder Include="Features\Users\ShareUserProfile\" />
+      <Folder Include="Persistance\" />
+      <Folder Include="Persistence\DbContext\" />
+      <Folder Include="Persistence\Migrations\" />
+      <Folder Include="Persistence\Models\" />
+      <Folder Include="Shared\AuthServices\" />
+      <Folder Include="Shared\Exceptions\" />
+    </ItemGroup>
+
+</Project>
