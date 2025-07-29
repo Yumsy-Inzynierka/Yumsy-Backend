@@ -2,7 +2,7 @@
 
 public class CreateOrderHandler
 {
-    private readonly AppDbContext _db;
+    /*private readonly AppDbContext _db;
 
     public CreateOrderHandler(AppDbContext db)
     {
@@ -22,5 +22,5 @@ public class CreateOrderHandler
         await _db.SaveChangesAsync(ct);
 
         return new CreateOrderResponse(order.Id);
-    }
+    }*/
 }

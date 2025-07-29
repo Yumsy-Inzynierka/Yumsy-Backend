@@ -8,7 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5"/>
+        <PackageReference Include="FluentValidation" Version="12.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.13.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+        <PackageReference Include="Supabase" Version="1.1.1" />
+        <PackageReference Include="Supabase.Gotrue" Version="6.0.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -42,13 +54,12 @@
       <Folder Include="Features\Users\FollowUser\" />
       <Folder Include="Features\Users\GetProfile\" />
       <Folder Include="Features\Users\GetUserPosts\" />
-      <Folder Include="Features\Users\Login\" />
-      <Folder Include="Features\Users\Register\" />
+      <Folder Include="Features\Users\Logout\" />
       <Folder Include="Features\Users\ReportUser\" />
       <Folder Include="Features\Users\SavePost\" />
       <Folder Include="Features\Users\ShareUserProfile\" />
       <Folder Include="Persistence\DbContext\" />
-      <Folder Include="Persistence\Migrations\" />
+      <Folder Include="Persistence\Modele\" />
       <Folder Include="Persistence\Models\" />
       <Folder Include="Shared\AuthServices\" />
       <Folder Include="Shared\Exceptions\" />
