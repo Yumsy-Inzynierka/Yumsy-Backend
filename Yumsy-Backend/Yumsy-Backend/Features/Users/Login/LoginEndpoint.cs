@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Supabase.Postgrest.Exceptions;
 
 namespace Yumsy_Backend.Features.Users.Login;
 
@@ -19,15 +21,28 @@ public class LoginEndpoint : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Handle([FromBody] LoginRequest request)
     {
-        var validation = await _validator.ValidateAsync(request);
-        if (!validation.IsValid)
-            return BadRequest(validation.Errors);
-
-        LoginResponse response = await _handler.Handle(request);
-
-        if (!response.Success || response == null)
-            return Unauthorized(new { error = response.Message });
-
-        return Ok(response);
+        try
+        {
+            var validationResult = await _validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+            }
+            LoginResponse response = await _handler.Handle(request);
+            
+            return Ok(response);
+        }
+        catch (PostgrestException ex)
+        {
+            return StatusCode(502, new { error = $"Supabase error: {ex.Message}" });
+        }
+        catch (DbUpdateException ex)
+        {
+            return StatusCode(500, new { error = $"Database error: {ex.Message}" });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 }

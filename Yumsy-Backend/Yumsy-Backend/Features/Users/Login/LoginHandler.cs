@@ -1,63 +1,47 @@
-﻿
-using User = Yumsy_Backend.Persistence.Models.User;
+﻿using Microsoft.EntityFrameworkCore;
+using Yumsy_Backend.Persistence.DbContext;
 
 namespace Yumsy_Backend.Features.Users.Login;
 
 public class LoginHandler
 {
-    private readonly Supabase.Client _client;
+    private readonly Supabase.Client _supabaseClient;
+    private readonly SupabaseDbContext _dbContext;
 
-    public LoginHandler(Supabase.Client client)
+    public LoginHandler(Supabase.Client supabaseClient, SupabaseDbContext dbContext)
     {
-        _client = client;
+        _supabaseClient = supabaseClient;
+        _dbContext = dbContext;
     }
 
     public async Task<LoginResponse> Handle(LoginRequest request)
     {
-        await _client.InitializeAsync();
+        await _supabaseClient.InitializeAsync(); 
 
-        // 1. Próba zalogowania
-        var signInResult = await _client.Auth.SignIn(
+        var signInResult = await _supabaseClient.Auth.SignIn(
             email: request.Email,
             password: request.Password
         );
 
         if (signInResult.User == null)
-        {
-            return new LoginResponse
-            {
-                Success = false,
-                Message = "Invalid credentials"
-            };
-        }
+            throw new ArgumentException("Invalid email or password");
 
-        var userId = signInResult.User.Id;
+        if (!Guid.TryParse(signInResult.User.Id, out Guid userId))
+            throw new ArgumentException("Invalid user ID format from auth provider");
 
-        // 2. Pobranie użytkownika z tabeli (np. "users")
-        var userQuery = await _client.From<User>()
-            .Where(u => u.Id == Guid.Parse(userId))
-            .Get();
-
-        var user = userQuery.Models.FirstOrDefault();
+        var user = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
-        {
-            return new LoginResponse
-            {
-                Success = false,
-                Message = "User not found"
-            };
-        }
+            throw new ArgumentException("User not found in database");
 
-        // 3. Zwróć odpowiedź
         return new LoginResponse
         {
-            Success = true,
-            Message = "Login successful",
             AccessToken = signInResult.AccessToken,
             RefreshToken = signInResult.RefreshToken,
             Email = user.Email,
-            ProfileName = user.Username,
+            UserName = user.Username,
             Role = user.Role
         };
     }
