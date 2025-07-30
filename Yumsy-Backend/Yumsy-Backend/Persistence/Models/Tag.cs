@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Supabase.Postgrest.Models;
 
-namespace Yumsy_Backend.Persistence.Models;
+namespace Yumsy_Backend.Persistence.Modele;
 
-public partial class Tag : BaseModel
+public partial class Tag
 {
     public Guid Id { get; set; }
 
