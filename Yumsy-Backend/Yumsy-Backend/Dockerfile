@@ -4,9 +4,10 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["Yumsy-Backend.csproj", "./"]
-RUN dotnet restore "Yumsy-Backend.csproj"
+COPY ["Yumsy-Backend/Yumsy-Backend.csproj", "Yumsy-Backend/"]
+RUN dotnet restore "Yumsy-Backend/Yumsy-Backend.csproj"
 COPY . .
+WORKDIR "/src/Yumsy-Backend"
 RUN dotnet build "Yumsy-Backend.csproj" -c Release -o /app/build
 
 FROM build AS publish
