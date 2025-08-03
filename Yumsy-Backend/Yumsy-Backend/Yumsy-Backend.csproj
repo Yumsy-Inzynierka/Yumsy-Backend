@@ -59,7 +59,6 @@
       <Folder Include="Features\Users\SavePost\" />
       <Folder Include="Features\Users\ShareUserProfile\" />
       <Folder Include="Persistence\DbContext\" />
-      <Folder Include="Persistence\Modele\" />
       <Folder Include="Persistence\Models\" />
       <Folder Include="Shared\AuthServices\" />
       <Folder Include="Shared\Exceptions\" />
