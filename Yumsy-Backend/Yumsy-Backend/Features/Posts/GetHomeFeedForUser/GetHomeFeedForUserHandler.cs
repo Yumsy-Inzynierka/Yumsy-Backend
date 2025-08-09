@@ -24,10 +24,11 @@ public class GetHomeFeedForUserHandler
         var posts = await _context.Posts
             .Include(p => p.CreatedByNavigation)
             .Include(p => p.Photos)
-            .OrderBy(x => Guid.NewGuid())
+            .OrderBy(x => Guid.NewGuid()) //pseudo-losowe wybieranie postów
             .Take(10)
             .Select(p => new GetHomeFeedForUserPostDto()
             {
+                Id = p.Id,
                 PostTitle = p.Title,
                 UserId = p.CreatedBy,
                 Username = p.CreatedByNavigation.Username,
