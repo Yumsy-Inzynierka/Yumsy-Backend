@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Yumsy_Backend.Features.Posts.GetPost;
+using Yumsy_Backend.Features.Posts.GetHomeFeed;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Persistence.DbContext;
@@ -42,6 +43,9 @@ builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
 builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostValidator>();
 
+builder.Services.AddScoped<GetHomeFeedForUserHandler>();
+builder.Services.AddScoped<GetHomeFeedForUserValidator>();
+
 // Konfiguracja uwierzytelniania JWT z Supabase
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -65,10 +69,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Yumsy API V1");
+        c.RoutePrefix = "swagger";
+    });
 }
 
 app.UseAuthentication();
