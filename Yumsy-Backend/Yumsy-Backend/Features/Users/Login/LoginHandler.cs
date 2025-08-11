@@ -38,6 +38,7 @@ public class LoginHandler
 
         return new LoginResponse
         {
+            UserId = user.Id,
             AccessToken = signInResult.AccessToken,
             RefreshToken = signInResult.RefreshToken,
             Email = user.Email,

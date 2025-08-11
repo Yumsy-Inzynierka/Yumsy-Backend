@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class Ingredient
+[Table("ingredient")]
+public class Ingredient
 {
+    [Key]
     public Guid Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
     public string? Brand { get; set; }
 
@@ -29,7 +31,7 @@ public partial class Ingredient
 
     public int SearchCount { get; set; }
 
-    public virtual ICollection<IngredientPost> IngredientPosts { get; set; } = new List<IngredientPost>();
+    public ICollection<IngredientPost> IngredientPosts { get; set; } = new HashSet<IngredientPost>();
 
-    public virtual ICollection<IngredientShoppingList> IngredientShoppingLists { get; set; } = new List<IngredientShoppingList>();
+    public ICollection<IngredientShoppingList> IngredientShoppingLists { get; set; } = new HashSet<IngredientShoppingList>();
 }

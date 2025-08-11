@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class Tag
+[Table("tag")]
+public class Tag
 {
+    [Key]
     public Guid Id { get; set; }
 
+    [MaxLength(50)]
     public string Name { get; set; } = null!;
 
+    [MaxLength(300)]
     public string? Emote { get; set; }
 
-    public virtual ICollection<QuizQuestion> QuizQuestions { get; set; } = new List<QuizQuestion>();
+    public ICollection<QuizQuestion> QuizQuestions { get; set; } = new HashSet<QuizQuestion>();
 
-    public virtual ICollection<RecommendationTag> RecommendationTags { get; set; } = new List<RecommendationTag>();
+    public ICollection<RecommendationTag> RecommendationTags { get; set; } = new HashSet<RecommendationTag>();
 
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+    public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();
 }

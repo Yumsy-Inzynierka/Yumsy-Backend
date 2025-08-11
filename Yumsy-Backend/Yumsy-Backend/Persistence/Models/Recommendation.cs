@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class Recommendation
+[Table("recommendation")]
+public class Recommendation
 {
+    [Key]
     public Guid Id { get; set; }
 
     public Guid UserId { get; set; }
 
-    public virtual ICollection<RecommendationTag> RecommendationTags { get; set; } = new List<RecommendationTag>();
-
-    public virtual User User { get; set; } = null!;
+    public ICollection<RecommendationTag> RecommendationTags { get; set; } = new HashSet<RecommendationTag>();
+    
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
 }

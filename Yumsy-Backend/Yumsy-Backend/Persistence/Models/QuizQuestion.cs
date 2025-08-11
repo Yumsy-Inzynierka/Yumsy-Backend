@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class QuizQuestion
+[Table("quiz_question")]
+public class QuizQuestion
 {
+    [Key]
     public Guid Id { get; set; }
 
-    public string Description { get; set; } = null!;
+    [MaxLength(100)]
+    public string Description { get; set; }
 
-    public string Name { get; set; } = null!;
+    [MaxLength(40)]
+    public string Name { get; set; }
 
     public Guid TagId { get; set; }
-
-    public virtual Tag Tag { get; set; } = null!;
+    
+    [ForeignKey(nameof(TagId))]
+    public Tag Tag { get; set; }
 }

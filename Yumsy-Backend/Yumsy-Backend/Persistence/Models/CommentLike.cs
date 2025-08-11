@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class CommentLike
+[Table("comment_like")]
+public class CommentLike
 {
+    [Key]
     public Guid Id { get; set; }
 
     public Guid UserId { get; set; }
 
     public Guid CommentId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public virtual Comment Comment { get; set; } = null!;
+    [ForeignKey(nameof(CommentId))]
+    public Comment Comment { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
 }

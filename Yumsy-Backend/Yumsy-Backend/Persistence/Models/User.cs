@@ -1,18 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class User
+[Table("user")]
+public class User
 {
+    [Key]
     public Guid Id { get; set; }
 
-    public string Email { get; set; } = null!;
-
-    public string Username { get; set; } = null!;
+    [EmailAddress]
+    [MaxLength(320)]
+    public string Email { get; set; }
+    
+    [MaxLength(20)]
+    public string Username { get; set; }
+    
+    [MaxLength(20)]
 
     public string? ProfileName { get; set; }
-
+    
+    [MaxLength(20)]
     public string? ProfilePicture { get; set; }
 
     public string? Bio { get; set; }
@@ -23,25 +31,24 @@ public partial class User
 
     public int RecipesCount { get; set; }
 
-    public DateTime RegistrationDate { get; set; }
+    public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
 
-    public string Role { get; set; } = null!;
+    [MaxLength(20)]
+    public string Role { get; set; }
 
-    public virtual ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
+    public ICollection<CommentLike> CommentLikes { get; set; } = new HashSet<CommentLike>();
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
-    public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
+    public ICollection<Like> Likes { get; set; } = new HashSet<Like>();
 
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+    public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
 
-    public virtual ICollection<Recommendation> Recommendations { get; set; } = new List<Recommendation>();
+    public ICollection<Recommendation> Recommendations { get; set; } = new HashSet<Recommendation>();
 
-    public virtual ICollection<ShoppingList> ShoppingLists { get; set; } = new List<ShoppingList>();
+    public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
+    
+    public ICollection<UserFollower> Followers { get; set; } = new HashSet<UserFollower>();
 
-    public virtual ICollection<Post> PostsNavigation { get; set; } = new List<Post>();
-
-    public virtual ICollection<User> UserFolloweds { get; set; } = new List<User>();
-
-    public virtual ICollection<User> UserFollowings { get; set; } = new List<User>();
+    public ICollection<UserFollower> Followings { get; set; } = new HashSet<UserFollower>();
 }

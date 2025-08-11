@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Yumsy_Backend.Persistence.DbContext;
-using Yumsy_Backend.Persistence.Modele;
+﻿using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Persistence.Models;
 
 namespace Yumsy_Backend.Features.Users.Register;
 
@@ -30,8 +29,7 @@ public class RegisterHandler
             throw new ArgumentException("Failed to register user in Supabase Auth");
         
         var userId = Guid.Parse(signUpResult.User.Id);
-        var registrationDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
-
+        
         var user = new User
         {
             Id = userId,
@@ -41,7 +39,6 @@ public class RegisterHandler
             FollowersCount = 0,
             FollowingCount = 0,
             RecipesCount = 0,
-            RegistrationDate = registrationDate
         };
         
         _dbContext.Users.Add(user);
