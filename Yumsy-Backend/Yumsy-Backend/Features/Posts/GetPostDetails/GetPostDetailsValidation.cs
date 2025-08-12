@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Yumsy_Backend.Features.Posts.GetPost;
+namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
 public class GetPostValidator : AbstractValidator<GetPostDetailsRequest>
 {

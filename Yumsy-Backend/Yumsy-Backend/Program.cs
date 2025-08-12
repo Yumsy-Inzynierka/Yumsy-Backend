@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Yumsy_Backend.Features.Posts.GetPost;
+using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Register;
@@ -38,13 +38,14 @@ builder.Services.AddSingleton(provider =>
 // Rejestracja handlerów i walidatorów
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
+builder.Services.AddScoped<GetPostDetailsHandler>();
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
 builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostValidator>();
 
-builder.Services.AddScoped<GetHomeFeedForUserHandler>();
-builder.Services.AddScoped<GetHomeFeedForUserValidator>();
+//builder.Services.AddScoped<GetHomeFeedForUserHandler>();
+//builder.Services.AddScoped<GetHomeFeedForUserValidator>();
 
 // Konfiguracja uwierzytelniania JWT z Supabase
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

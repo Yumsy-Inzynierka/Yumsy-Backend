@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Yumsy_Backend.Features.Posts.GetPost;
+namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class GetPostDetailsEndpoint : ControllerBase
@@ -20,10 +20,11 @@ public class GetPostDetailsEndpoint : ControllerBase
     
     [HttpGet]
     [Route("{postId}")]
-    public async Task<IActionResult> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
+    public async Task<IActionResult> Handle([FromRoute] GetPostDetailsRequest detailsRequest, CancellationToken cancellationToken)
     {
         try
         {
+            Console.WriteLine("Dupa");
             var validationResult = await _validator.ValidateAsync(detailsRequest);
             if (!validationResult.IsValid)
             {

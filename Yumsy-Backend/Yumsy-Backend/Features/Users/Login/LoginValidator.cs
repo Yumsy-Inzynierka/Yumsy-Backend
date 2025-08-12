@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-
 namespace Yumsy_Backend.Features.Users.Login;
 
 public class LoginValidator : AbstractValidator<LoginRequest>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Posts.GetPost;
+namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
 public class GetPostDetailsHandler
 {

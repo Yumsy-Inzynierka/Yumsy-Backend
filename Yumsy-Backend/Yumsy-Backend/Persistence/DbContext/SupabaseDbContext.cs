@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.Models;
 
+
 namespace Yumsy_Backend.Persistence.DbContext;
 
 public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
