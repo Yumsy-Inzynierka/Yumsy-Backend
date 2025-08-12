@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class IngredientShoppingList
+[Table("ingredient_shopping_list")]
+[PrimaryKey(nameof(IngredientId), nameof(ShoppingListId))]
+public class IngredientShoppingList
 {
     public Guid ShoppingListId { get; set; }
-
     public Guid IngredientId { get; set; }
 
     public int Quantity { get; set; }
+    
+    [ForeignKey(nameof(IngredientId))]
+    public Ingredient Ingredient { get; set; }
 
-    public virtual Ingredient Ingredient { get; set; } = null!;
-
-    public virtual ShoppingList ShoppingList { get; set; } = null!;
+    [ForeignKey(nameof(ShoppingListId))]
+    public ShoppingList ShoppingList { get; set; }
 }

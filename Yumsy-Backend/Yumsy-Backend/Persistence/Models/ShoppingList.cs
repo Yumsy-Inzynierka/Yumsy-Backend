@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class ShoppingList
+[Table("shopping_list")]
+public class ShoppingList
 {
+    [Key]
     public Guid Id { get; set; }
 
-    public string Title { get; set; } = null!;
+    [MaxLength(50)]
+    public string Title { get; set; }
 
     public Guid UserId { get; set; }
 
-    public Guid CreatedFrom { get; set; }
+    public Guid CreatedFromId { get; set; }
+    
+    [ForeignKey(nameof(CreatedFromId))]
+    public Post CreatedFrom { get; set; }
 
-    public virtual Post CreatedFromNavigation { get; set; } = null!;
-
-    public virtual ICollection<IngredientShoppingList> IngredientShoppingLists { get; set; } = new List<IngredientShoppingList>();
-
-    public virtual User User { get; set; } = null!;
+    public ICollection<IngredientShoppingList> IngredientShoppingLists { get; set; } = new HashSet<IngredientShoppingList>();
+    
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
 }

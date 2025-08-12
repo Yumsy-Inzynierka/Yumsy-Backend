@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class Post
+[Table("post")]
+public class Post
 {
+    [Key]
     public Guid Id { get; set; }
+    
+    [MaxLength(50)]
+    public string Title { get; set; }
 
-    public string Title { get; set; } = null!;
-
-    public DateTime PostedDate { get; set; }
+    public DateTime PostedDate { get; set; } = DateTime.UtcNow;
+    [MaxLength(400)]
+    public string Description { get; set; }
+    public int CookingTime { get; set; }
 
     public int LikesCount { get; set; }
 
@@ -18,24 +24,22 @@ public partial class Post
     public int SavedCount { get; set; }
 
     public int SharedCount { get; set; }
+    public Guid UserId { get; set; }
+    
+    [ForeignKey(nameof(UserId))]
+    public User CreatedBy { get; set; }
 
-    public Guid CreatedBy { get; set; }
+    public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+    
+    public ICollection<IngredientPost> IngredientPosts { get; set; } = new HashSet<IngredientPost>();
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public ICollection<Like> Likes { get; set; } = new HashSet<Like>();
 
-    public virtual User CreatedByNavigation { get; set; } = null!;
+    public ICollection<Photo> Photos { get; set; } = new HashSet<Photo>();
 
-    public virtual ICollection<IngredientPost> IngredientPosts { get; set; } = new List<IngredientPost>();
+    public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
 
-    public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
+    public ICollection<Step> Steps { get; set; } = new HashSet<Step>();
 
-    public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
-
-    public virtual ICollection<ShoppingList> ShoppingLists { get; set; } = new List<ShoppingList>();
-
-    public virtual ICollection<Step> Steps { get; set; } = new List<Step>();
-
-    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
-
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public ICollection<PostTag> posttags { get; set; } = new HashSet<PostTag>();
 }

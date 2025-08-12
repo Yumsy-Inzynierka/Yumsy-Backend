@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class IngredientPost
+[Table("ingredient_post")]
+[PrimaryKey(nameof(IngredientId), nameof(PostId))]
+public class IngredientPost
 {
     public Guid PostId { get; set; }
-
     public Guid IngredientId { get; set; }
 
     public int Quantity { get; set; }
-
-    public virtual Ingredient Ingredient { get; set; } = null!;
-
-    public virtual Post Post { get; set; } = null!;
+    
+    [ForeignKey(nameof(IngredientId))]
+    public Ingredient Ingredient { get; set; }
+    
+    [ForeignKey(nameof(PostId))]
+    public Post Post { get; set; }
 }

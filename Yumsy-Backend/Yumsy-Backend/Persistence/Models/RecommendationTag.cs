@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class RecommendationTag
+[Table("recommendation_tag")]
+[PrimaryKey(nameof(RecommendationId), nameof(TagId))]
+public class RecommendationTag
 {
     public Guid RecommendationId { get; set; }
-
     public Guid TagId { get; set; }
 
     public int Count { get; set; }
 
-    public virtual Recommendation Recommendation { get; set; } = null!;
+    [ForeignKey(nameof(RecommendationId))]
+    public Recommendation Recommendation { get; set; }
 
-    public virtual Tag Tag { get; set; } = null!;
+    [ForeignKey(nameof(TagId))]
+    public Tag Tag { get; set; }
 }

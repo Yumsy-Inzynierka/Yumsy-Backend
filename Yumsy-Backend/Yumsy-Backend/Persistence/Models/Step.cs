@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Yumsy_Backend.Persistence.Modele;
+namespace Yumsy_Backend.Persistence.Models;
 
-public partial class Step
+[Table("step")]
+public class Step
 {
+    [Key]
     public Guid Id { get; set; }
 
-    public string Description { get; set; } = null!;
-
-    public Guid PostId { get; set; }
-
-    public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
-
-    public virtual Post Post { get; set; } = null!;
+    [MaxLength(300)]
+    public string Description { get; set; }
+    public int StepNumber { get; set; }
+    public Photo? Photo { get; set; }
 }
