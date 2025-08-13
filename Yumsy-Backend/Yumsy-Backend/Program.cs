@@ -80,6 +80,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     });
 }
 
+app.UseGlobalExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 
