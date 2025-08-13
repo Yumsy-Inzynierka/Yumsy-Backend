@@ -21,7 +21,7 @@ public class GetPostDetailsHandler
             .FirstOrDefaultAsync(p => p.Id == detailsRequest.PostId);
 
         if (post == null)
-            throw new ArgumentException("Post does not exist");
+            throw new KeyNotFoundException("Post does not exist");
 
         var ingredients = await _dbContext.IngredientPosts
             .Where(ip => ip.PostId == detailsRequest.PostId)
@@ -110,6 +110,7 @@ public class GetPostDetailsHandler
             PostId = post.Id,
             Title = post.Title,
             CookingTime = post.CookingTime,
+            Description = post.Description,
             Ingredients = ingredientResponses,
             Calories = totalCalories,
             Fats = totalFats,

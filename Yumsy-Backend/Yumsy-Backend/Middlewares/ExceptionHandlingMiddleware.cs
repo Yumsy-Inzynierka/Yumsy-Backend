@@ -46,7 +46,7 @@ public class ExceptionHandlingMiddleware
             SecurityException => (int)HttpStatusCode.Forbidden,              // Użytkownik zalogowany, ale brak mu uprawnień
 
             // 404 - Nie znaleziono zasobu
-            KeyNotFoundException => (int)HttpStatusCode.NotFound,            // Brak elementu w kolekcji
+            KeyNotFoundException => (int)HttpStatusCode.NotFound,            // Brak elementu w kolekcji np. nie ma takiego usera w bazie 
 
             // 409 - Konflikt stanu
             InvalidOperationException => (int)HttpStatusCode.Conflict,       // Operacja w niepoprawnym stanie (coś ogólnie można zrobić ale nie w danym stanie obiektu)

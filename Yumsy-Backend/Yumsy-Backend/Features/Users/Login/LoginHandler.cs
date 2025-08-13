@@ -27,14 +27,14 @@ public class LoginHandler
             throw new ArgumentException("Invalid email or password");
 
         if (!Guid.TryParse(signInResult.User.Id, out Guid userId))
-            throw new ArgumentException("Invalid user ID format from auth provider");
+            throw new FormatException("Invalid user ID format from auth provider");
 
         var user = await _dbContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
-            throw new ArgumentException("User not found in database");
+            throw new KeyNotFoundException("User not found in database");
 
         return new LoginResponse
         {

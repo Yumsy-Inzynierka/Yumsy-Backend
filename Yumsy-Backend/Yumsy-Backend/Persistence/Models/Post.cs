@@ -38,7 +38,6 @@ public class Post
     public ICollection<Photo> Photos { get; set; } = new HashSet<Photo>();
 
     public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
-
     public ICollection<Step> Steps { get; set; } = new HashSet<Step>();
 
     public ICollection<PostTag> posttags { get; set; } = new HashSet<PostTag>();
