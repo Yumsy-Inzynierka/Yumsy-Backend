@@ -1,4 +1,4 @@
-/*using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Shared;
 
@@ -22,7 +22,7 @@ public class GetHomeFeedForUserHandler
         var userId = Guid.Parse(request.UserId);
 
         var posts = await _context.Posts
-            .Include(p => p.CreatedByNavigation)
+            .Include(p => p.CreatedBy)
             .Include(p => p.Photos)
             .OrderBy(x => Guid.NewGuid()) //pseudo-losowe wybieranie postów
             .Take(10)
@@ -30,9 +30,9 @@ public class GetHomeFeedForUserHandler
             {
                 Id = p.Id,
                 PostTitle = p.Title,
-                UserId = p.CreatedBy,
-                Username = p.CreatedByNavigation.Username,
-                ImageURL = ImageHelper.DummyImageUrl,
+                UserId = p.UserId,
+                Username = p.CreatedBy.Username,
+                ImageURL = p.Photos.First().ImageUrl,
                 TimePosted = p.PostedDate
             })
             .ToListAsync(cancellationToken);
@@ -42,4 +42,4 @@ public class GetHomeFeedForUserHandler
             Posts = posts
         };
     }
-} */
+} 
