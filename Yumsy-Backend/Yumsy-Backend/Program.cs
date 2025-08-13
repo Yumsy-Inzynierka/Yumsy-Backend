@@ -44,8 +44,8 @@ builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
 builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostValidator>();
 
-//builder.Services.AddScoped<GetHomeFeedForUserHandler>();
-//builder.Services.AddScoped<GetHomeFeedForUserValidator>();
+builder.Services.AddScoped<GetHomeFeedForUserHandler>();
+builder.Services.AddScoped<GetHomeFeedForUserValidator>();
 
 // Konfiguracja uwierzytelniania JWT z Supabase
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
