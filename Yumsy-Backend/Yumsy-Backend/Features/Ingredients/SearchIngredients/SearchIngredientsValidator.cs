@@ -3,9 +3,9 @@ using Yumsy_Backend.Features.Posts.GetHomeFeed;
 
 namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
 
-public class SearchIngredientValidator : AbstractValidator<SearchIngredientsRequest>
+public class SearchIngredientsValidator : AbstractValidator<SearchIngredientsRequest>
 {
-    public SearchIngredientValidator()
+    public SearchIngredientsValidator()
     {
         RuleFor(x => x.Query)
             .NotEmpty()

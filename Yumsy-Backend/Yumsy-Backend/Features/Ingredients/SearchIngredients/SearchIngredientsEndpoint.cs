@@ -8,9 +8,9 @@ namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
 public class SearchIngredientsEndpoint : ControllerBase
 {
     private readonly SearchIngredientsHandler _handler;
-    private readonly SearchIngredientValidator _validator;
+    private readonly SearchIngredientsValidator _validator;
 
-    public SearchIngredientsEndpoint(SearchIngredientsHandler handler, SearchIngredientValidator validator)
+    public SearchIngredientsEndpoint(SearchIngredientsHandler handler, SearchIngredientsValidator validator)
     {
         _handler = handler;
         _validator = validator;
