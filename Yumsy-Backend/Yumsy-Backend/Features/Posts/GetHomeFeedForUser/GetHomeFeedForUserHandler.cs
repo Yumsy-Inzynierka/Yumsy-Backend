@@ -15,9 +15,6 @@ public class GetHomeFeedForUserHandler
 
     public async Task<GetHomeFeedForUserResponse> Handle(GetHomeFeedForUserRequest request, CancellationToken cancellationToken)
     {
-        // dokonczyc logike pobierania postów z bazy danych 
-        //_context.get...
-
         //dodać logikę pobierania postów dla danego użytkownika
         var userId = Guid.Parse(request.UserId);
 
@@ -26,7 +23,7 @@ public class GetHomeFeedForUserHandler
             .Include(p => p.Photos)
             .OrderBy(x => Guid.NewGuid()) //pseudo-losowe wybieranie postów
             .Take(10)
-            .Select(p => new GetHomeFeedForUserPostDto()
+            .Select(p => new GetHomeFeedForUserPost()
             {
                 Id = p.Id,
                 PostTitle = p.Title,
