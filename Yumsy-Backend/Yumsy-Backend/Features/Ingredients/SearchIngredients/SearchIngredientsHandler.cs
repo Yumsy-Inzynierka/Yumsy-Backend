@@ -18,6 +18,7 @@ public class SearchIngredientsHandler
         const int pageSize = 20;
         
         var ingredients = await _context.Ingredients
+            .Where(i => i.Name.Contains(request.Query))
             .OrderByDescending(i => i.SearchCount)
             .Skip(request.Offset)
             .Take(pageSize + 1)

@@ -1,29 +1,29 @@
 ﻿namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-public class GetPostDetailsResponse
+public record GetPostDetailsResponse
 {
-    public Guid PostId { get; set; }
-    public string Title { get; set; }
-    public int CookingTime { get; set; }
-    public string Description { get; set; } 
-    public IEnumerable<GetPostIngredientResponse> Ingredients { get; set; }
-    public decimal Calories { get; set; }
-    public decimal Fats { get; set; }
-    public decimal Carbohydrates { get; set; }
-    public decimal? Fiber { get; set; }
-    public decimal? Sugars { get; set; }
-    public decimal Protein { get; set; }
-    public decimal? Salt { get; set; }
-    public IEnumerable<GetPostRecipeStepResponse> RecipeSteps { get; set; }
+    public Guid PostId { get; init; }
+    public string Title { get; init; }
+    public int CookingTime { get; init; }
+    public string Description { get; init; } 
+    public IEnumerable<GetPostIngredientResponse> Ingredients { get; init; }
+    public decimal Calories { get; init; }
+    public decimal Fats { get; init; }
+    public decimal Carbohydrates { get; init; }
+    public decimal? Fiber { get; init; }
+    public decimal? Sugars { get; init; }
+    public decimal Protein { get; init; }
+    public decimal? Salt { get; init; }
+    public IEnumerable<GetPostRecipeStepResponse> RecipeSteps { get; init; }
 }
-public class GetPostIngredientResponse
+public record GetPostIngredientResponse
 {
-    public int Quantity { get; set; }
-    public string Name { get; set; } 
+    public int Quantity { get; init; }
+    public string Name { get; init; } 
 }
-public class GetPostRecipeStepResponse
+public record GetPostRecipeStepResponse
 {
-    public int StepNumber { get; set; }
-    public string Description { get; set; }
-    public string PhotoUrl { get; set; }
+    public int StepNumber { get; init; }
+    public string Description { get; init; }
+    public string PhotoUrl { get; init; }
 }

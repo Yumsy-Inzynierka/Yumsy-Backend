@@ -1,17 +1,17 @@
 namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
 
-public class GetHomeFeedForUserResponse
+public record GetHomeFeedForUserResponse
 {
-    public List<GetHomeFeedForUserPost> Posts { get; set; }
+    public List<GetHomeFeedForUserPostResponse> Posts { get; init; }
     
 }
 
-public record GetHomeFeedForUserPost
+public record GetHomeFeedForUserPostResponse
 {
-    public Guid Id { get; set; }
-    public string PostTitle { get; set; }
-    public Guid UserId { get; set; }
-    public string Username { get; set; }
-    public string ImageURL { get; set; }
-    public DateTime TimePosted { get; set; }
+    public Guid Id { get; init; }
+    public string PostTitle { get; init; }
+    public Guid UserId { get; init; }
+    public string Username { get; init; }
+    public string ImageURL { get; init; }
+    public DateTime TimePosted { get; init; }
 }

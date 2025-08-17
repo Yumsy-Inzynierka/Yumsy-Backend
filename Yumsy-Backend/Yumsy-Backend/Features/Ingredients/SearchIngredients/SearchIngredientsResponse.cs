@@ -1,15 +1,15 @@
 namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
 
-public class SearchIngredientsResponse
+public record SearchIngredientsResponse
 {
-    public List<SearchIngredientResponse> Ingredients { get; set; }
-    public int Offset { get; set; }
-    public bool HasMore { get; set; }
+    public List<SearchIngredientResponse> Ingredients { get; init; }
+    public int Offset { get; init; }
+    public bool HasMore { get; init; }
 }
 
-public class SearchIngredientResponse
+public record SearchIngredientResponse
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public decimal EnergyKcal100g { get; set; }
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public decimal EnergyKcal100g { get; init; }
 }

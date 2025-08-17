@@ -23,7 +23,7 @@ public class GetHomeFeedForUserHandler
             .Include(p => p.Photos)
             .OrderBy(x => Guid.NewGuid()) //pseudo-losowe wybieranie postów
             .Take(10)
-            .Select(p => new GetHomeFeedForUserPost()
+            .Select(p => new GetHomeFeedForUserPostResponse()
             {
                 Id = p.Id,
                 PostTitle = p.Title,

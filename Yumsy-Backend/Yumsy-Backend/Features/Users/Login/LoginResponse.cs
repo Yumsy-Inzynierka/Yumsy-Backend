@@ -1,12 +1,12 @@
 ﻿namespace Yumsy_Backend.Features.Users.Login;
 
-public class LoginResponse
+public record LoginResponse
 {
-    public Guid UserId { get; set; }
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-    public string Role { get; set; }
-    public string Email { get; set; }
-    public string UserName { get; set; }
+    public Guid UserId { get; init; }
+    public string AccessToken { get; init; }
+    public string RefreshToken { get; init; }
+    public string Role { get; init; }
+    public string Email { get; init; }
+    public string UserName { get; init; }
     
 }
