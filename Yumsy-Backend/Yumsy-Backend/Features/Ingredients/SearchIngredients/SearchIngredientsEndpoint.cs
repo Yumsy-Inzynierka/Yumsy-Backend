@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
 public class SearchIngredientsEndpoint : ControllerBase
 {
     private readonly SearchIngredientsHandler _handler;
-    private readonly SearchIngredientsValidator _validator;
+    private readonly IValidator<SearchIngredientsRequest> _validator;
 
-    public SearchIngredientsEndpoint(SearchIngredientsHandler handler, SearchIngredientsValidator validator)
+    public SearchIngredientsEndpoint(SearchIngredientsHandler handler, IValidator<SearchIngredientsRequest> validator)
     {
         _handler = handler;
         _validator = validator;
