@@ -5,7 +5,9 @@ public class GetPostDetailsResponse
     public Guid PostId { get; set; }
     public string Title { get; set; }
     public int CookingTime { get; set; }
-    public string Description { get; set; } 
+    public string Description { get; set; }
+    //PostPhotoUrl
+    //Tags[string]
     public IEnumerable<GetPostIngredientResponse> Ingredients { get; set; }
     public decimal Calories { get; set; }
     public decimal Fats { get; set; }
@@ -25,5 +27,5 @@ public class GetPostRecipeStepResponse
 {
     public int StepNumber { get; set; }
     public string Description { get; set; }
-    public string PhotoUrl { get; set; }
+    public string? PhotoUrl { get; set; }
 }

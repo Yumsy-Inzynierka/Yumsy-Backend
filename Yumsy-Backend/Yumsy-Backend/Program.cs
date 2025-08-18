@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
+using Yumsy_Backend.Features.Users.GetShoppingLists;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Persistence.DbContext;
@@ -39,10 +40,14 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddScoped<GetPostDetailsHandler>();
+builder.Services.AddScoped<GetShoppingListsHandler>();
+
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
-builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostValidator>();
+builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostDetailsValidator>();
+builder.Services.AddScoped<IValidator<GetShoppingListsRequest>, GetShoppingListsValidator>();
+
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
 builder.Services.AddScoped<GetHomeFeedForUserValidator>();

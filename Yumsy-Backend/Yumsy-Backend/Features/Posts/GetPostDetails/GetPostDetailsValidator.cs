@@ -2,9 +2,9 @@
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-public class GetPostValidator : AbstractValidator<GetPostDetailsRequest>
+public class GetPostDetailsValidator : AbstractValidator<GetPostDetailsRequest>
 {
-    public GetPostValidator()
+    public GetPostDetailsValidator()
     {
         RuleFor(x => x.PostId)
             .NotEmpty().WithMessage("PostId is required.")
