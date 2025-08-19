@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class GetPostDetailsEndpoint : ControllerBase

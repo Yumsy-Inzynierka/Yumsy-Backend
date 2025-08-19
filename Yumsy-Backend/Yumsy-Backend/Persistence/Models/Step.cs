@@ -8,9 +8,11 @@ public class Step
 {
     [Key]
     public Guid Id { get; set; }
-
     [MaxLength(300)]
     public string Description { get; set; }
     public int StepNumber { get; set; }
-    public Photo? Photo { get; set; }
+    public string? ImageUrl { get; set; }
+    public Guid PostId { get; set; }
+    [ForeignKey(nameof(PostId))]
+    public Post Post { get; set; }
 }
