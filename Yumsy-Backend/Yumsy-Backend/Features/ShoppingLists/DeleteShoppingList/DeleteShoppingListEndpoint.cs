@@ -9,12 +9,12 @@ namespace Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 [Route("api/shoppingLists")]
 public class DeleteShoppingListEndpoint : ControllerBase
 {
-    private readonly DeleteShoppingListHandler _detailsHandler;
+    private readonly DeleteShoppingListHandler _deleteShoppingListHandler;
     private readonly IValidator<DeleteShoppingListRequest> _validator;
     
     public DeleteShoppingListEndpoint(DeleteShoppingListHandler deleteShoppingListHandler, IValidator<DeleteShoppingListRequest> validator)
     {
-        _detailsHandler = deleteShoppingListHandler;
+        _deleteShoppingListHandler = deleteShoppingListHandler;
         _validator = validator;
     }
     
@@ -27,7 +27,7 @@ public class DeleteShoppingListEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _detailsHandler.Handle(deleteShoppingListRequest);
+        await _deleteShoppingListHandler.Handle(deleteShoppingListRequest);
             
         return NoContent();
     }
