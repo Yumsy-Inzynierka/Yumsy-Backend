@@ -18,8 +18,7 @@ public class GetPostDetailsEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpGet]
-    [Route("{postId}")]
+    [HttpGet("{postId}")]
     public async Task<IActionResult> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
     {
         var validationResult = await _validator.ValidateAsync(detailsRequest);
