@@ -17,7 +17,6 @@ public class GetPostDetailsHandler
         var post = await _dbContext.Posts
             .AsNoTracking()
             .Include(p => p.Steps)
-            .ThenInclude(s => s.ImageUrl)
             .Include(p => p.PostTags)
             .ThenInclude(pt => pt.Tag)
             .FirstOrDefaultAsync(p => p.Id == detailsRequest.PostId);
