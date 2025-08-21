@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class GetPostDetailsEndpoint : ControllerBase
@@ -18,8 +18,7 @@ public class GetPostDetailsEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpGet]
-    [Route("{postId}")]
+    [HttpGet("{postId}")]
     public async Task<IActionResult> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
     {
         var validationResult = await _validator.ValidateAsync(detailsRequest);

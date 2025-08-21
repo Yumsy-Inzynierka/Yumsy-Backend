@@ -27,7 +27,7 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     public DbSet<Like> Likes { get; set; }
 
-    public DbSet<Photo> Photos { get; set; }
+    public DbSet<PostImage> Photos { get; set; }
 
     public DbSet<Post> Posts { get; set; }
 

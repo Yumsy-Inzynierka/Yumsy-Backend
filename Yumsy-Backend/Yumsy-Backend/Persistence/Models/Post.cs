@@ -35,10 +35,10 @@ public class Post
 
     public ICollection<Like> Likes { get; set; } = new HashSet<Like>();
 
-    public ICollection<Photo> Photos { get; set; } = new HashSet<Photo>();
+    public ICollection<PostImage> PostImages { get; set; } = new HashSet<PostImage>();
 
     public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
     public ICollection<Step> Steps { get; set; } = new HashSet<Step>();
 
-    public ICollection<PostTag> posttags { get; set; } = new HashSet<PostTag>();
+    public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();//zmiana z posttags
 }

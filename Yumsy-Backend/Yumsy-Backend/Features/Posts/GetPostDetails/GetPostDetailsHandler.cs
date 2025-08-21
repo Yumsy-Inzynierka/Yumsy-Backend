@@ -17,7 +17,8 @@ public class GetPostDetailsHandler
         var post = await _dbContext.Posts
             .AsNoTracking()
             .Include(p => p.Steps)
-            .ThenInclude(s => s.Photo)
+            .Include(p => p.PostTags)
+            .ThenInclude(pt => pt.Tag)
             .FirstOrDefaultAsync(p => p.Id == detailsRequest.PostId);
 
         if (post == null)
@@ -101,9 +102,20 @@ public class GetPostDetailsHandler
             {
                 StepNumber = rs.StepNumber,
                 Description = rs.Description,
-                PhotoUrl = rs.Photo.ImageUrl
+                ImageUrl = rs.ImageUrl
             })
             .ToList();
+        
+        var postTags = post.PostTags
+            .Select(p => new GetPostTagResponse
+            {
+                Id = p.Tag.Id,
+                Name = p.Tag.Name,
+            }
+            )
+            .ToList();
+
+        var images = post.PostImages.Select(p => p.ImageUrl).ToList();
 
         return new GetPostDetailsResponse
         {
@@ -111,14 +123,19 @@ public class GetPostDetailsHandler
             Title = post.Title,
             CookingTime = post.CookingTime,
             Description = post.Description,
+            Tags = postTags,
+            ImagesUrls = images,
             Ingredients = ingredientResponses,
-            Calories = totalCalories,
-            Fats = totalFats,
-            Carbohydrates = totalCarbs,
-            Fiber = isTotalFiberNullFlag ? null : totalFiber,
-            Sugars = isTotalSugarsNullFlag ? null : totalSugars,
-            Protein = totalProtein,
-            Salt = isTotalSaltsNullFlag ? null : totalSalt,
+            Nutrition = new GetPostNutritionResponse
+            {
+                Calories = totalCalories,
+                Fats = totalFats,
+                Carbohydrates = totalCarbs,
+                Fiber = isTotalFiberNullFlag ? null : totalFiber,
+                Sugars = isTotalSugarsNullFlag ? null : totalSugars,
+                Protein = totalProtein,
+                Salt = isTotalSaltsNullFlag ? null : totalSalt,
+            },
             RecipeSteps = recipeSteps
         };
     }

@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
 public class GetHomeFeedForUserEndpoint : ControllerBase
 {
     private readonly GetHomeFeedForUserHandler _handler;
-    private readonly GetHomeFeedForUserValidator _validator;
+    private readonly IValidator<GetHomeFeedForUserRequest> _validator;
 
-    public GetHomeFeedForUserEndpoint(GetHomeFeedForUserHandler handler, GetHomeFeedForUserValidator validator)
+    public GetHomeFeedForUserEndpoint(GetHomeFeedForUserHandler handler, IValidator<GetHomeFeedForUserRequest> validator)
     {
         _handler = handler;
         _validator = validator;
