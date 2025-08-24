@@ -20,7 +20,7 @@ public class GetHomeFeedForUserHandler
 
         var posts = await _context.Posts
             .Include(p => p.CreatedBy)
-            .Include(p => p.Photos)
+            .Include(p => p.PostImages)
             .OrderBy(x => Guid.NewGuid()) //pseudo-losowe wybieranie postów
             .Take(10)
             .Select(p => new GetHomeFeedForUserPostResponse()
@@ -29,7 +29,7 @@ public class GetHomeFeedForUserHandler
                 PostTitle = p.Title,
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
-                ImageURL = p.Photos.First().ImageUrl,
+                ImageURL = p.PostImages.First().ImageUrl,
                 TimePosted = p.PostedDate
             })
             .ToListAsync(cancellationToken);

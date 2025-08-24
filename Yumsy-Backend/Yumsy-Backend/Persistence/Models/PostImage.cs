@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Yumsy_Backend.Persistence.Models;
 
-[Table("photo")]
-public class Photo
+[Table("post_image")]
+public class PostImage
 {
     [Key]
     public Guid Id { get; set; }
     public string ImageUrl { get; set; }
-    public Guid StepId { get; set; }
+    public Guid PostId { get; set; }
 
-    [ForeignKey(nameof(StepId))]
-    public Step Step { get; set; }
+    [ForeignKey(nameof(PostId))]
+    public Post Post { get; set; }
 }

@@ -5,7 +5,6 @@ public record GetHomeFeedForUserResponse
     public List<GetHomeFeedForUserPostResponse> Posts { get; init; }
     
 }
-
 public record GetHomeFeedForUserPostResponse
 {
     public Guid Id { get; init; }
