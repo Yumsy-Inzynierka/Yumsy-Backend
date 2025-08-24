@@ -17,7 +17,7 @@ public class GetProfileDetailsHandler
         var profile = await _dbContext.Users
             .AsNoTracking()
             .Include(p => p.Posts)
-            .ThenInclude(p => p.Photos)
+            .ThenInclude(p => p.PostImages)
             .FirstOrDefaultAsync(p => p.Id == request.UserId);
 
         if (profile == null)
@@ -39,7 +39,7 @@ public class GetProfileDetailsHandler
                 .Select(p => new GetProfilePostsResponse()
                 {
                     Id = p.Id,
-                    ImageUrl = p.Photos.FirstOrDefault().ImageUrl
+                    ImageUrl = p.PostImages.FirstOrDefault().ImageUrl
                 })
                 .ToList()
         };
