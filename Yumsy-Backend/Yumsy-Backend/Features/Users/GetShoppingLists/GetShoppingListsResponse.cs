@@ -2,18 +2,21 @@
 
 public class GetShoppingListsResponse
 {
-    IEnumerable<GetShoppingListResponse> shoppingLists;
+    public IEnumerable<GetShoppingListResponse> ShoppingLists { get; init; }
 }
 
 public class GetShoppingListResponse
 {
-    public string ShoppingListName { get; set; }
-    public Guid? PostId { get; set; } // tutaj to jako link do posta ale nwm czy w ten sposób to rozwiązać 
-    private IEnumerable<GetShoppingListIngredientResponse> shoppingListIngredient;
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string Username { get; init; }
+    public Guid PostId { get; set; }
+    public IEnumerable<GetShoppingListIngredientResponse> Ingredients { get; init; }
 }
 
 public class GetShoppingListIngredientResponse
 {
-    public string Ingredient { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
     public int Quantity { get; set; }
 }

@@ -50,7 +50,7 @@ builder.Services.AddScoped<DeleteShoppingListHandler>();
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
-builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostValidator>();
+builder.Services.AddScoped<IValidator<GetPostDetailsRequest>, GetPostDetailsValidator>();
 builder.Services.AddScoped<IValidator<SearchIngredientsRequest>, SearchIngredientsValidator>();
 builder.Services.AddScoped<IValidator<GetHomeFeedForUserRequest>, GetHomeFeedForUserValidator>();
 builder.Services.AddScoped<IValidator<DeleteShoppingListRequest>, DeleteShoppingListValidator>();

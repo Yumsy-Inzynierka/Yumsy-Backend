@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Users.GetShoppingLists;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/shoppingLists")]
 public class GetShoppingListsEndpoint : ControllerBase
