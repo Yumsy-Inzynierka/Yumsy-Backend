@@ -21,6 +21,10 @@ public class DeletePostHandler
         if (post is null)
             throw new KeyNotFoundException("Post does not exist");;
         
+        // dodac weryfikacje czy osoba usuwajaca post to autor posta lub admin
+        // var userId = User.GetUserId();
+        // if (userId != comment.UserId || userId != admin .......
+        
         _dbContext.Posts.Remove(post);
         await _dbContext.SaveChangesAsync();
     }
