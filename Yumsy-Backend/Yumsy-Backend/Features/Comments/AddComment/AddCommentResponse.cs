@@ -2,9 +2,10 @@ namespace Yumsy_Backend.Features.Comments.AddComment;
 
 public record AddCommentResponse
 {
-    public Guid Id { get; set; }
-    public Guid PostId { get; set; }
-    public Guid UserId { get; set; }
-    public string Content { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public Guid Id { get; init; }
+    public Guid PostId { get; init; }
+    public Guid UserId { get; init; }
+    public string Content { get; init; }
+    public DateTime CommentedDate { get; init; }
+    public Guid? ParentCommentId { get; init; }
 }
