@@ -11,7 +11,7 @@ public class Handler
         _dbContext = dbContext;
     }
 
-    public async Task<Response> Handle(Request request)
+    public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
     {
         return new Response()
         {

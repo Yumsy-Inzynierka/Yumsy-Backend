@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Yumsy_Backend.Features.Comments.AddComment;
+using Yumsy_Backend.Features.Comments.DeleteComment;
 using Yumsy_Backend.Features.Ingredients.SearchIngredient;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
@@ -52,6 +53,7 @@ builder.Services.AddScoped<GetProfileDetailsHandler>();
 builder.Services.AddScoped<LikePostHandler>();
 builder.Services.AddScoped<UnlikePostHandler>();
 builder.Services.AddScoped<AddCommentHandler>();
+builder.Services.AddScoped<DeleteCommentHandler>();
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
@@ -63,6 +65,7 @@ builder.Services.AddScoped<IValidator<GetProfileDetailsRequest>, GetProfileDetai
 builder.Services.AddScoped<IValidator<LikePostRequest>, LikePostValidator>();
 builder.Services.AddScoped<IValidator<UnlikePostRequest>, UnlikePostValidator>();
 builder.Services.AddScoped<IValidator<AddCommentRequest>, AddCommentValidator>();
+builder.Services.AddScoped<IValidator<DeleteCommentRequest>, DeleteCommentValidator>();
 
 
 

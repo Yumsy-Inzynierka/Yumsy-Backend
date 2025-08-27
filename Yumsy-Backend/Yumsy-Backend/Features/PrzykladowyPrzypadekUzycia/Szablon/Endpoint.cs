@@ -26,6 +26,12 @@ public class Endpoint : ControllerBase
         CancellationToken cancellationToken
         )
     {
-        return Ok();
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
+        var response = _handler.Handle(request, cancellationToken);
+        
+        return Ok(response);
     }
 }
