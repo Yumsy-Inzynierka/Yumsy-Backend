@@ -6,7 +6,7 @@ namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 public class GetPostDetailsHandler
 {
     private readonly SupabaseDbContext _dbContext;
-    
+
     public GetPostDetailsHandler(SupabaseDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -17,17 +17,19 @@ public class GetPostDetailsHandler
         var post = await _dbContext.Posts
             .AsNoTracking()
             .Include(p => p.Steps)
-            .Include(p => p.PostTags)
-            .ThenInclude(pt => pt.Tag)
+            .Include(p => p.CreatedBy)
+            .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.PostImages)
             .FirstOrDefaultAsync(p => p.Id == detailsRequest.PostId);
 
-        if (post == null)
+        if (post is null)
             throw new KeyNotFoundException("Post does not exist");
 
         var ingredients = await _dbContext.IngredientPosts
             .Where(ip => ip.PostId == detailsRequest.PostId)
             .Select(ip => new
             {
+                ip.IngredientId,
                 ip.Quantity,
                 ip.Ingredient.Name,
                 ip.Ingredient.EnergyKcal100g,
@@ -40,57 +42,51 @@ public class GetPostDetailsHandler
             })
             .ToListAsync();
 
-        decimal totalCalories = 0;
-        decimal totalFats = 0;
-        decimal totalCarbs = 0;
-        decimal? totalFiber = 0;
-        decimal? totalSugars = 0;
-        decimal totalProtein = 0;
-        decimal? totalSalt = 0;
+        decimal? totalCalories = 0,
+                 totalFats = 0,
+                 totalCarbs = 0,
+                 totalFiber = 0,
+                 totalSugars = 0,
+                 totalProtein = 0,
+                 totalSalt = 0;
+
+        bool caloriesNull = false,
+             fatsNull = false,
+             carbsNull = false,
+             fiberNull = false,
+             sugarsNull = false,
+             proteinNull = false,
+             saltNull = false;
 
         var ingredientResponses = new List<GetPostIngredientResponse>();
 
-        bool isTotalFiberNullFlag = false;
-        bool isTotalSugarsNullFlag = false;
-        bool isTotalSaltsNullFlag = false;
-
         foreach (var ingredient in ingredients)
         {
-            decimal multiplier = ingredient.Quantity / 100m;
+            var multiplier = ingredient.Quantity / 100m;
 
-            totalCalories += ingredient.EnergyKcal100g * multiplier;
-            totalFats += ingredient.Fat100g * multiplier;
-            totalCarbs += ingredient.Carbohydrates100g * multiplier;
-            totalProtein += ingredient.Proteins100g * multiplier;
-            if (totalFiber == null)
+            void AddNutrition(ref decimal? total, ref bool nullFlag, decimal? valuePer100g)
             {
-                isTotalFiberNullFlag = true;
+                if (valuePer100g is null)
+                {
+                    nullFlag = true;
+                }
+                else
+                {
+                    total += valuePer100g * multiplier;
+                }
             }
-            else
-            {
-                totalFiber += ingredient.Fiber100g * multiplier;
-            }
-            
-            if (totalFiber == null)
-            {
-                isTotalSugarsNullFlag = true;
-            }
-            else
-            {
-                totalSugars += ingredient.Sugars100g * multiplier;
-            }
-            
-            if (totalFiber == null)
-            {
-                isTotalSaltsNullFlag = true;
-            }
-            else
-            {
-                totalSalt += ingredient.Salt100g * multiplier;
-            }
+
+            AddNutrition(ref totalCalories, ref caloriesNull, ingredient.EnergyKcal100g);
+            AddNutrition(ref totalFats, ref fatsNull, ingredient.Fat100g);
+            AddNutrition(ref totalCarbs, ref carbsNull, ingredient.Carbohydrates100g);
+            AddNutrition(ref totalProtein, ref proteinNull, ingredient.Proteins100g);
+            AddNutrition(ref totalFiber, ref fiberNull, ingredient.Fiber100g);
+            AddNutrition(ref totalSugars, ref sugarsNull, ingredient.Sugars100g);
+            AddNutrition(ref totalSalt, ref saltNull, ingredient.Salt100g);
 
             ingredientResponses.Add(new GetPostIngredientResponse
             {
+                Id = ingredient.IngredientId,
                 Quantity = ingredient.Quantity,
                 Name = ingredient.Name
             });
@@ -100,41 +96,44 @@ public class GetPostDetailsHandler
             .OrderBy(rs => rs.StepNumber)
             .Select(rs => new GetPostRecipeStepResponse
             {
+                Id = rs.Id,
                 StepNumber = rs.StepNumber,
                 Description = rs.Description,
                 ImageUrl = rs.ImageUrl
             })
             .ToList();
-        
+
         var postTags = post.PostTags
-            .Select(p => new GetPostTagResponse
+            .Select(pt => new GetPostTagResponse
             {
-                Id = p.Tag.Id,
-                Name = p.Tag.Name,
-            }
-            )
+                Id = pt.Tag.Id,
+                Name = pt.Tag.Name
+            })
             .ToList();
 
-        var images = post.PostImages.Select(p => p.ImageUrl).ToList();
+        var images = post.PostImages
+            .Select(p => p.ImageUrl)
+            .ToList();
 
         return new GetPostDetailsResponse
         {
-            PostId = post.Id,
+            Id = post.Id,
             Title = post.Title,
             CookingTime = post.CookingTime,
             Description = post.Description,
+            Username = post.CreatedBy.Username,
             Tags = postTags,
             ImagesUrls = images,
             Ingredients = ingredientResponses,
             Nutrition = new GetPostNutritionResponse
             {
-                Calories = totalCalories,
-                Fats = totalFats,
-                Carbohydrates = totalCarbs,
-                Fiber = isTotalFiberNullFlag ? null : totalFiber,
-                Sugars = isTotalSugarsNullFlag ? null : totalSugars,
-                Protein = totalProtein,
-                Salt = isTotalSaltsNullFlag ? null : totalSalt,
+                Calories = caloriesNull ? null : totalCalories,
+                Fats = fatsNull ? null : totalFats,
+                TotalCarbohydrates = carbsNull ? null : totalCarbs,
+                Fiber = fiberNull ? null : totalFiber,
+                Sugars = sugarsNull ? null : totalSugars,
+                Protein = proteinNull ? null : totalProtein,
+                Sodium = saltNull ? null : totalSalt
             },
             RecipeSteps = recipeSteps
         };
