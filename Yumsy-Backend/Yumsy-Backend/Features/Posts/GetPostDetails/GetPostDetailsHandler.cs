@@ -121,7 +121,6 @@ public class GetPostDetailsHandler
             Title = post.Title,
             CookingTime = post.CookingTime,
             Description = post.Description,
-            Username = post.CreatedBy.Username,
             Tags = postTags,
             ImagesUrls = images,
             Ingredients = ingredientResponses,
