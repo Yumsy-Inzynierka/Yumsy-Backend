@@ -19,7 +19,7 @@ public class GetProfileDetailsEndpoint : ControllerBase
     
     [HttpGet]
     [Route("{userId}")]
-    public async Task<IActionResult> GetProfileDetails(
+    public async Task<ActionResult<GetProfileDetailsResponse>> GetProfileDetails(
         [FromRoute] GetProfileDetailsRequest request,
         CancellationToken cancellationToken
         )
