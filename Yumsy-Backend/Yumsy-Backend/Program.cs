@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Yumsy_Backend.Features.Comments.AddComment;
 using Yumsy_Backend.Features.Comments.DeleteComment;
 using Yumsy_Backend.Features.Ingredients.SearchIngredient;
+using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
 using Yumsy_Backend.Features.Users.GetShoppingLists;
@@ -48,7 +49,6 @@ builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddScoped<GetPostDetailsHandler>();
 builder.Services.AddScoped<GetShoppingListsHandler>();
-
 builder.Services.AddScoped<SearchIngredientsHandler>();
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
 builder.Services.AddScoped<DeleteShoppingListHandler>();
@@ -57,6 +57,8 @@ builder.Services.AddScoped<LikePostHandler>();
 builder.Services.AddScoped<UnlikePostHandler>();
 builder.Services.AddScoped<AddCommentHandler>();
 builder.Services.AddScoped<DeleteCommentHandler>();
+builder.Services.AddScoped<AddPostHandler>();
+
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
@@ -71,6 +73,7 @@ builder.Services.AddScoped<IValidator<LikePostRequest>, LikePostValidator>();
 builder.Services.AddScoped<IValidator<UnlikePostRequest>, UnlikePostValidator>();
 builder.Services.AddScoped<IValidator<AddCommentRequest>, AddCommentValidator>();
 builder.Services.AddScoped<IValidator<DeleteCommentRequest>, DeleteCommentValidator>();
+builder.Services.AddScoped<IValidator<AddPostRequest>, AddPostValidator>();
 
 
 
