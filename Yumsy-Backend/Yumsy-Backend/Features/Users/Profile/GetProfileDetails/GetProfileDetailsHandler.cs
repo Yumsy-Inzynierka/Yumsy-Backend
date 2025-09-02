@@ -39,7 +39,7 @@ public class GetProfileDetailsHandler
                 .Select(p => new GetProfilePostsResponse()
                 {
                     Id = p.Id,
-                    ImageUrl = p.PostImages.FirstOrDefault().ImageUrl
+                    ImageUrl = p.PostImages.FirstOrDefault()?.ImageUrl
                 })
                 .ToList()
         };
