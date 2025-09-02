@@ -122,6 +122,7 @@ public class GetPostDetailsHandler
             CookingTime = post.CookingTime,
             Description = post.Description,
             Tags = postTags,
+            Username = post.CreatedBy.Username,
             ImagesUrls = images,
             Ingredients = ingredientResponses,
             Nutrition = new GetPostNutritionResponse
