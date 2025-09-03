@@ -44,6 +44,8 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<Tag> Tags { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<PostTag> PostTags { get; set; }
+    public DbSet<Saved> Saved { get; set; }
+
 
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
