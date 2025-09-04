@@ -40,5 +40,8 @@ public class Post
     public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
     public ICollection<Step> Steps { get; set; } = new HashSet<Step>();
 
-    public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();//zmiana z posttags
+    public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();
+    
+    public ICollection<Saved> Saved { get; set; } = new HashSet<Saved>();
+
 }

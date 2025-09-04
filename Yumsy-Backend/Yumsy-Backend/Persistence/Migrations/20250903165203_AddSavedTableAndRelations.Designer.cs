@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Yumsy_Backend.Persistence.DbContext;
@@ -11,9 +12,11 @@ using Yumsy_Backend.Persistence.DbContext;
 namespace Yumsy_Backend.Persistence.Migrations
 {
     [DbContext(typeof(SupabaseDbContext))]
-    partial class SupabaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250903165203_AddSavedTableAndRelations")]
+    partial class AddSavedTableAndRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,24 +319,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("recommendation_tag");
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Saved", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("SavedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("saved");
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.ShoppingList", b =>
@@ -659,25 +644,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Saved", b =>
-                {
-                    b.HasOne("Yumsy_Backend.Persistence.Models.Post", "Post")
-                        .WithMany("Saved")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
-                        .WithMany("Saved")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.ShoppingList", b =>
                 {
                     b.HasOne("Yumsy_Backend.Persistence.Models.Post", "CreatedFrom")
@@ -753,8 +719,6 @@ namespace Yumsy_Backend.Persistence.Migrations
 
                     b.Navigation("PostTags");
 
-                    b.Navigation("Saved");
-
                     b.Navigation("ShoppingLists");
 
                     b.Navigation("Steps");
@@ -794,8 +758,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("Recommendations");
-
-                    b.Navigation("Saved");
 
                     b.Navigation("ShoppingLists");
                 });

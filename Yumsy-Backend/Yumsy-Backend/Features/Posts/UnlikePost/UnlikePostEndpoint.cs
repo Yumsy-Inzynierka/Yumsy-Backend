@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Yumsy_Backend.Features.PrzykladowyPrzypadekUzycia.Szablon;
 
 namespace Yumsy_Backend.Features.Posts.UnlikePost;
 

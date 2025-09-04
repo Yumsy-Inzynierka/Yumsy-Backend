@@ -49,6 +49,7 @@ public class User
     public ICollection<ShoppingList> ShoppingLists { get; set; } = new HashSet<ShoppingList>();
     
     public ICollection<UserFollower> Followers { get; set; } = new HashSet<UserFollower>();
-
     public ICollection<UserFollower> Followings { get; set; } = new HashSet<UserFollower>();
+    
+    public ICollection<Saved> Saved { get; set; } = new HashSet<Saved>();
 }
