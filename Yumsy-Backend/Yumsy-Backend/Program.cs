@@ -19,6 +19,7 @@ using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.Register;
+using Yumsy_Backend.Features.Users.UnfollowUser;
 using Yumsy_Backend.Persistence.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -67,6 +68,7 @@ builder.Services.AddScoped<AddPostHandler>();
 builder.Services.AddScoped<SavePostHandler>();
 builder.Services.AddScoped<UnsavePostHandler>();
 builder.Services.AddScoped<FollowUserHandler>();
+builder.Services.AddScoped<UnfollowUserHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -87,6 +89,8 @@ builder.Services.AddScoped<IValidator<AddPostRequest>, AddPostValidator>();
 builder.Services.AddScoped<IValidator<SavePostRequest>, SavePostValidator>();
 builder.Services.AddScoped<IValidator<UnsavePostRequest>, UnsavePostValidator>();
 builder.Services.AddScoped<IValidator<FollowUserRequest>, FollowUserValidator>();
+builder.Services.AddScoped<IValidator<UnfollowUserRequest>, UnfollowUserValidator>();
+
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
