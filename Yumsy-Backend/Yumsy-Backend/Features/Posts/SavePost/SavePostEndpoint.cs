@@ -34,6 +34,6 @@ public class SavePostEndpoint : ControllerBase
         
         var response = await _savePostHandler.Handle(fullRequest, cancellationToken);
             
-        return Created($"api/post/{response.PostId}/save", response);
+        return Created($"api/posts/{response.PostId}/save", response);
     }
 }
