@@ -18,7 +18,7 @@ public class GetPostCommentsEndpoint : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetPostComments(
+    public async Task<ActionResult<GetPostCommentsResponse>> GetPostComments(
         [FromRoute] GetPostCommentsRequest request,
         CancellationToken cancellationToken
         )
