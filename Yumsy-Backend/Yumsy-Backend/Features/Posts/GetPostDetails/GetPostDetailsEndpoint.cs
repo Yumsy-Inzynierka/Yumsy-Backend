@@ -19,7 +19,7 @@ public class GetPostDetailsEndpoint : ControllerBase
     }
     
     [HttpGet("{postId}")]
-    public async Task<IActionResult> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
+    public async Task<ActionResult<GetPostDetailsResponse>> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
     {
         var validationResult = await _validator.ValidateAsync(detailsRequest);
         if (!validationResult.IsValid)
