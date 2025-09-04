@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Yumsy_Backend.Persistence.Models;
 
 [Table("user_follower")]
-[PrimaryKey(nameof(UserId), nameof(FollowerId))]
+[PrimaryKey(nameof(FollowingId), nameof(FollowerId))]
 public class UserFollower
 {
-    public Guid UserId { get; set; }
+    public Guid FollowingId { get; set; }
     
-    [ForeignKey(nameof(UserId))]
-    public User User { get; set; }
+    [ForeignKey(nameof(FollowingId))]
+    public User Following { get; set; }
 
     public Guid FollowerId { get; set; }
     [ForeignKey(nameof(FollowerId))]

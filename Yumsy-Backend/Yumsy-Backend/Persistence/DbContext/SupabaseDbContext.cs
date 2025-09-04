@@ -26,16 +26,20 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<IngredientShoppingList> IngredientShoppingLists { get; set; }
 
     public DbSet<Like> Likes { get; set; }
-
-    public DbSet<PostImage> Photos { get; set; }
-
+    
     public DbSet<Post> Posts { get; set; }
+
+    public DbSet<PostImage> PostImages { get; set; }
+    
+    public DbSet<PostTag> PostTags { get; set; }
 
     public DbSet<QuizQuestion> QuizQuestions { get; set; }
 
     public DbSet<Recommendation> Recommendations { get; set; }
 
     public DbSet<RecommendationTag> RecommendationTags { get; set; }
+    
+    public DbSet<Saved> Saved { get; set; }
 
     public DbSet<ShoppingList> ShoppingLists { get; set; }
 
@@ -43,9 +47,8 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     public DbSet<Tag> Tags { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<PostTag> PostTags { get; set; }
-    public DbSet<Saved> Saved { get; set; }
-
+    
+    public DbSet<UserFollower> UserFollowers { get; set; }
 
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -61,12 +64,12 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserFollower>()
-            .HasKey(uf => new { uf.UserId, uf.FollowerId });
+            .HasKey(uf => new { uf.FollowingId, uf.FollowerId });
 
         modelBuilder.Entity<UserFollower>()
-            .HasOne(uf => uf.User)
+            .HasOne(uf => uf.Following)
             .WithMany(u => u.Followers)
-            .HasForeignKey(uf => uf.UserId)
+            .HasForeignKey(uf => uf.FollowingId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<UserFollower>()
