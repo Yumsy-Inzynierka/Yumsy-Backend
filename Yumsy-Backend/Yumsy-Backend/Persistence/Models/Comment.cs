@@ -10,6 +10,7 @@ public class Comment
     public Guid Id { get; set; }
 
     public DateTime CommentedDate { get; set; } = DateTime.UtcNow;
+    public int LikesCount { get; set; }
 
     [MaxLength(400)]
     public string Content { get; set; }
