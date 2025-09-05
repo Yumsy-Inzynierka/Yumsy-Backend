@@ -25,7 +25,6 @@
 
     <ItemGroup>
       <Folder Include="Features\Ingredients\SearchForIngredient\" />
-      <Folder Include="Features\Posts\Likes\LikeComment\" />
       <Folder Include="Persistence\DbContext\" />
       <Folder Include="Persistence\Migrations\" />
     </ItemGroup>

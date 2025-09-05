@@ -11,6 +11,7 @@ using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
 using Yumsy_Backend.Features.Users.GetShoppingLists;
 using Yumsy_Backend.Features.Posts.LikePost;
+using Yumsy_Backend.Features.Posts.Likes.LikeComment;
 using Yumsy_Backend.Features.Posts.SavePost;
 using Yumsy_Backend.Features.Posts.UnlikePost;
 using Yumsy_Backend.Features.Posts.UnsavePost;
@@ -69,6 +70,7 @@ builder.Services.AddScoped<SavePostHandler>();
 builder.Services.AddScoped<UnsavePostHandler>();
 builder.Services.AddScoped<FollowUserHandler>();
 builder.Services.AddScoped<UnfollowUserHandler>();
+builder.Services.AddScoped<LikeCommentHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -90,6 +92,7 @@ builder.Services.AddScoped<IValidator<SavePostRequest>, SavePostValidator>();
 builder.Services.AddScoped<IValidator<UnsavePostRequest>, UnsavePostValidator>();
 builder.Services.AddScoped<IValidator<FollowUserRequest>, FollowUserValidator>();
 builder.Services.AddScoped<IValidator<UnfollowUserRequest>, UnfollowUserValidator>();
+builder.Services.AddScoped<IValidator<LikeCommentRequest>, LikeCommentValidator>();
 
 
 
