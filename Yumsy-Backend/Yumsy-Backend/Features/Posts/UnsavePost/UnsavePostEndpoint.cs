@@ -17,7 +17,7 @@ public class UnsavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{postId}/unsave")]
+    [HttpDelete("{postId}/unsave")]
     public async Task<IActionResult> Handle([FromRoute] Guid postId, [FromBody]UnsavePostRequest unsavePostRequest, CancellationToken cancellationToken)
     {
         var fullRequest = new UnsavePostRequest

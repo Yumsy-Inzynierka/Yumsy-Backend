@@ -13,7 +13,7 @@ public class UnlikePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<UnlikePostResponse> Handle(UnlikePostRequest request, CancellationToken cancellationToken)
+    public async Task<UnlikePostResponse> Handle(UnlikePostRequest request, Guid userId, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .Include(p => p.Likes)
@@ -23,7 +23,7 @@ public class UnlikePostHandler
             throw new KeyNotFoundException($"Post with ID: {request.PostId} not found");
 
         var like = await _dbContext.Likes
-            .FirstOrDefaultAsync(l => l.PostId == request.PostId && l.UserId == request.UserId);
+            .FirstOrDefaultAsync(l => l.PostId == request.PostId && l.UserId == userId);
 
         if (like != null)
         {

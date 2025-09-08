@@ -17,8 +17,8 @@ public class SavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{postId}/save")]
-    public async Task<IActionResult> Handle([FromRoute] Guid postId, [FromBody]SavePostRequest savePostRequest, CancellationToken cancellationToken)
+    [HttpPost("{postId}/saved")]
+    public async Task<ActionResult<SavePostResponse>> Handle([FromRoute] Guid postId, [FromBody]SavePostRequest savePostRequest, CancellationToken cancellationToken)
     {
         var fullRequest = new SavePostRequest
         {
@@ -34,6 +34,6 @@ public class SavePostEndpoint : ControllerBase
         
         var response = await _savePostHandler.Handle(fullRequest, cancellationToken);
             
-        return Created($"api/posts/{response.PostId}/save", response);
+        return Created($"api/posts/{response.PostId}/saved", response);
     }
 }

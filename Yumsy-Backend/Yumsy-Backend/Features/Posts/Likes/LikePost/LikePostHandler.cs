@@ -13,7 +13,7 @@ public class LikePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<LikePostResponse> Handle(LikePostRequest request, CancellationToken cancellationToken)
+    public async Task<LikePostResponse> Handle(LikePostRequest request, Guid userId, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .Include(p => p.Likes)
@@ -23,13 +23,13 @@ public class LikePostHandler
             throw new KeyNotFoundException($"Post with ID: {request.PostId} not found");
 
         var alreadyLiked = await _dbContext.Likes
-            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId);
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == userId);
 
         if (!alreadyLiked)
         {
             var like = new Like()
             {
-                UserId = request.UserId,
+                UserId = userId,
                 PostId = request.PostId
             };
 

@@ -19,7 +19,7 @@ public class AddCommentEndpoint : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddComment(
+    public async Task<ActionResult<AddCommentResponse>> AddComment(
         [FromRoute] Guid postId,
         [FromBody] AddCommentRequest addCommentRequest,
         CancellationToken cancellationToken

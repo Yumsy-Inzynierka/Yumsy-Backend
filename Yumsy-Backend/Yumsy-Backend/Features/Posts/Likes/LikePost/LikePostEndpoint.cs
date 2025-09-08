@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.LikePost;
 
@@ -18,7 +19,7 @@ public class LikePostEndpoint : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> LikePost(
+    public async Task<ActionResult<LikePostResponse>> LikePost(
         [FromBody] LikePostRequest request,
         CancellationToken cancellationToken
         )
@@ -27,7 +28,9 @@ public class LikePostEndpoint : ControllerBase
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var result = await _handler.Handle(request, cancellationToken);
+        var userId = User.GetUserId();
+        
+        var result = await _handler.Handle(request, userId, cancellationToken);
         return Ok(result);
     }
 }

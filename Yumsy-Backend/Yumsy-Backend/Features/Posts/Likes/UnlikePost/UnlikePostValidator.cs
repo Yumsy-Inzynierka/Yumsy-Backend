@@ -9,9 +9,5 @@ public class UnlikePostValidator : AbstractValidator<UnlikePostRequest>
         RuleFor(x => x.PostId)
             .NotEmpty()
             .WithMessage("PostId cannot be empty.");
-
-        RuleFor(x => x.UserId)
-            .NotEmpty()
-            .WithMessage("UserId cannot be empty.");
     }
 }
