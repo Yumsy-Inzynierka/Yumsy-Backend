@@ -39,9 +39,9 @@ public class LikeCommentHandler
             UserId = likeCommentRequest.UserId
         };
 
-        comment.LikesCount += 1;
-
         await _dbContext.CommentLikes.AddAsync(commentLike, cancellationToken);
+        comment.LikesCount = _dbContext.CommentLikes.Count(l => l.CommentId == likeCommentRequest.CommentId);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new LikeCommentResponse

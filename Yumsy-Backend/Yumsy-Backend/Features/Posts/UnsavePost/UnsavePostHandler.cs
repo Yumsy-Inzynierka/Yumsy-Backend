@@ -31,10 +31,10 @@ public class UnsavePostHandler
 
         if (savedPost == null)
             throw new InvalidOperationException("Post is already unsaved by this user.");
-
-        post.SavedCount -= 1;
-
+        
         _dbContext.Saved.Remove(savedPost);
+        post.SavedCount = _dbContext.Saved.Count(l => l.PostId == savedPost.PostId);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
