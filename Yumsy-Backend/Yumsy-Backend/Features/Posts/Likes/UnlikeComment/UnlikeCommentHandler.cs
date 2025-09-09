@@ -33,7 +33,9 @@ public class UnlikeCommentHandler
             throw new InvalidOperationException($"User with Id: {unlikeCommentRequest.UserId} already does not like comment with Id: {unlikeCommentRequest.CommentId}.");
         
         _dbContext.CommentLikes.Remove(likedComment);
-        comment.LikesCount = _dbContext.CommentLikes.Count(l => l.CommentId == unlikeCommentRequest.CommentId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        comment.LikesCount = await _dbContext.CommentLikes.CountAsync(l => l.CommentId == unlikeCommentRequest.CommentId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

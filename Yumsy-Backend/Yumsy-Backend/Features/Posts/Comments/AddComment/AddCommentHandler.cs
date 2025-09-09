@@ -39,7 +39,9 @@ public class AddCommentHandler
         
         
         _dbContext.Comments.Add(comment);
-        post.CommentsCount = _dbContext.Comments.Count(l => l.PostId == addCommentRequest.PostId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        post.CommentsCount = await _dbContext.Comments.CountAsync(l => l.PostId == addCommentRequest.PostId, cancellationToken);
             
         await _dbContext.SaveChangesAsync(cancellationToken);
         
