@@ -16,6 +16,7 @@ public class DeleteCommentHandler
     {
         var comment = await _dbContext.Comments
             .Include(c => c.User)
+            .Include(p => p.Post)
             .FirstOrDefaultAsync(c => c.Id == request.CommentId, cancellationToken);
         
         if (comment == null)
@@ -25,6 +26,8 @@ public class DeleteCommentHandler
             throw new UnauthorizedAccessException("Current user does not have permission to delete comment");*/
         
         _dbContext.Comments.Remove(comment);
-        await _dbContext.SaveChangesAsync();
+        comment.Post.CommentsCount = _dbContext.Comments.Count(l => l.PostId == comment.PostId);
+        
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

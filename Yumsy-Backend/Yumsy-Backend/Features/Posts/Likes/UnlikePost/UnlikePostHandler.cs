@@ -29,7 +29,7 @@ public class UnlikePostHandler
         {
             _dbContext.Likes.Remove(like);
 
-            post.LikesCount -= 1;
+            post.LikesCount = _dbContext.Likes.Count(l => l.PostId == request.PostId);;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

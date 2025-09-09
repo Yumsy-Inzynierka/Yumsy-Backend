@@ -38,11 +38,11 @@ public class FollowUserHandler
             FollowingId = followUserRequest.FollowingId,
             FollowerId = followUserRequest.FollowerId
         };
-
-        follower.FollowersCount += 1;
-        following.FollowingCount += 1;
-
+        
         await _dbContext.UserFollowers.AddAsync(follow, cancellationToken);
+        follower.FollowingCount = _dbContext.UserFollowers.Count(l => l.FollowerId == followUserRequest.FollowerId);
+        following.FollowersCount = _dbContext.UserFollowers.Count(l => l.FollowingId == followUserRequest.FollowingId);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new FollowUserResponse

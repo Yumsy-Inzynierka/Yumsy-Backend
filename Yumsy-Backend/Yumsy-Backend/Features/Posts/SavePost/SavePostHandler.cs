@@ -39,14 +39,14 @@ public class SavePostHandler
             PostId = savePostRequest.PostId
         };
 
-        post.SavedCount += 1;
-
         await _dbContext.Saved.AddAsync(savedPost, cancellationToken);
+        post.SavedCount = _dbContext.Saved.Count(l => l.PostId == savedPost.PostId);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new SavePostResponse
         {
-            PostId = savedPost.PostId,
+            PostId = savedPost.PostId
         };
     }
 }

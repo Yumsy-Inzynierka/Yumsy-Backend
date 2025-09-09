@@ -34,12 +34,12 @@ public class LikePostHandler
             };
 
             _dbContext.Likes.Add(like);
-            post.LikesCount += 1;
+            post.LikesCount = _dbContext.Likes.Count(l => l.PostId == request.PostId);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
         
-        return new LikePostResponse()
+        return new LikePostResponse
         {
             Id = post.Id,
             Liked = true,
