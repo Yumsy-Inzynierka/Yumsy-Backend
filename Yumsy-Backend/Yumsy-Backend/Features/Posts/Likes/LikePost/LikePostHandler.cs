@@ -34,7 +34,9 @@ public class LikePostHandler
             };
 
             _dbContext.Likes.Add(like);
-            post.LikesCount = _dbContext.Likes.Count(l => l.PostId == request.PostId);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            post.LikesCount = await _dbContext.Likes.CountAsync(l => l.PostId == request.PostId, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

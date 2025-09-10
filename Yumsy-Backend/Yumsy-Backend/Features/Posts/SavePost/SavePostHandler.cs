@@ -40,7 +40,9 @@ public class SavePostHandler
         };
 
         await _dbContext.Saved.AddAsync(savedPost, cancellationToken);
-        post.SavedCount = _dbContext.Saved.Count(l => l.PostId == savedPost.PostId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        post.SavedCount = await _dbContext.Saved.CountAsync(l => l.PostId == savedPost.PostId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 

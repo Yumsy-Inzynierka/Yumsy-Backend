@@ -33,8 +33,10 @@ public class UnfollowUserHandler
             throw new InvalidOperationException($"User with Id: {unfollowUserRequest.FollowerId} already does not follow user with Id: {unfollowUserRequest.FollowingId}.");
 
         _dbContext.UserFollowers.Remove(follow);
-        follower.FollowingCount = _dbContext.UserFollowers.Count(l => l.FollowerId == unfollowUserRequest.FollowerId);
-        following.FollowersCount = _dbContext.UserFollowers.Count(l => l.FollowingId == unfollowUserRequest.FollowingId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        follower.FollowingCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowerId == unfollowUserRequest.FollowerId, cancellationToken);
+        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == unfollowUserRequest.FollowingId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

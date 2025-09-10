@@ -23,13 +23,14 @@ public class UnlikePostHandler
             throw new KeyNotFoundException($"Post with ID: {request.PostId} not found");
 
         var like = await _dbContext.Likes
-            .FirstOrDefaultAsync(l => l.PostId == request.PostId && l.UserId == userId);
+            .FirstOrDefaultAsync(l => l.PostId == request.PostId && l.UserId == userId, cancellationToken);
 
         if (like != null)
         {
             _dbContext.Likes.Remove(like);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-            post.LikesCount = _dbContext.Likes.Count(l => l.PostId == request.PostId);;
+            post.LikesCount = await _dbContext.Likes.CountAsync(l => l.PostId == request.PostId, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

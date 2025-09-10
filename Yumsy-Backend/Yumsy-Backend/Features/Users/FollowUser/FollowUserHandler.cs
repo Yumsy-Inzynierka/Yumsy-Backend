@@ -40,8 +40,10 @@ public class FollowUserHandler
         };
         
         await _dbContext.UserFollowers.AddAsync(follow, cancellationToken);
-        follower.FollowingCount = _dbContext.UserFollowers.Count(l => l.FollowerId == followUserRequest.FollowerId);
-        following.FollowersCount = _dbContext.UserFollowers.Count(l => l.FollowingId == followUserRequest.FollowingId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        follower.FollowingCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowerId == followUserRequest.FollowerId, cancellationToken);
+        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == followUserRequest.FollowingId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 

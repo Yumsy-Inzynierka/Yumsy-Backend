@@ -40,7 +40,9 @@ public class LikeCommentHandler
         };
 
         await _dbContext.CommentLikes.AddAsync(commentLike, cancellationToken);
-        comment.LikesCount = _dbContext.CommentLikes.Count(l => l.CommentId == likeCommentRequest.CommentId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        comment.LikesCount = await _dbContext.CommentLikes.CountAsync(l => l.CommentId == likeCommentRequest.CommentId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
