@@ -6,7 +6,7 @@ namespace Yumsy_Backend.Features.ShoppingLists.AddShoppingList;
 
 //[Authorize]
 [ApiController]
-[Route("api/shoppingLists")]
+[Route("api/shopping-lists")]
 public class AddShoppingListController : ControllerBase
 {
     private readonly AddShoppingListHandler _addShoppingListHandler;

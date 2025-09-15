@@ -1,4 +1,4 @@
-using Supabase.Gotrue;
+using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
@@ -16,6 +16,10 @@ public class AddShoppingListHandler
     public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest request, Guid userId,
         CancellationToken cancellationToken)
     {
+        var postExists = await _dbContext.Posts.AnyAsync(p => p.Id == request.CreatedFrom, cancellationToken);
+        if (!postExists)
+            throw new KeyNotFoundException("Post specified in CreatedFrom does not exist");
+        
         var shoppingList = new ShoppingList
         {
             Id = Guid.NewGuid(),
@@ -23,6 +27,16 @@ public class AddShoppingListHandler
             UserId = userId,
             CreatedFromId = request.CreatedFrom
         };
+        
+        foreach (var ingredient in request.Ingredients)
+        {
+            shoppingList.IngredientShoppingLists.Add(new IngredientShoppingList
+            {
+                ShoppingListId = shoppingList.Id,
+                IngredientId = ingredient.Id,
+                Quantity = ingredient.Quantity
+            });
+        }
         
         _dbContext.ShoppingLists.Add(shoppingList);
         await _dbContext.SaveChangesAsync(cancellationToken);
