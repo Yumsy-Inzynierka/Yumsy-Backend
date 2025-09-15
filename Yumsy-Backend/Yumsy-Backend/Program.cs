@@ -1,3 +1,4 @@
+using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -107,17 +108,52 @@ builder.Services.AddScoped<GetHomeFeedForUserValidator>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"{supabaseUrl}/auth/v1";
-        options.RequireHttpsMetadata = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = $"{supabaseUrl}/auth/v1",
+            ValidIssuer = $"{configuration["Supabase:Url"]}/auth/v1",
+
             ValidateAudience = false,
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(configuration["Supabase:JwtSecret"])
+            )
+        };
+
+        // 🔥 Dodanie logów do debugowania
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine("❌ Authentication failed:");
+                Console.WriteLine(context.Exception.ToString());
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("✅ Token validated successfully.");
+                var claimsIdentity = context.Principal.Identity as System.Security.Claims.ClaimsIdentity;
+                if (claimsIdentity != null)
+                {
+                    Console.WriteLine("Claims:");
+                    foreach (var claim in claimsIdentity.Claims)
+                    {
+                        Console.WriteLine($" - {claim.Type}: {claim.Value}");
+                    }
+                }
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine("⚠️ OnChallenge error:");
+                Console.WriteLine(context.ErrorDescription);
+                return Task.CompletedTask;
+            }
         };
     });
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
