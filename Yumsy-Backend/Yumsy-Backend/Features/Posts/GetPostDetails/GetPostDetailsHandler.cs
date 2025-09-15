@@ -123,6 +123,8 @@ public class GetPostDetailsHandler
             Description = post.Description,
             Tags = postTags,
             Username = post.CreatedBy.Username,
+            LikesCount = post.LikesCount,
+            CommentsCount = post.CommentsCount,
             ImagesUrls = images,
             Ingredients = ingredientResponses,
             Nutrition = new GetPostNutritionResponse

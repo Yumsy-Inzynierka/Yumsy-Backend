@@ -7,6 +7,8 @@ public record GetPostDetailsResponse
     public int CookingTime { get; init; }
     public string Description { get; init; }
     public string Username { get; init; }
+    public int LikesCount { get; set; }
+    public int CommentsCount { get; set; }
     public IEnumerable<GetPostTagResponse> Tags { get; init; }
     public IEnumerable<string> ImagesUrls { get; init; }
     public IEnumerable<GetPostIngredientResponse> Ingredients { get; init; }

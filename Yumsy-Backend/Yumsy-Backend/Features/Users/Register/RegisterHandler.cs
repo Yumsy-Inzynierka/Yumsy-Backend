@@ -1,4 +1,5 @@
-﻿using Yumsy_Backend.Persistence.DbContext;
+﻿using Microsoft.EntityFrameworkCore;
+using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
 namespace Yumsy_Backend.Features.Users.Register;
@@ -16,6 +17,18 @@ public class RegisterHandler
 
     public async Task Handle(RegisterRequest request)
     {
+        var usernameExist = await _dbContext.Users
+            .AnyAsync(u => u.Username == request.Username);
+        
+        if (!usernameExist)
+            throw new InvalidOperationException($"User name: {request.Username} is already registered.");
+
+        var emailExist = await _dbContext.Users
+            .AnyAsync(u => u.Email == request.Email);
+        
+        if (!emailExist)
+            throw new InvalidOperationException($"Email: {request.Email} is already registered.");
+        
         await _supabaseClient.InitializeAsync();
 
         var signUpOptions = new Supabase.Gotrue.SignUpOptions

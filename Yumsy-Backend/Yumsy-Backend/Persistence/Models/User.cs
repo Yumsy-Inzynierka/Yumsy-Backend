@@ -20,9 +20,9 @@ public class User
 
     public string? ProfileName { get; set; }
     
-    [MaxLength(20)]
     public string? ProfilePicture { get; set; }
 
+    [MaxLength(400)]
     public string? Bio { get; set; }
 
     public int FollowersCount { get; set; }
