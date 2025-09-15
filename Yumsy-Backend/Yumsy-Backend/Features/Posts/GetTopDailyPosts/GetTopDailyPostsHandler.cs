@@ -29,7 +29,6 @@ public class GetTopDailyPostsHandler
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
                 ImageURL = p.PostImages
-                    .OrderBy(pi => pi.Id)
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
                 TimePosted = p.PostedDate,

@@ -9,6 +9,7 @@ using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.GetPostComments;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
+using Yumsy_Backend.Features.Posts.GetTopDailyPostsEndpoint;
 using Yumsy_Backend.Features.Users.GetShoppingLists;
 using Yumsy_Backend.Features.Posts.LikePost;
 using Yumsy_Backend.Features.Posts.Likes.LikeComment;
@@ -17,8 +18,11 @@ using Yumsy_Backend.Features.Posts.SavePost;
 using Yumsy_Backend.Features.Posts.UnlikePost;
 using Yumsy_Backend.Features.Posts.UnsavePost;
 using Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
+using Yumsy_Backend.Features.ShoppingLists.EditShoppingList;
+using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
+using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Features.Users.UnfollowUser;
@@ -73,6 +77,10 @@ builder.Services.AddScoped<FollowUserHandler>();
 builder.Services.AddScoped<UnfollowUserHandler>();
 builder.Services.AddScoped<LikeCommentHandler>();
 builder.Services.AddScoped<UnlikeCommentHandler>();
+builder.Services.AddScoped<GetTopDailyPostsHandler>();
+builder.Services.AddScoped<GetTopDailyTagsHandler>();
+builder.Services.AddScoped<GetLikedPostsHandler>();
+builder.Services.AddScoped<EditShoppingListHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -96,6 +104,10 @@ builder.Services.AddScoped<IValidator<FollowUserRequest>, FollowUserValidator>()
 builder.Services.AddScoped<IValidator<UnfollowUserRequest>, UnfollowUserValidator>();
 builder.Services.AddScoped<IValidator<LikeCommentRequest>, LikeCommentValidator>();
 builder.Services.AddScoped<IValidator<UnlikeCommentRequest>, UnlikeCommentValidator>();
+builder.Services.AddScoped<IValidator<GetTopDailyPostsRequest>, GetTopDailyPostsValidator>();
+builder.Services.AddScoped<IValidator<GetTopDailyTagsRequest>, GetTopDailyTagsValidator>();
+builder.Services.AddScoped<IValidator<GetLikedPostsRequest>, GetLikedPostsValidator>();
+builder.Services.AddScoped<IValidator<EditShoppingListRequest>, EditShoppingListValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
