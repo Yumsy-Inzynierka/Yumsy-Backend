@@ -17,5 +17,5 @@ public record GetProfileDetailsResponse
 public record GetProfilePostsResponse
 {
     public Guid Id { get; init; }
-    public string? ImageUrl { get; init; }
+    public string ImageUrl { get; init; }
 }

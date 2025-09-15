@@ -23,7 +23,7 @@ public class GetPostCommentsHandler
             .ThenInclude(cc => cc.User)
             .Where(c => c.PostId == request.PostId && c.ParentCommentId == null)
             .OrderBy(c => c.CommentLikes.Count)
-            .Take(YumsyConstants.FETCHED_COMMENTS_NUMBER)
+            .Take(YumsyConstants.FETCHED_COMMENTS_AMOUNT)
             .ToListAsync(cancellationToken);
         
         return new GetPostCommentsResponse()

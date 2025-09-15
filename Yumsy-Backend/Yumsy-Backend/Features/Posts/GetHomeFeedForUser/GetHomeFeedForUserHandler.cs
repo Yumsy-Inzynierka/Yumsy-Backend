@@ -30,7 +30,9 @@ public class GetHomeFeedForUserHandler
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
                 ImageURL = p.PostImages.First().ImageUrl,
-                TimePosted = p.PostedDate
+                TimePosted = p.PostedDate,
+                LikesCount = p.LikesCount,
+                CommentsCount = p.CommentsCount,
             })
             .ToListAsync(cancellationToken);
 
