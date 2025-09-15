@@ -23,7 +23,7 @@ public class AddProfileDetailsHandler
         var profileName = await _dbContext.Users
             .AnyAsync(u => u.ProfileName == addProfileDetailsRequest.ProfileName, cancellationToken);
         
-        if (!profileName)
+        if (profileName)
             throw new InvalidOperationException($"Profile name: {addProfileDetailsRequest.ProfileName} already exists.");
 
         user.ProfileName = addProfileDetailsRequest.ProfileName;
