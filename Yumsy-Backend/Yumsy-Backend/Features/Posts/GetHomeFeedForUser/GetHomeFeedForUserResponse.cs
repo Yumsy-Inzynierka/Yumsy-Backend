@@ -13,4 +13,6 @@ public record GetHomeFeedForUserPostResponse
     public string Username { get; init; }
     public string ImageURL { get; init; }
     public DateTime TimePosted { get; init; }
+    public int LikesCount { get; init; }
+    public int CommentsCount { get; init; }
 }

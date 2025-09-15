@@ -27,7 +27,7 @@ public class GetPostCommentsEndpoint : ControllerBase
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
-        var response = _handler.Handle(request, cancellationToken);
+        var response = await _handler.Handle(request, cancellationToken);
         
         return Ok(response);
     }
