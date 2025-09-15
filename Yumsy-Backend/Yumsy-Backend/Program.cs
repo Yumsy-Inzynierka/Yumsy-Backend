@@ -19,6 +19,7 @@ using Yumsy_Backend.Features.Posts.UnsavePost;
 using Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
+using Yumsy_Backend.Features.Users.Profile.CreateProfile;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Features.Users.UnfollowUser;
@@ -33,7 +34,7 @@ builder.Services.AddDbContext<SupabaseDbContext>(options =>
 
 // Konfiguracja Supabase Clienta
 var supabaseUrl = configuration["Supabase:Url"];
-var supabaseJWKS = $"{supabaseUrl}/auth/v1/keys";
+var supabaseJWKS = $"{supabaseUrl}/auth/v1/.well-known/openid-configuration";
 
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton(configuration);
@@ -56,7 +57,6 @@ builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddScoped<GetPostDetailsHandler>();
 builder.Services.AddScoped<GetShoppingListsHandler>();
-
 builder.Services.AddScoped<SearchIngredientsHandler>();
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
 builder.Services.AddScoped<DeleteShoppingListHandler>();
@@ -73,6 +73,7 @@ builder.Services.AddScoped<FollowUserHandler>();
 builder.Services.AddScoped<UnfollowUserHandler>();
 builder.Services.AddScoped<LikeCommentHandler>();
 builder.Services.AddScoped<UnlikeCommentHandler>();
+builder.Services.AddScoped<AddProfileDetailsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -96,6 +97,7 @@ builder.Services.AddScoped<IValidator<FollowUserRequest>, FollowUserValidator>()
 builder.Services.AddScoped<IValidator<UnfollowUserRequest>, UnfollowUserValidator>();
 builder.Services.AddScoped<IValidator<LikeCommentRequest>, LikeCommentValidator>();
 builder.Services.AddScoped<IValidator<UnlikeCommentRequest>, UnlikeCommentValidator>();
+builder.Services.AddScoped<IValidator<AddProfileDetailsRequest>, AddProfileDetailsValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
@@ -105,12 +107,12 @@ builder.Services.AddScoped<GetHomeFeedForUserValidator>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.MetadataAddress = supabaseJWKS;
+        options.Authority = $"{supabaseUrl}/auth/v1";
         options.RequireHttpsMetadata = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = supabaseUrl,
+            ValidIssuer = $"{supabaseUrl}/auth/v1",
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true

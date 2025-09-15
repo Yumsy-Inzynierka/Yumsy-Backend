@@ -419,7 +419,8 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text");
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -437,8 +438,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .HasColumnType("character varying(20)");
 
                     b.Property<string>("ProfilePicture")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<int>("RecipesCount")
                         .HasColumnType("integer");
