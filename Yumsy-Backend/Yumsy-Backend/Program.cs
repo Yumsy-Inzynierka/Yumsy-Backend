@@ -27,6 +27,7 @@ using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 using Yumsy_Backend.Features.Users.Profile.CreateProfile;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
+using Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Features.Users.UnfollowUser;
 using Yumsy_Backend.Persistence.DbContext;
@@ -45,7 +46,7 @@ var supabaseJWKS = $"{supabaseUrl}/auth/v1/.well-known/openid-configuration";
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton(configuration);
 
-builder.Services.AddSingleton(provider =>
+/*builder.Services.AddSingleton(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
     var url = config["Supabase:Url"];
@@ -56,7 +57,7 @@ builder.Services.AddSingleton(provider =>
         AutoConnectRealtime = false,
         AutoRefreshToken = true
     });
-});
+});*/
 
 // Rejestracja handlerów i walidatorów
 builder.Services.AddScoped<RegisterHandler>();
@@ -85,6 +86,7 @@ builder.Services.AddScoped<GetTopDailyTagsHandler>();
 builder.Services.AddScoped<GetLikedPostsHandler>();
 builder.Services.AddScoped<EditShoppingListHandler>();
 builder.Services.AddScoped<AddShoppingListHandler>();
+builder.Services.AddScoped<RefreshTokenHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -137,18 +139,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         };
 
-        // 🔥 Dodanie logów do debugowania
+        //Logi do debugowania
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
             {
-                Console.WriteLine("❌ Authentication failed:");
+                Console.WriteLine("Authentication failed:");
                 Console.WriteLine(context.Exception.ToString());
                 return Task.CompletedTask;
             },
             OnTokenValidated = context =>
             {
-                Console.WriteLine("✅ Token validated successfully.");
+                Console.WriteLine("Token validated successfully.");
                 var claimsIdentity = context.Principal.Identity as System.Security.Claims.ClaimsIdentity;
                 if (claimsIdentity != null)
                 {
@@ -162,7 +164,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             },
             OnChallenge = context =>
             {
-                Console.WriteLine("⚠️ OnChallenge error:");
+                Console.WriteLine("OnChallenge error:");
                 Console.WriteLine(context.ErrorDescription);
                 return Task.CompletedTask;
             }

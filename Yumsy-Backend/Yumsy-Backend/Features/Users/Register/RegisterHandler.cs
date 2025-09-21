@@ -6,12 +6,12 @@ namespace Yumsy_Backend.Features.Users.Register;
 
 public class RegisterHandler
 {
-    private readonly Supabase.Client _supabaseClient;
+    private readonly IConfiguration _config;
     private readonly SupabaseDbContext _dbContext;
 
-    public RegisterHandler(Supabase.Client supabaseClient, SupabaseDbContext dbContext)
+    public RegisterHandler(IConfiguration config, SupabaseDbContext dbContext)
     {
-        _supabaseClient = supabaseClient;
+        _config = config;
         _dbContext = dbContext;
     }
 
@@ -20,29 +20,33 @@ public class RegisterHandler
         var usernameExist = await _dbContext.Users
             .AnyAsync(u => u.Username == request.Username);
         
-        if (!usernameExist)
+        if (usernameExist)
             throw new InvalidOperationException($"User name: {request.Username} is already registered.");
 
         var emailExist = await _dbContext.Users
             .AnyAsync(u => u.Email == request.Email);
         
-        if (!emailExist)
+        if (emailExist)
             throw new InvalidOperationException($"Email: {request.Email} is already registered.");
         
-        await _supabaseClient.InitializeAsync();
+        var client = new Supabase.Client(
+            _config["Supabase:Url"],
+            _config["Supabase:ServiceKey"],
+            new Supabase.SupabaseOptions { AutoConnectRealtime = false }
+        );
+        await client.InitializeAsync();
 
         var signUpOptions = new Supabase.Gotrue.SignUpOptions
         {
             Data = new Dictionary<string, object> { { "username", request.Username } }
         };
 
-        var signUpResult = await _supabaseClient.Auth.SignUp(request.Email, request.Password, signUpOptions);
+        var signUpResult = await client.Auth.SignUp(request.Email, request.Password, signUpOptions);
 
         if (signUpResult.User == null)
             throw new ArgumentException("Failed to register user in Supabase Auth");
-        
+
         var userId = Guid.Parse(signUpResult.User.Id);
-        
         var user = new User
         {
             Id = userId,
