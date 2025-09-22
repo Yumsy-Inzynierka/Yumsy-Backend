@@ -26,6 +26,7 @@ using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 using Yumsy_Backend.Features.Users.Profile.CreateProfile;
+using Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
 using Yumsy_Backend.Features.Users.Register;
@@ -87,6 +88,7 @@ builder.Services.AddScoped<GetLikedPostsHandler>();
 builder.Services.AddScoped<EditShoppingListHandler>();
 builder.Services.AddScoped<AddShoppingListHandler>();
 builder.Services.AddScoped<RefreshTokenHandler>();
+builder.Services.AddScoped<EditProfileDetailsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -116,6 +118,7 @@ builder.Services.AddScoped<IValidator<GetTopDailyTagsRequest>, GetTopDailyTagsVa
 builder.Services.AddScoped<IValidator<GetLikedPostsRequest>, GetLikedPostsValidator>();
 builder.Services.AddScoped<IValidator<EditShoppingListRequest>, EditShoppingListValidator>();
 builder.Services.AddScoped<IValidator<AddShoppingListRequest>, AddShoppingListValidator>();
+builder.Services.AddScoped<IValidator<EditProfileDetailsRequest>, EditProfileDetailsValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
@@ -160,6 +163,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         Console.WriteLine($" - {claim.Type}: {claim.Value}");
                     }
                 }
+
+                // 👇 Dodaj tutaj
+                Console.WriteLine("Issuer claim (iss):");
+                Console.WriteLine(context.Principal?.FindFirst("iss")?.Value);
+
                 return Task.CompletedTask;
             },
             OnChallenge = context =>
