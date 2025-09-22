@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Users.Profile.CreateProfile;
+namespace Yumsy_Backend.Features.Users.Profile.AddProfileDetails;
 
 public class AddProfileDetailsHandler
 {

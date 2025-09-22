@@ -24,8 +24,8 @@ using Yumsy_Backend.Features.ShoppingLists.EditShoppingList;
 using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
+using Yumsy_Backend.Features.Users.Profile.AddProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
-using Yumsy_Backend.Features.Users.Profile.CreateProfile;
 using Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
@@ -40,25 +40,8 @@ var configuration = builder.Configuration;
 builder.Services.AddDbContext<SupabaseDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("SupabaseConnection")));
 
-// Konfiguracja Supabase Clienta
-var supabaseUrl = configuration["Supabase:Url"];
-var supabaseJWKS = $"{supabaseUrl}/auth/v1/.well-known/openid-configuration";
-
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton(configuration);
-
-/*builder.Services.AddSingleton(provider =>
-{
-    var config = provider.GetRequiredService<IConfiguration>();
-    var url = config["Supabase:Url"];
-    var key = config["Supabase:ServiceKey"];
-
-    return new Supabase.Client(url, key, new Supabase.SupabaseOptions
-    {
-        AutoConnectRealtime = false,
-        AutoRefreshToken = true
-    });
-});*/
 
 // Rejestracja handlerów i walidatorów
 builder.Services.AddScoped<RegisterHandler>();
@@ -164,7 +147,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     }
                 }
 
-                // 👇 Dodaj tutaj
                 Console.WriteLine("Issuer claim (iss):");
                 Console.WriteLine(context.Principal?.FindFirst("iss")?.Value);
 

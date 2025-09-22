@@ -22,11 +22,6 @@ public class EditProfileDetailsEndpoint : ControllerBase
     [HttpPut]
     public async Task<ActionResult> AddProfileDetails([FromBody] EditProfileDetailsRequest editProfileDetailsRequest, CancellationToken cancellationToken)
     {
-        
-        foreach (var claim in User.Claims)
-        {
-            Console.WriteLine($"{claim.Type}: {claim.Value}");
-        }
         var userId = User.GetUserId();
         
         var fullRequest = new EditProfileDetailsRequest
