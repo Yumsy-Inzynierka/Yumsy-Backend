@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Yumsy_Backend.Features.Users.GetShoppingLists;
+namespace Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 
 public class GetShoppingListsRequest
 {
-    [FromRoute]
+    [FromRoute(Name = "userId")]
     public Guid UserId { get; set; }
+
 }

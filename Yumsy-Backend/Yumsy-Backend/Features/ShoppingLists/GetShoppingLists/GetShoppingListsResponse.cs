@@ -1,4 +1,4 @@
-﻿namespace Yumsy_Backend.Features.Users.GetShoppingLists;
+﻿namespace Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 
 public record GetShoppingListsResponse
 {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("/api/posts/feed")]
 public class GetHomeFeedForUserEndpoint : ControllerBase
