@@ -6,15 +6,14 @@ namespace Yumsy_Backend.Persistence.Models;
 [Table("shopping_list")]
 public class ShoppingList
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
     [MaxLength(50)]
     public string Title { get; set; }
 
     public Guid UserId { get; set; }
 
-    public Guid CreatedFromId { get; set; }
+    public Guid? CreatedFromId { get; set; }
     
     [ForeignKey(nameof(CreatedFromId))]
     public Post CreatedFrom { get; set; }
