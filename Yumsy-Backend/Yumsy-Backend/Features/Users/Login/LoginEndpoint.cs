@@ -18,7 +18,7 @@ public class LoginEndpoint : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<ActionResult<LoginResponse>> Handle([FromBody] LoginRequest request)
     {
         var validationResult = await _validator.ValidateAsync(request);

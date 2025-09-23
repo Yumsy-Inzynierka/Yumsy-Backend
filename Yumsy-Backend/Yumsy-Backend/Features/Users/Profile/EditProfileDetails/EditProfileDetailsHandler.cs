@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Users.Profile.CreateProfile;
+namespace Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 
-public class AddProfileDetailsHandler
+public class EditProfileDetailsHandler
 {
     private readonly SupabaseDbContext _dbContext;
 
-    public AddProfileDetailsHandler(SupabaseDbContext dbContext)
+    public EditProfileDetailsHandler(SupabaseDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task Handle(AddProfileDetailsRequest addProfileDetailsRequest, CancellationToken cancellationToken)
+    public async Task Handle(EditProfileDetailsRequest addProfileDetailsRequest, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == addProfileDetailsRequest.Id, cancellationToken);

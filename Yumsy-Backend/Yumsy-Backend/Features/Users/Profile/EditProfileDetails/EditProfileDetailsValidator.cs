@@ -1,14 +1,14 @@
 using FluentValidation;
 
-namespace Yumsy_Backend.Features.Users.Profile.CreateProfile;
+namespace Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 
-public class AddProfileDetailsValidator : AbstractValidator<AddProfileDetailsRequest>
+public class EditProfileDetailsValidator : AbstractValidator<EditProfileDetailsRequest>
 {
-    public AddProfileDetailsValidator()
+    public EditProfileDetailsValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("UserId cannot be empty");
+            .NotEmpty().WithMessage("UserId is required.")
+            .NotEqual(Guid.Empty).WithMessage("UserId must be a valid GUID.");
         
         RuleFor(x => x.ProfileName)
             .NotEmpty().WithMessage("ProfileName is required.")

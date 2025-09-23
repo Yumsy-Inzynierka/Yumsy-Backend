@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Users.GetShoppingLists;
+namespace Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 
 public class GetShoppingListsHandler
 {

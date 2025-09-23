@@ -5,25 +5,34 @@ namespace Yumsy_Backend.Features.Users.Login;
 
 public class LoginHandler
 {
-    private readonly Supabase.Client _supabaseClient;
+    private readonly IConfiguration _config;
     private readonly SupabaseDbContext _dbContext;
 
-    public LoginHandler(Supabase.Client supabaseClient, SupabaseDbContext dbContext)
+    public LoginHandler(IConfiguration config, SupabaseDbContext dbContext)
     {
-        _supabaseClient = supabaseClient;
+        _config = config;
         _dbContext = dbContext;
     }
 
     public async Task<LoginResponse> Handle(LoginRequest request)
     {
-        await _supabaseClient.InitializeAsync(); 
+        var client = new Supabase.Client(
+            _config["Supabase:Url"],
+            _config["Supabase:ServiceKey"],
+            new Supabase.SupabaseOptions
+            {
+                AutoConnectRealtime = false
+            }
+        );
 
-        var signInResult = await _supabaseClient.Auth.SignIn(
+        await client.InitializeAsync();
+
+        var signInResult = await client.Auth.SignIn(
             email: request.Email,
             password: request.Password
         );
 
-        if (signInResult.User == null)
+        if (signInResult?.User == null)
             throw new ArgumentException("Invalid email or password");
 
         if (!Guid.TryParse(signInResult.User.Id, out Guid userId))
@@ -43,7 +52,7 @@ public class LoginHandler
             RefreshToken = signInResult.RefreshToken,
             Email = user.Email,
             UserName = user.Username,
-            Role = user.Role
+            Role = user.Role,
         };
     }
 }
