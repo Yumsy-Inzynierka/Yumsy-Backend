@@ -18,18 +18,18 @@ public class AddShoppingListController : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost]
+    [HttpPost("import")]
     public async Task<ActionResult<AddShoppingListResponse>> Handle([FromBody] AddShoppingListRequest request, CancellationToken cancellationToken)
     {
+        //request.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        var userId = User.GetUserId();
-        
-        var response = await _addShoppingListHandler.Handle(request, userId, cancellationToken);
+        var response = await _addShoppingListHandler.Handle(request, cancellationToken);
             
         return Created($"api/shoppingLists/{response.Id}", response);
     }

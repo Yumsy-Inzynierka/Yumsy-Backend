@@ -6,44 +6,49 @@ namespace Yumsy_Backend.Features.ShoppingLists.AddShoppingList;
 
 public class AddShoppingListHandler
 {
-    public SupabaseDbContext _dbContext;
+    private readonly SupabaseDbContext _dbContext;
 
     public AddShoppingListHandler(SupabaseDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest request, Guid userId,
-        CancellationToken cancellationToken)
+    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest request, CancellationToken cancellationToken)
     {
-        var postExists = await _dbContext.Posts.AnyAsync(p => p.Id == request.CreatedFrom, cancellationToken);
-        if (!postExists)
+        var sourcePost = await _dbContext.Posts
+            .AsNoTracking()
+            .Include(p => p.IngredientPosts)
+            .ThenInclude(ip => ip.Ingredient)
+            .FirstOrDefaultAsync(p => p.Id == request.CreatedFrom, cancellationToken);
+            
+        if (sourcePost == null)
             throw new KeyNotFoundException("Post specified in CreatedFrom does not exist");
-        
+
         var shoppingList = new ShoppingList
         {
             Id = Guid.NewGuid(),
             Title = request.Title,
-            UserId = userId,
-            CreatedFromId = request.CreatedFrom
+            UserId = request.UserId,
+            CreatedFromId = request.CreatedFrom,
+            IngredientShoppingLists = new List<IngredientShoppingList>()
         };
-        
-        foreach (var ingredient in request.Ingredients)
+
+        foreach (var ingredientPost in sourcePost.IngredientPosts)
         {
             shoppingList.IngredientShoppingLists.Add(new IngredientShoppingList
             {
                 ShoppingListId = shoppingList.Id,
-                IngredientId = ingredient.Id,
-                Quantity = ingredient.Quantity
+                IngredientId = ingredientPost.Ingredient.Id,
+                Quantity = ingredientPost.Quantity
             });
         }
-        
+
         _dbContext.ShoppingLists.Add(shoppingList);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new AddShoppingListResponse
         {
-            Id = shoppingList.Id,
+            Id = shoppingList.Id
         };
     }
 }
