@@ -8,6 +8,7 @@ using Yumsy_Backend.Features.Comments.DeleteComment;
 using Yumsy_Backend.Features.Ingredients.SearchIngredient;
 using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.GetPostComments;
+using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
 using Yumsy_Backend.Features.Posts.GetTopDailyPostsEndpoint;
@@ -72,6 +73,7 @@ builder.Services.AddScoped<EditShoppingListHandler>();
 builder.Services.AddScoped<AddShoppingListHandler>();
 builder.Services.AddScoped<RefreshTokenHandler>();
 builder.Services.AddScoped<EditProfileDetailsHandler>();
+builder.Services.AddScoped<GetExplorePagePostsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -102,6 +104,7 @@ builder.Services.AddScoped<IValidator<GetLikedPostsRequest>, GetLikedPostsValida
 builder.Services.AddScoped<IValidator<EditShoppingListRequest>, EditShoppingListValidator>();
 builder.Services.AddScoped<IValidator<AddShoppingListRequest>, AddShoppingListValidator>();
 builder.Services.AddScoped<IValidator<EditProfileDetailsRequest>, EditProfileDetailsValidator>();
+builder.Services.AddScoped<IValidator<GetExplorePagePostsRequest>, GetExplorePagePostsValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
