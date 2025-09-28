@@ -6,7 +6,7 @@ namespace Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 
 //[Authorize]
 [ApiController]
-[Route("api/shoppingLists")]
+[Route("api/shopping-lists")]
 public class DeleteShoppingListEndpoint : ControllerBase
 {
     private readonly DeleteShoppingListHandler _deleteShoppingListHandler;
