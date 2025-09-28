@@ -61,21 +61,95 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
         => optionsBuilder.UseNpgsql("Host=aws-0-eu-north-1.pooler.supabase.com;Port=6543;Database=postgres;Username=postgres.kitubqamchqakbyysyuk;Password=k2ig2odPgpKNISFC;Ssl Mode=Require;Trust Server Certificate=true");
         */
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.Entity<UserFollower>()
+        .HasKey(uf => new { uf.FollowingId, uf.FollowerId });
+
+    modelBuilder.Entity<UserFollower>()
+        .HasOne(uf => uf.Following)
+        .WithMany(u => u.Followers)
+        .HasForeignKey(uf => uf.FollowingId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<UserFollower>()
+        .HasOne(uf => uf.Follower)
+        .WithMany(u => u.Followings)
+        .HasForeignKey(uf => uf.FollowerId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.PostImages)
+        .WithOne(pi => pi.Post)
+        .HasForeignKey(pi => pi.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.PostTags)
+        .WithOne(pt => pt.Post)
+        .HasForeignKey(pt => pt.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.Steps)
+        .WithOne(s => s.Post)
+        .HasForeignKey(s => s.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<IngredientPost>(entity =>
     {
-        modelBuilder.Entity<UserFollower>()
-            .HasKey(uf => new { uf.FollowingId, uf.FollowerId });
+        entity.HasKey(ip => new { ip.IngredientId, ip.PostId });
 
-        modelBuilder.Entity<UserFollower>()
-            .HasOne(uf => uf.Following)
-            .WithMany(u => u.Followers)
-            .HasForeignKey(uf => uf.FollowingId)
-            .OnDelete(DeleteBehavior.Restrict);
+        entity.HasOne(ip => ip.Post)
+              .WithMany(p => p.IngredientPosts)
+              .HasForeignKey(ip => ip.PostId)
+              .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<UserFollower>()
-            .HasOne(uf => uf.Follower)
-            .WithMany(u => u.Followings)
-            .HasForeignKey(uf => uf.FollowerId)
-            .OnDelete(DeleteBehavior.Restrict);
-    }
+        entity.HasOne(ip => ip.Ingredient)
+              .WithMany(i => i.IngredientPosts)
+              .HasForeignKey(ip => ip.IngredientId)
+              .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.Likes)
+        .WithOne(l => l.Post)
+        .HasForeignKey(l => l.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.Comments)
+        .WithOne(c => c.Post)
+        .HasForeignKey(c => c.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<Post>()
+        .HasMany(p => p.Saved)
+        .WithOne(s => s.Post)
+        .HasForeignKey(s => s.PostId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<IngredientShoppingList>()
+        .HasKey(isl => new { isl.IngredientId, isl.ShoppingListId });
+
+    modelBuilder.Entity<IngredientShoppingList>()
+        .HasOne(isl => isl.Ingredient)
+        .WithMany(i => i.IngredientShoppingLists)
+        .HasForeignKey(isl => isl.IngredientId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<IngredientShoppingList>()
+        .HasOne(isl => isl.ShoppingList)
+        .WithMany(sl => sl.IngredientShoppingLists)
+        .HasForeignKey(isl => isl.ShoppingListId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<PostTag>()
+        .HasOne(pt => pt.Tag)
+        .WithMany(t => t.PostTags)
+        .HasForeignKey(pt => pt.TagId)
+        .OnDelete(DeleteBehavior.Cascade);
+}
 }

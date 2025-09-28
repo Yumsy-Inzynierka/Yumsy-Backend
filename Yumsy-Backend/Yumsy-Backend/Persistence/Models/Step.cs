@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Step
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     [MaxLength(300)]
     public string Description { get; set; }
     public int StepNumber { get; set; }

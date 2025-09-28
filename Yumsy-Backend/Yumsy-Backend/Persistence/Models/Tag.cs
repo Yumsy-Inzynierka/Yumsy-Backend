@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Tag
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(50)]
     public string Name { get; set; } = null!;

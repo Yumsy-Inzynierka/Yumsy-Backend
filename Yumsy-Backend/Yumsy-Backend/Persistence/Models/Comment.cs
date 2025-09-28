@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Comment
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public DateTime CommentedDate { get; set; } = DateTime.UtcNow;
     public int LikesCount { get; set; }

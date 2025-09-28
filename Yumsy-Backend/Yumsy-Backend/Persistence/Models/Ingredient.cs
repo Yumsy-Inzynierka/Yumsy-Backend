@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Ingredient
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string Name { get; set; }
 

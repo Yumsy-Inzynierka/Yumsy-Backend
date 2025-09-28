@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Persistence.Models;
 public class QuizQuestion
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(100)]
     public string Description { get; set; }

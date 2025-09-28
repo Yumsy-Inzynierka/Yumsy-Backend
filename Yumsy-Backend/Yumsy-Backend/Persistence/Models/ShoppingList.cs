@@ -6,7 +6,8 @@ namespace Yumsy_Backend.Persistence.Models;
 [Table("shopping_list")]
 public class ShoppingList
 {
-    [Key] public Guid Id { get; set; }
+    [Key] 
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(50)]
     public string Title { get; set; }
