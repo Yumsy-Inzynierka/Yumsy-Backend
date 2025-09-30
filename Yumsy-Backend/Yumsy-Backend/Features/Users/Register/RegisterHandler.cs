@@ -22,6 +22,12 @@ public class RegisterHandler
         
         if (usernameExist)
             throw new InvalidOperationException($"User name: {request.Username} is already registered.");
+        
+        var profileNameExist = await _dbContext.Users
+            .AnyAsync(u => u.ProfileName == request.Username);
+        
+        if (profileNameExist)
+            throw new InvalidOperationException($"User name: {request.Username} is already registered as profile name.");
 
         var emailExist = await _dbContext.Users
             .AnyAsync(u => u.Email == request.Email);
@@ -52,10 +58,11 @@ public class RegisterHandler
             Id = userId,
             Email = request.Email,
             Username = request.Username,
+            ProfileName = request.Username,
             Role = "user",
             FollowersCount = 0,
             FollowingCount = 0,
-            RecipesCount = 0,
+            RecipesCount = 0
         };
         
         _dbContext.Users.Add(user);

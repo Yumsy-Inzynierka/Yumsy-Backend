@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Supabase.Postgrest.Exceptions;
 using Yumsy_Backend.Features.Users.Register;
 
 [ApiController]
