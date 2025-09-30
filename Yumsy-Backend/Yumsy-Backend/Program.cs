@@ -8,6 +8,7 @@ using Yumsy_Backend.Features.Comments.DeleteComment;
 using Yumsy_Backend.Features.Ingredients.SearchIngredient;
 using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.GetPostComments;
+using Yumsy_Backend.Features.Posts.EditPost;
 using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeed;
@@ -25,7 +26,6 @@ using Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
-using Yumsy_Backend.Features.Users.Profile.AddProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 using Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
@@ -65,7 +65,6 @@ builder.Services.AddScoped<FollowUserHandler>();
 builder.Services.AddScoped<UnfollowUserHandler>();
 builder.Services.AddScoped<LikeCommentHandler>();
 builder.Services.AddScoped<UnlikeCommentHandler>();
-builder.Services.AddScoped<AddProfileDetailsHandler>();
 builder.Services.AddScoped<GetTopDailyPostsHandler>();
 builder.Services.AddScoped<GetTopDailyTagsHandler>();
 builder.Services.AddScoped<GetLikedPostsHandler>();
@@ -74,6 +73,7 @@ builder.Services.AddScoped<AddShoppingListHandler>();
 builder.Services.AddScoped<RefreshTokenHandler>();
 builder.Services.AddScoped<EditProfileDetailsHandler>();
 builder.Services.AddScoped<GetExplorePagePostsHandler>();
+builder.Services.AddScoped<EditPostHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -97,7 +97,6 @@ builder.Services.AddScoped<IValidator<FollowUserRequest>, FollowUserValidator>()
 builder.Services.AddScoped<IValidator<UnfollowUserRequest>, UnfollowUserValidator>();
 builder.Services.AddScoped<IValidator<LikeCommentRequest>, LikeCommentValidator>();
 builder.Services.AddScoped<IValidator<UnlikeCommentRequest>, UnlikeCommentValidator>();
-builder.Services.AddScoped<IValidator<AddProfileDetailsRequest>, AddProfileDetailsValidator>();
 builder.Services.AddScoped<IValidator<GetTopDailyPostsRequest>, GetTopDailyPostsValidator>();
 builder.Services.AddScoped<IValidator<GetTopDailyTagsRequest>, GetTopDailyTagsValidator>();
 builder.Services.AddScoped<IValidator<GetLikedPostsRequest>, GetLikedPostsValidator>();
@@ -105,6 +104,7 @@ builder.Services.AddScoped<IValidator<EditShoppingListRequest>, EditShoppingList
 builder.Services.AddScoped<IValidator<AddShoppingListRequest>, AddShoppingListValidator>();
 builder.Services.AddScoped<IValidator<EditProfileDetailsRequest>, EditProfileDetailsValidator>();
 builder.Services.AddScoped<IValidator<GetExplorePagePostsRequest>, GetExplorePagePostsValidator>();
+builder.Services.AddScoped<IValidator<EditPostRequest>, EditPostValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
