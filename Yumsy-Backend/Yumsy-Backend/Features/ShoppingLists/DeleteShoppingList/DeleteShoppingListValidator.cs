@@ -7,7 +7,7 @@ public class DeleteShoppingListValidator : AbstractValidator<DeleteShoppingListR
     public DeleteShoppingListValidator()
     {
         RuleFor(x => x.ShoppingListId)
-            .NotEmpty()
-            .NotEqual(Guid.Empty);
+            .NotEmpty().WithMessage("ShoppingListId is required.")
+            .NotEqual(Guid.Empty).WithMessage("ShoppingListId must be a valid GUID.");
     }
 }

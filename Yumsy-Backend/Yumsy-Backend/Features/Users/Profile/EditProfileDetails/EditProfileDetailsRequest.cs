@@ -1,9 +1,18 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 
 public class EditProfileDetailsRequest
 {
-    public Guid Id { get; set; }
-    public string ProfileName { get; set; }
-    public string ProfilePicture { get; set; }
-    public string Bio { get; set; }
+    public Guid UserId { get; set; }
+
+    [FromBody]
+    public EditProfileDetailsRequestBody Body { get; set; } = default!;
+}
+
+public class EditProfileDetailsRequestBody
+{
+    public string ProfileName { get; set; } = string.Empty;
+    public string ProfilePicture { get; set; } = string.Empty;
+    public string Bio { get; set; } = string.Empty;
 }

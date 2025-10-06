@@ -9,5 +9,5 @@ public record GetExplorePagePostsResponse
 public record GetExplorePagePostResponse
 {
     public Guid Id { get; init; }
-    public string ImageUrl { get; init; }
+    public string Image { get; init; }
 }

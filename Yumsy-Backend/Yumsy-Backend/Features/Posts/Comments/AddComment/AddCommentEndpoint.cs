@@ -1,12 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
-namespace Yumsy_Backend.Features.Comments.AddComment;
+namespace Yumsy_Backend.Features.Posts.Comments.AddComment;
 
-// [Authorized]
+[Authorize]
 [ApiController]
-[Route("api/posts/{postId}/comments")]
+[Route("api/posts/")]
 public class AddCommentEndpoint : ControllerBase
 {
     private readonly AddCommentHandler _handler;
@@ -18,22 +19,16 @@ public class AddCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost]
-    public async Task<ActionResult<AddCommentResponse>> AddComment(
-        [FromRoute] Guid postId,
-        [FromBody] AddCommentRequest addCommentRequest,
-        CancellationToken cancellationToken
-        )
+    [HttpPost("{postId:guid}/comments")]
+    public async Task<ActionResult<AddCommentResponse>> AddComment([FromRoute] AddCommentRequest addCommentRequest, CancellationToken cancellationToken)
     {
-        addCommentRequest.PostId = postId;
+        addCommentRequest.UserId = User.GetUserId();
         
         var validationResult = await _validator.ValidateAsync(addCommentRequest, cancellationToken);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
-
-        var userId = User.GetUserId();
         
-        var response = await _handler.Handle(addCommentRequest, userId, cancellationToken);
+        var response = await _handler.Handle(addCommentRequest, cancellationToken);
         
         return Ok(response);
     }

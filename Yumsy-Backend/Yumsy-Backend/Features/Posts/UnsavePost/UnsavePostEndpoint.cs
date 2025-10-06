@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.UnsavePost;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class UnsavePostEndpoint : ControllerBase
@@ -17,22 +19,18 @@ public class UnsavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{postId}/unsave")]
-    public async Task<IActionResult> Handle([FromRoute] Guid postId, [FromBody]UnsavePostRequest unsavePostRequest, CancellationToken cancellationToken)
+    [HttpDelete("{postId:guid}/unsave")]
+    public async Task<IActionResult> Handle([FromRoute] UnsavePostRequest unsavePostRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new UnsavePostRequest
-        {
-            PostId = postId,
-            UserId = unsavePostRequest.UserId,
-        };
+        unsavePostRequest.UserId = User.GetUserId(); 
         
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(unsavePostRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _unsavePostHandler.Handle(fullRequest, cancellationToken);
+        await _unsavePostHandler.Handle(unsavePostRequest, cancellationToken);
             
         return NoContent();
     }

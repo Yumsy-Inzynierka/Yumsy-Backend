@@ -1,10 +1,11 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.ShoppingLists.EditShoppingList;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/shopping-lists")]
 public class Controller : ControllerBase
@@ -18,21 +19,18 @@ public class Controller : ControllerBase
         _validator = validator;
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<ActionResult<EditShoppingListResponse>> Handle(
-        [FromRoute] Guid id,
-        [FromBody] EditShoppingListRequest editShoppingListRequest,
-        CancellationToken cancellationToken)
+    [HttpPut("{shoppingListId:guid}")]
+    public async Task<ActionResult<EditShoppingListResponse>> Handle([FromRoute] EditShoppingListRequest editShoppingListRequest, CancellationToken cancellationToken)
     {
+        editShoppingListRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(editShoppingListRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        var userId = User.GetUserId();
-        
-        var response = await _editShoppingListHandler.Handle(id, editShoppingListRequest, userId, cancellationToken);
+        var response = await _editShoppingListHandler.Handle(editShoppingListRequest, cancellationToken);
             
         return Ok(response);
     }

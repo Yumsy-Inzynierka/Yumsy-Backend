@@ -3,7 +3,6 @@ namespace Yumsy_Backend.Features.Posts.Comments.GetPostComments;
 public record GetPostCommentsResponse
 {
     public List<GetPostCommentResponse> Comments { get; init; }
-    
 }
 
 

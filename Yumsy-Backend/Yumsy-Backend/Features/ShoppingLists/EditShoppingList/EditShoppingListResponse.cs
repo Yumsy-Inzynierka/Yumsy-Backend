@@ -4,5 +4,5 @@ public record EditShoppingListResponse
 {
     public Guid Id { get; init; }
     public string Title { get; init; } = null!;
-    public List<EditShoppingListIngredient> Ingredients { get; init; }
+    public IEnumerable<EditShoppingListIngredient> Ingredients { get; init; }
 }

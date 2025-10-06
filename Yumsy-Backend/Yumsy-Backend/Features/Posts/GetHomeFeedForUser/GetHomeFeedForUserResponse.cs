@@ -1,4 +1,4 @@
-namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
+namespace Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
 
 public record GetHomeFeedForUserResponse
 {
@@ -11,7 +11,7 @@ public record GetHomeFeedForUserPostResponse
     public string PostTitle { get; init; }
     public Guid UserId { get; init; }
     public string Username { get; init; }
-    public string ImageURL { get; init; }
+    public string Image { get; init; }
     public DateTime TimePosted { get; init; }
     public int LikesCount { get; init; }
     public int CommentsCount { get; init; }

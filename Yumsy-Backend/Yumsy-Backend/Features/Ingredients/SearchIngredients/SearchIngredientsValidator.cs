@@ -1,5 +1,5 @@
 using FluentValidation;
-using Yumsy_Backend.Features.Posts.GetHomeFeed;
+using Yumsy_Backend.Features.Ingredients.SearchIngredient;
 
 namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
 

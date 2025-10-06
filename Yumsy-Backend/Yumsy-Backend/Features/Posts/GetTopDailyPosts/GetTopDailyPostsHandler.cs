@@ -3,7 +3,7 @@ using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Shared;
 
-namespace Yumsy_Backend.Features.Posts.GetTopDailyPostsEndpoint;
+namespace Yumsy_Backend.Features.Posts.GetTopDailyPosts;
 
 public class GetTopDailyPostsHandler
 {
@@ -28,7 +28,7 @@ public class GetTopDailyPostsHandler
                 PostTitle = p.Title,
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
-                ImageURL = p.PostImages
+                Image = p.PostImages
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
                 TimePosted = p.PostedDate,

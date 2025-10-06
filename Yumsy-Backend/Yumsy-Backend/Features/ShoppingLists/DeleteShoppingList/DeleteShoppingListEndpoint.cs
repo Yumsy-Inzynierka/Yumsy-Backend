@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/shopping-lists")]
 public class DeleteShoppingListEndpoint : ControllerBase
@@ -18,7 +18,7 @@ public class DeleteShoppingListEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{shoppingListId}")]
+    [HttpDelete("{shoppingListId:guid}")]
     public async Task<IActionResult> Handle([FromRoute] DeleteShoppingListRequest deleteShoppingListRequest)
     {
         var validationResult = await _validator.ValidateAsync(deleteShoppingListRequest);

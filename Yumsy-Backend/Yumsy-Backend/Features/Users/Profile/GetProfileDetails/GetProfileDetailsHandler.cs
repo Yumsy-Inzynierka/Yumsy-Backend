@@ -34,12 +34,12 @@ public class GetProfileDetailsHandler
             FollowersCount = profile.FollowersCount,
             RecreationsCount = 0, // to be implemented: recreations logic
             Bio = profile.Bio,
-            ProfilePictureUrl = profile.ProfilePicture,
+            ProfilePicture = profile.ProfilePicture,
             ProfilePosts = profile.Posts
                 .Select(p => new GetProfilePostsResponse()
                 {
                     Id = p.Id,
-                    ImageUrl = p.PostImages.FirstOrDefault()?.ImageUrl
+                    Image = p.PostImages.FirstOrDefault()?.ImageUrl
                 })
                 .ToList()
         };

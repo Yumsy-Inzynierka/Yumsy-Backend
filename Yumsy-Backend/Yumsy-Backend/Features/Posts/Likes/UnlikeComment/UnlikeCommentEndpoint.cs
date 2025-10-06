@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.Likes.UnlikeComment;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/comments")]
 public class UnlikeCommentEndpoint : ControllerBase
@@ -17,22 +19,18 @@ public class UnlikeCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{commentId}/unlike")]
-    public async Task<IActionResult> Handle([FromRoute] Guid commentId, [FromBody] UnlikeCommentRequest unlikeCommentRequest, CancellationToken cancellationToken)
+    [HttpDelete("{commentId:guid}/unlike")]
+    public async Task<IActionResult> Handle([FromRoute] UnlikeCommentRequest unlikeCommentRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new UnlikeCommentRequest
-        {
-            CommentId = commentId,
-            UserId = unlikeCommentRequest.UserId
-        };
+        unlikeCommentRequest.UserId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(unlikeCommentRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _unlikeCommentHandler.Handle(fullRequest, cancellationToken);
+        await _unlikeCommentHandler.Handle(unlikeCommentRequest, cancellationToken);
             
         return NoContent();
     }

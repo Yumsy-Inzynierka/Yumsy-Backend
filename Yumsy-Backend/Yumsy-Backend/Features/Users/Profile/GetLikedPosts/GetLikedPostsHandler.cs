@@ -20,7 +20,7 @@ public class GetLikedPostsHandler
             .Select(l => new GetLikedPostResponse
             {
                 Id = l.PostId,
-                ImageUrl = l.Post.PostImages
+                Image = l.Post.PostImages
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
             })

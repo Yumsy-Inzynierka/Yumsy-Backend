@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Users.FollowUser;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/users")]
 public class FollowUserEndpoint : ControllerBase
@@ -17,23 +19,19 @@ public class FollowUserEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{followerId}/follow")]
-    public async Task<IActionResult> Handle([FromRoute] Guid followerId, [FromBody] FollowUserRequest followUserRequest, CancellationToken cancellationToken)
+    [HttpPost("follow")]
+    public async Task<IActionResult> Handle([FromRoute] FollowUserRequest followUserRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new FollowUserRequest
-        {
-            FollowingId = followUserRequest.FollowingId,
-            FollowerId = followerId
-        };
+        followUserRequest.FollowerId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(followUserRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _followUserHandler.Handle(fullRequest, cancellationToken);
+        var response = await _followUserHandler.Handle(followUserRequest, cancellationToken);
             
-        return Created($"api/users/{response.FollowingId}/follow", response);
+        return Created($"api/users/follow", response);
     }
 }

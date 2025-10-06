@@ -48,7 +48,7 @@ public class LikeCommentHandler
 
         return new LikeCommentResponse
         {
-            commentId = commentLike.CommentId
+            Id = commentLike.CommentId
         };
     }
 }

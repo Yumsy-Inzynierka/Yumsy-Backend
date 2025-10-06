@@ -1,11 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 
-// [Authorized]
+[Authorize]
 [ApiController]
-[Route("api/profile")]
+[Route("api/profiles")]
 public class GetProfileDetailsEndpoint : ControllerBase
 {
     private readonly GetProfileDetailsHandler _handler;
@@ -18,19 +20,17 @@ public class GetProfileDetailsEndpoint : ControllerBase
     }
     
     [HttpGet]
-    [Route("{userId}")]
-    public async Task<ActionResult<GetProfileDetailsResponse>> GetProfileDetails(
-        [FromRoute] GetProfileDetailsRequest request,
-        CancellationToken cancellationToken
-        )
+    public async Task<ActionResult<GetProfileDetailsResponse>> GetProfileDetails([FromRoute] GetProfileDetailsRequest getProfileDetailsRequest, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        getProfileDetailsRequest.UserId = User.GetUserId();
+         
+        var validationResult = await _validator.ValidateAsync(getProfileDetailsRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        GetProfileDetailsResponse response = await _handler.Handle(request);
+        GetProfileDetailsResponse response = await _handler.Handle(getProfileDetailsRequest);
             
         return Ok(response);
     }

@@ -1,12 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 
-//[Authorize]
+[Authorize]
 [ApiController]
-[Route("api/profile")]
+[Route("api/profiles")]
 public class Controller : ControllerBase
 {
     private readonly GetLikedPostsHandler _getLikedPostsHandler;

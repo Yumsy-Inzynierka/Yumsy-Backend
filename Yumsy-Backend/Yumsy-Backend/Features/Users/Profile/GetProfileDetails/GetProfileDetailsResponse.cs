@@ -9,7 +9,7 @@ public record GetProfileDetailsResponse
     public int FollowersCount { get; init; }
     public int RecreationsCount { get; init; }
     public string? Bio { get; init; }
-    public string? ProfilePictureUrl { get; init; }
+    public string? ProfilePicture { get; init; }
 
     public List<GetProfilePostsResponse>? ProfilePosts { get; set; }
 }
@@ -17,5 +17,5 @@ public record GetProfileDetailsResponse
 public record GetProfilePostsResponse
 {
     public Guid Id { get; init; }
-    public string ImageUrl { get; init; }
+    public string Image { get; init; }
 }

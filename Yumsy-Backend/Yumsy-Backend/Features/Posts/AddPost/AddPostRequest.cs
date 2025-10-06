@@ -4,15 +4,21 @@ namespace Yumsy_Backend.Features.Posts.AddPost;
 
 public class AddPostRequest
 {
-    [FromBody] 
     public Guid UserId { get; set; }
-    public string Title { get; set; }
+
+    [FromBody]
+    public AddPostRequestBody Body { get; set; } = default!;
+}
+
+public class AddPostRequestBody
+{
+    public string Title { get; set; } = string.Empty;
     public int? CookingTime { get; set; }
-    public string Description { get; set; }
-    public IEnumerable<AddPostRequestTag> Tags { get; set; }
-    public IEnumerable<AddPostRequestImage> Images { get; set; }
-    public IEnumerable<AddPostRequestIngredient> Ingredients { get; set; }
-    public IEnumerable<AddPostRequestRecipeStep> RecipeSteps { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public IEnumerable<AddPostRequestTag> Tags { get; set; } = Enumerable.Empty<AddPostRequestTag>();
+    public IEnumerable<AddPostRequestImage> Images { get; set; } = Enumerable.Empty<AddPostRequestImage>();
+    public IEnumerable<AddPostRequestIngredient> Ingredients { get; set; } = Enumerable.Empty<AddPostRequestIngredient>();
+    public IEnumerable<AddPostRequestRecipeStep> RecipeSteps { get; set; } = Enumerable.Empty<AddPostRequestRecipeStep>();
 }
 
 public class AddPostRequestTag
@@ -22,7 +28,7 @@ public class AddPostRequestTag
 
 public class AddPostRequestImage
 {
-    public string Image { get; set; }
+    public string Image { get; set; } = string.Empty;
 }
 
 public class AddPostRequestIngredient
@@ -34,6 +40,6 @@ public class AddPostRequestIngredient
 public class AddPostRequestRecipeStep
 {
     public int StepNumber { get; set; }
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
     public string? Image { get; set; }
 }

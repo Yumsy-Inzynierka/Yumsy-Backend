@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Posts.DeletePost;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class DeletePostEndpoint : ControllerBase
@@ -18,7 +18,7 @@ public class DeletePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{postId}")]
+    [HttpDelete("{postId:guid}")]
     public async Task<IActionResult> Handle([FromRoute] DeletePostRequest deletePostRequest)
     {
         var validationResult = await _validator.ValidateAsync(deletePostRequest);

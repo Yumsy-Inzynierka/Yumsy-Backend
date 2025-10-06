@@ -1,4 +1,4 @@
-namespace Yumsy_Backend.Features.Posts.GetTopDailyPostsEndpoint;
+namespace Yumsy_Backend.Features.Posts.GetTopDailyPosts;
 
 public record GetTopDailyPostsResponse
 {
@@ -11,7 +11,7 @@ public record GetTopDailyPostResponse
     public string PostTitle { get; init; }
     public Guid UserId { get; init; }
     public string Username { get; init; }
-    public string ImageURL { get; init; }
+    public string Image { get; init; }
     public DateTime TimePosted { get; init; }
     public int Count { get; init; }
     

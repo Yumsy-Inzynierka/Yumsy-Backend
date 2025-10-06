@@ -7,5 +7,10 @@ public class UnfollowUserRequest
     public Guid FollowerId { get; set; }
     
     [FromBody]
-    public Guid FollowingId { get; set; }    
+    public UnfollowUserRequestBody Body { get; set; } = default!;
+}
+
+public class UnfollowUserRequestBody
+{
+    public Guid FollowingId { get; set; } 
 }

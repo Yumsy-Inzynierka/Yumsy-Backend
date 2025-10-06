@@ -6,24 +6,24 @@ namespace Yumsy_Backend.Features.ShoppingLists.CreateShoppingList;
 
 public class CreateShoppingListHandler
 {
-    public SupabaseDbContext _dbContext;
+    private readonly SupabaseDbContext _dbContext;
 
     public CreateShoppingListHandler(SupabaseDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<CreateShoppingListResponse> Handle(CreateShoppingListRequest request, CancellationToken cancellationToken)
+    public async Task<CreateShoppingListResponse> Handle(CreateShoppingListRequest createShoppingListRequest, CancellationToken cancellationToken)
     {
         var shoppingList = new ShoppingList
         {
             Id = Guid.NewGuid(),
-            Title = request.Title,
-            UserId = request.UserId,
-            CreatedFromId = request.UserId
+            Title = createShoppingListRequest.Body.Title,
+            UserId = createShoppingListRequest.UserId,
+            CreatedFromId = createShoppingListRequest.UserId
         };
         
-        foreach (var ingredient in request.Ingredients)
+        foreach (var ingredient in createShoppingListRequest.Body.Ingredients)
         {
             shoppingList.IngredientShoppingLists.Add(new IngredientShoppingList
             {

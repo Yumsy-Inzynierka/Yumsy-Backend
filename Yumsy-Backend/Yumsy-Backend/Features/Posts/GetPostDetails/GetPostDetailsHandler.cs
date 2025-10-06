@@ -12,7 +12,7 @@ public class GetPostDetailsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest detailsRequest)
+    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest getPostDetailsRequest)
     {
         var post = await _dbContext.Posts
             .AsNoTracking()
@@ -20,13 +20,13 @@ public class GetPostDetailsHandler
             .Include(p => p.CreatedBy)
             .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
             .Include(p => p.PostImages)
-            .FirstOrDefaultAsync(p => p.Id == detailsRequest.PostId);
+            .FirstOrDefaultAsync(p => p.Id == getPostDetailsRequest.PostId);
 
         if (post is null)
             throw new KeyNotFoundException("Post does not exist");
 
         var ingredients = await _dbContext.IngredientPosts
-            .Where(ip => ip.PostId == detailsRequest.PostId)
+            .Where(ip => ip.PostId == getPostDetailsRequest.PostId)
             .Select(ip => new
             {
                 ip.IngredientId,
@@ -99,7 +99,7 @@ public class GetPostDetailsHandler
                 Id = rs.Id,
                 StepNumber = rs.StepNumber,
                 Description = rs.Description,
-                ImageUrl = rs.ImageUrl
+                Image = rs.ImageUrl
             })
             .ToList();
 
@@ -125,7 +125,7 @@ public class GetPostDetailsHandler
             Username = post.CreatedBy.Username,
             LikesCount = post.LikesCount,
             CommentsCount = post.CommentsCount,
-            ImagesUrls = images,
+            Images = images,
             Ingredients = ingredientResponses,
             Nutrition = new GetPostNutritionResponse
             {

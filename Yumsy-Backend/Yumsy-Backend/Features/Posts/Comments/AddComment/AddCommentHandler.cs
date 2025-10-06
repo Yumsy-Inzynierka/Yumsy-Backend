@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
-namespace Yumsy_Backend.Features.Comments.AddComment;
+namespace Yumsy_Backend.Features.Posts.Comments.AddComment;
 
 public class AddCommentHandler
 {
@@ -13,13 +13,13 @@ public class AddCommentHandler
         _dbContext = dbContext;
     }
 
-    public async Task<AddCommentResponse> Handle(AddCommentRequest addCommentRequest, Guid userId, CancellationToken cancellationToken)
+    public async Task<AddCommentResponse> Handle(AddCommentRequest addCommentRequest, CancellationToken cancellationToken)
     {
         var userExists = await _dbContext.Users
-            .AnyAsync(u => u.Id == userId, cancellationToken);
+            .AnyAsync(u => u.Id == addCommentRequest.UserId, cancellationToken);
 
         if (!userExists)
-            throw new KeyNotFoundException($"User with ID: {userId} not found.");
+            throw new KeyNotFoundException($"User with ID: {addCommentRequest.UserId} not found.");
     
         var post = await _dbContext.Posts
             .FirstOrDefaultAsync(u => u.Id == addCommentRequest.PostId, cancellationToken);
@@ -30,13 +30,12 @@ public class AddCommentHandler
         var comment = new Comment
         {
             Id = Guid.NewGuid(),
-            Content = addCommentRequest.Content,
+            Content = addCommentRequest.Body.Content,
             PostId = addCommentRequest.PostId,
-            ParentCommentId = addCommentRequest.ParentCommentId,
-            UserId = userId,
+            ParentCommentId = addCommentRequest.Body.ParentCommentId,
+            UserId = addCommentRequest.UserId,
             CommentedDate = DateTime.UtcNow,
         };
-        
         
         _dbContext.Comments.Add(comment);
         await _dbContext.SaveChangesAsync(cancellationToken);

@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class GetPostDetailsEndpoint : ControllerBase
 {
-    private readonly GetPostDetailsHandler _detailsHandler;
+    private readonly GetPostDetailsHandler _getPostDetailsRequest;
     private readonly IValidator<GetPostDetailsRequest> _validator;
     
-    public GetPostDetailsEndpoint(GetPostDetailsHandler detailsHandler, IValidator<GetPostDetailsRequest> validator)
+    public GetPostDetailsEndpoint(GetPostDetailsHandler getPostDetailsRequest, IValidator<GetPostDetailsRequest> validator)
     {
-        _detailsHandler = detailsHandler;
+        _getPostDetailsRequest = getPostDetailsRequest;
         _validator = validator;
     }
     
-    [HttpGet("{postId}")]
+    [HttpGet("{postId:guid}")]
     public async Task<ActionResult<GetPostDetailsResponse>> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
     {
         var validationResult = await _validator.ValidateAsync(detailsRequest);
@@ -27,7 +27,7 @@ public class GetPostDetailsEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        GetPostDetailsResponse detailsResponse = await _detailsHandler.Handle(detailsRequest);
+        GetPostDetailsResponse detailsResponse = await _getPostDetailsRequest.Handle(detailsRequest);
             
         return Ok(detailsResponse);
     }

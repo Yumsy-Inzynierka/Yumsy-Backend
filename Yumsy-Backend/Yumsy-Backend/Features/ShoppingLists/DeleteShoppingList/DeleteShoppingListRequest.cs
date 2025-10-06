@@ -4,6 +4,6 @@ namespace Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 
 public class DeleteShoppingListRequest
 {
-    [FromRoute]
+    [FromRoute(Name = "shoppingListId")]
     public Guid ShoppingListId { get; set; }
 }

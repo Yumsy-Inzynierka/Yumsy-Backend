@@ -13,13 +13,13 @@ public class AddShoppingListHandler
         _dbContext = dbContext;
     }
 
-    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest request, CancellationToken cancellationToken)
+    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest addShoppingListRequest, CancellationToken cancellationToken)
     {
         var sourcePost = await _dbContext.Posts
             .AsNoTracking()
             .Include(p => p.IngredientPosts)
             .ThenInclude(ip => ip.Ingredient)
-            .FirstOrDefaultAsync(p => p.Id == request.CreatedFrom, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == addShoppingListRequest.Body.CreatedFrom, cancellationToken);
             
         if (sourcePost == null)
             throw new KeyNotFoundException("Post specified in CreatedFrom does not exist");
@@ -27,9 +27,9 @@ public class AddShoppingListHandler
         var shoppingList = new ShoppingList
         {
             Id = Guid.NewGuid(),
-            Title = request.Title,
-            UserId = request.UserId,
-            CreatedFromId = request.CreatedFrom,
+            Title = addShoppingListRequest.Body.Title,
+            UserId = addShoppingListRequest.UserId,
+            CreatedFromId = addShoppingListRequest.Body.CreatedFrom,
             IngredientShoppingLists = new List<IngredientShoppingList>()
         };
 

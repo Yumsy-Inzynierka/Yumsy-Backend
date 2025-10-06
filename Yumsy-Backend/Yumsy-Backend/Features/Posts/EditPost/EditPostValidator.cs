@@ -9,6 +9,10 @@ public class EditPostValidator : AbstractValidator<EditPostRequest>
         RuleFor(x => x.PostId)
             .NotEmpty().WithMessage("PostId is required.")
             .NotEqual(Guid.Empty).WithMessage("PostId must be a valid GUID.");
+        
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage("UserId is required.")
+            .NotEqual(Guid.Empty).WithMessage("UserId must be a valid GUID.");
 
         RuleFor(x => x.Body)
             .NotNull().WithMessage("Request body is required.")
@@ -20,10 +24,6 @@ public class EditPostRequestBodyValidator : AbstractValidator<EditPostRequestBod
 {
     public EditPostRequestBodyValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.")
-            .NotEqual(Guid.Empty).WithMessage("UserId must be a valid GUID.");
-
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Title is required.")
             .MaximumLength(50).WithMessage("Title cannot exceed 50 characters.");

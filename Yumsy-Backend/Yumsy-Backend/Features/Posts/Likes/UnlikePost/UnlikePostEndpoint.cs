@@ -1,12 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
-namespace Yumsy_Backend.Features.Posts.UnlikePost;
+namespace Yumsy_Backend.Features.Posts.Likes.UnlikePost;
 
-// [Authorized]
+[Authorize]
 [ApiController]
-[Route("api/posts/{postId:guid}/likes")]
+[Route("api/posts")]
 public class UnlikePostEndpoint : ControllerBase
 {
     private readonly UnlikePostHandler _handler;
@@ -18,19 +19,16 @@ public class UnlikePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete]
-    public async Task<ActionResult<UnlikePostResponse>> UnlikePost(
-        [FromRoute] UnlikePostRequest request,
-        CancellationToken cancellationToken
-        )
+    [HttpDelete("{postId:guid}/likes")]
+    public async Task<ActionResult<UnlikePostResponse>> UnlikePost([FromRoute] UnlikePostRequest unlikePostRequest,CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        unlikePostRequest.UserId = User.GetUserId();
+        
+        var validationResult = await _validator.ValidateAsync(unlikePostRequest, cancellationToken);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var userId = User.GetUserId();
-
-        var result = await _handler.Handle(request, userId, cancellationToken);
+        var result = await _handler.Handle(unlikePostRequest, cancellationToken);
         return Ok(result);
     }
 }

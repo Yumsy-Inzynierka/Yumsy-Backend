@@ -21,22 +21,22 @@ public class UnfollowUserHandler
             throw new KeyNotFoundException($"User with ID: {unfollowUserRequest.FollowerId} not found.");
     
         var following = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == unfollowUserRequest.FollowingId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == unfollowUserRequest.Body.FollowingId, cancellationToken);
 
         if (following == null)
-            throw new KeyNotFoundException($"User with ID: {unfollowUserRequest.FollowingId} not found.");
+            throw new KeyNotFoundException($"User with ID: {unfollowUserRequest.Body.FollowingId} not found.");
 
         var follow = await _dbContext.UserFollowers
-            .FirstOrDefaultAsync(l => l.FollowerId == unfollowUserRequest.FollowerId && l.FollowingId == unfollowUserRequest.FollowingId, cancellationToken);
+            .FirstOrDefaultAsync(l => l.FollowerId == unfollowUserRequest.FollowerId && l.FollowingId == unfollowUserRequest.Body.FollowingId, cancellationToken);
 
         if (follow == null)
-            throw new InvalidOperationException($"User with Id: {unfollowUserRequest.FollowerId} already does not follow user with Id: {unfollowUserRequest.FollowingId}.");
+            throw new InvalidOperationException($"User with Id: {unfollowUserRequest.FollowerId} already does not follow user with Id: {unfollowUserRequest.Body.FollowingId}.");
 
         _dbContext.UserFollowers.Remove(follow);
         await _dbContext.SaveChangesAsync(cancellationToken);
         
         follower.FollowingCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowerId == unfollowUserRequest.FollowerId, cancellationToken);
-        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == unfollowUserRequest.FollowingId, cancellationToken);
+        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == unfollowUserRequest.Body.FollowingId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/shopping-lists")]
 public class GetShoppingListsEndpoint : ControllerBase
@@ -18,16 +19,18 @@ public class GetShoppingListsEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> Handle([FromRoute] GetShoppingListsRequest request)
+    [HttpGet]
+    public async Task<IActionResult> Handle([FromRoute] GetShoppingListsRequest getShoppingListsHandler)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        getShoppingListsHandler.UserId = User.GetUserId();
+        
+        var validationResult = await _validator.ValidateAsync(getShoppingListsHandler);
         if (!validationResult.IsValid)
         {
             return BadRequest(validationResult.Errors);
         }
 
-        var response = await _getShoppingListsHandler.Handle(request);
+        var response = await _getShoppingListsHandler.Handle(getShoppingListsHandler);
         return Ok(response);
     }
 }

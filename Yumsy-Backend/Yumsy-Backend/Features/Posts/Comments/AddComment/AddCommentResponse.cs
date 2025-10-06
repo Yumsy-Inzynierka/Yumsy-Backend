@@ -1,4 +1,4 @@
-namespace Yumsy_Backend.Features.Comments.AddComment;
+namespace Yumsy_Backend.Features.Posts.Comments.AddComment;
 
 public record AddCommentResponse
 {

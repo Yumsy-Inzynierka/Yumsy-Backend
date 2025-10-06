@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 
 [Authorize]
 [ApiController]
-[Route("api/profile")]
+[Route("api/profiles")]
 public class EditProfileDetailsEndpoint : ControllerBase
 {
     private readonly EditProfileDetailsHandler _addProfileDetailsHandler;
@@ -20,25 +20,17 @@ public class EditProfileDetailsEndpoint : ControllerBase
     }
     
     [HttpPut]
-    public async Task<ActionResult> AddProfileDetails([FromBody] EditProfileDetailsRequest editProfileDetailsRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult> AddProfileDetails([FromRoute] EditProfileDetailsRequest editProfileDetailsRequest, CancellationToken cancellationToken)
     {
-        var userId = User.GetUserId();
+        editProfileDetailsRequest.UserId = User.GetUserId();
         
-        var fullRequest = new EditProfileDetailsRequest
-        {
-            Id = userId,
-            ProfileName = editProfileDetailsRequest.ProfileName,
-            ProfilePicture = editProfileDetailsRequest.ProfilePicture,
-            Bio = editProfileDetailsRequest.Bio,
-        };
-        
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(editProfileDetailsRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _addProfileDetailsHandler.Handle(fullRequest, cancellationToken);
+        await _addProfileDetailsHandler.Handle(editProfileDetailsRequest, cancellationToken);
             
         return NoContent();
     }

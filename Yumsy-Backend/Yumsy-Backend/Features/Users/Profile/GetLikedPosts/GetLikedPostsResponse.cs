@@ -8,5 +8,5 @@ public record GetLikedPostsResponse
 public record GetLikedPostResponse
 {
     public Guid Id { get; set; }
-    public string ImageUrl { get; set; }
+    public string Image { get; set; }
 }

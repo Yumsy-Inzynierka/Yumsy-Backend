@@ -1,11 +1,20 @@
 
+using Microsoft.AspNetCore.Mvc;
+
 namespace Yumsy_Backend.Features.ShoppingLists.CreateShoppingList;
 
 public class CreateShoppingListRequest
 {
     public Guid UserId { get; set; }
-    public string Title { get; init; }
-    public List<AddShoppingListIngredientRequest> Ingredients { get; init; } = new();
+
+    [FromBody]
+    public CreateShoppingListRequestBody Body { get; set; } = default!;
+}
+
+public class CreateShoppingListRequestBody
+{
+    public string Title { get; init; } = string.Empty;
+    public IEnumerable<AddShoppingListIngredientRequest> Ingredients { get; init; } = Enumerable.Empty<AddShoppingListIngredientRequest>();
 }
 
 public class AddShoppingListIngredientRequest

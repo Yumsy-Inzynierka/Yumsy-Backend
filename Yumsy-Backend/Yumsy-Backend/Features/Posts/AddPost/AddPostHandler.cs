@@ -24,9 +24,9 @@ public class AddPostHandler
         var post = new Post
         {
             Id = Guid.NewGuid(),
-            Title = addPostRequest.Title,
-            Description = addPostRequest.Description,
-            CookingTime = addPostRequest.CookingTime ?? 0,
+            Title = addPostRequest.Body.Title,
+            Description = addPostRequest.Body.Description,
+            CookingTime = addPostRequest.Body.CookingTime ?? 0,
             LikesCount = 0,
             CommentsCount = 0,
             SavedCount = 0,
@@ -34,7 +34,7 @@ public class AddPostHandler
             UserId = addPostRequest.UserId,
         };
         
-        foreach (var image in addPostRequest.Images)
+        foreach (var image in addPostRequest.Body.Images)
         {
             post.PostImages.Add(new PostImage
             {
@@ -44,7 +44,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var tag in addPostRequest.Tags)
+        foreach (var tag in addPostRequest.Body.Tags)
         {
             post.PostTags.Add(new PostTag
             {
@@ -53,7 +53,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var ingredient in addPostRequest.Ingredients)
+        foreach (var ingredient in addPostRequest.Body.Ingredients)
         {
             post.IngredientPosts.Add(new IngredientPost
             {
@@ -63,7 +63,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var step in addPostRequest.RecipeSteps)
+        foreach (var step in addPostRequest.Body.RecipeSteps)
         {
             post.Steps.Add(new Step
             {

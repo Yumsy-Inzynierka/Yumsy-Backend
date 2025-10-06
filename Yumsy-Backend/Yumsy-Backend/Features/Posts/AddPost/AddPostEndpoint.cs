@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.AddPost;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class AddPostEndpoint : ControllerBase
@@ -18,8 +20,10 @@ public class AddPostEndpoint : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Handle([FromBody] AddPostRequest addPostRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> Handle([FromRoute] AddPostRequest addPostRequest, CancellationToken cancellationToken)
     {
+        addPostRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(addPostRequest);
         if (!validationResult.IsValid)
         {

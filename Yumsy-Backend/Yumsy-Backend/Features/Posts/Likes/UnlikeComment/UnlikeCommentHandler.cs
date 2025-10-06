@@ -22,7 +22,7 @@ public class UnlikeCommentHandler
     
         var comment = await _dbContext.Comments
             .FirstOrDefaultAsync(u => u.Id == unlikeCommentRequest.CommentId, cancellationToken);
-
+   
         if (comment == null)
             throw new KeyNotFoundException($"Comment with ID: {unlikeCommentRequest.CommentId} not found.");
 

@@ -22,20 +22,20 @@ public class FollowUserHandler
             throw new KeyNotFoundException($"User with ID: {followUserRequest.FollowerId} not found.");
     
         var following = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == followUserRequest.FollowingId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == followUserRequest.Body.FollowingId, cancellationToken);
 
         if (following == null)
-            throw new KeyNotFoundException($"User with ID: {followUserRequest.FollowingId} not found.");
+            throw new KeyNotFoundException($"User with ID: {followUserRequest.Body.FollowingId} not found.");
 
         var alreadyFollowed = await _dbContext.UserFollowers
-            .AnyAsync(l => l.FollowerId == followUserRequest.FollowerId && l.FollowingId == followUserRequest.FollowingId, cancellationToken);
+            .AnyAsync(l => l.FollowerId == followUserRequest.FollowerId && l.FollowingId == followUserRequest.Body.FollowingId, cancellationToken);
 
         if (alreadyFollowed)
-            throw new InvalidOperationException($"User with Id: {followUserRequest.FollowerId} already follows user with Id: {followUserRequest.FollowingId}.");
+            throw new InvalidOperationException($"User with Id: {followUserRequest.FollowerId} already follows user with Id: {followUserRequest.Body.FollowingId}.");
     
         var follow = new UserFollower
         {
-            FollowingId = followUserRequest.FollowingId,
+            FollowingId = followUserRequest.Body.FollowingId,
             FollowerId = followUserRequest.FollowerId
         };
         
@@ -43,7 +43,7 @@ public class FollowUserHandler
         await _dbContext.SaveChangesAsync(cancellationToken);
         
         follower.FollowingCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowerId == followUserRequest.FollowerId, cancellationToken);
-        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == followUserRequest.FollowingId, cancellationToken);
+        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == followUserRequest.Body.FollowingId, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -25,17 +25,13 @@ public class EditPostHandler
         if (post == null)
             throw new KeyNotFoundException("Post not found.");
 
-        if (post.UserId != request.Body.UserId)
+        if (post.UserId != request.UserId)
             throw new UnauthorizedAccessException("User is not the owner of this post.");
-
-        // Aktualizacja podstawowych pól
+        
         post.Title = request.Body.Title;
         post.Description = request.Body.Description;
         post.CookingTime = request.Body.CookingTime ?? 0;
-
-        // -----------------------
-        // Synchronizacja obrazów
-        // -----------------------
+        
         var newImages = request.Body.Images.Select(i => i.Image).ToList();
         foreach (var img in post.PostImages.ToList())
         {
@@ -47,10 +43,7 @@ public class EditPostHandler
             if (!post.PostImages.Any(pi => pi.ImageUrl == img))
                 post.PostImages.Add(new PostImage { Id = Guid.NewGuid(), ImageUrl = img, PostId = post.Id });
         }
-
-        // -----------------------
-        // Synchronizacja tagów
-        // -----------------------
+        
         var newTagIds = request.Body.Tags.Select(t => t.Id).ToList();
         foreach (var tag in post.PostTags.ToList())
         {
@@ -62,10 +55,7 @@ public class EditPostHandler
             if (!post.PostTags.Any(pt => pt.TagId == tagId))
                 post.PostTags.Add(new PostTag { PostId = post.Id, TagId = tagId });
         }
-
-        // -----------------------
-        // Synchronizacja składników
-        // -----------------------
+        
         var newIngredients = request.Body.Ingredients.ToList();
         foreach (var ing in post.IngredientPosts.ToList())
         {
@@ -79,9 +69,6 @@ public class EditPostHandler
             else post.IngredientPosts.Add(new IngredientPost { PostId = post.Id, IngredientId = ing.Id, Quantity = ing.Quantity });
         }
 
-        // -----------------------
-        // Synchronizacja kroków
-        // -----------------------
         var newSteps = request.Body.RecipeSteps.ToList();
         foreach (var step in post.Steps.ToList())
         {
@@ -102,7 +89,6 @@ public class EditPostHandler
             }
         }
 
-        // Zapis w transakcji
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {

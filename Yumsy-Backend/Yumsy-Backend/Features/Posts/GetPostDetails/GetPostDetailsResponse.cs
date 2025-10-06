@@ -7,10 +7,10 @@ public record GetPostDetailsResponse
     public int CookingTime { get; init; }
     public string Description { get; init; }
     public string Username { get; init; }
-    public int LikesCount { get; set; }
-    public int CommentsCount { get; set; }
+    public int LikesCount { get; init; }
+    public int CommentsCount { get; init; }
     public IEnumerable<GetPostTagResponse> Tags { get; init; }
-    public IEnumerable<string> ImagesUrls { get; init; }
+    public IEnumerable<string> Images { get; init; }
     public IEnumerable<GetPostIngredientResponse> Ingredients { get; init; }
     public GetPostNutritionResponse Nutrition { get; init; }
     public IEnumerable<GetPostRecipeStepResponse> RecipeSteps { get; init; }
@@ -39,8 +39,8 @@ public record GetPostNutritionResponse
 }
 public record GetPostRecipeStepResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     public int StepNumber { get; init; }
     public string Description { get; init; }
-    public string? ImageUrl { get; init; }
+    public string? Image { get; init; }
 }

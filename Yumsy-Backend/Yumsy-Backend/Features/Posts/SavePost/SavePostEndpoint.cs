@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.SavePost;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class SavePostEndpoint : ControllerBase
@@ -17,23 +19,18 @@ public class SavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{postId}/saved")]
-    public async Task<ActionResult<SavePostResponse>> Handle([FromRoute] Guid postId, [FromBody]SavePostRequest savePostRequest, CancellationToken cancellationToken)
+    [HttpPost("{postId:guid}/save")]
+    public async Task<ActionResult<SavePostResponse>> Handle([FromRoute] SavePostRequest savePostRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new SavePostRequest
-        {
-            PostId = postId,
-            UserId = savePostRequest.UserId,
-        };
-        
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        savePostRequest.UserId = User.GetUserId();
+        var validationResult = await _validator.ValidateAsync(savePostRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _savePostHandler.Handle(fullRequest, cancellationToken);
+        var response = await _savePostHandler.Handle(savePostRequest, cancellationToken);
             
-        return Created($"api/posts/{response.PostId}/saved", response);
+        return Created($"api/posts/{response.PostId}/save", response);
     }
 }

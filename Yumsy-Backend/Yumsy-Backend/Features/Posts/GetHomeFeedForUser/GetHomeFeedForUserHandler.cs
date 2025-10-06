@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Shared;
 
-namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
+namespace Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
 
 public class GetHomeFeedForUserHandler
 {
@@ -13,11 +13,8 @@ public class GetHomeFeedForUserHandler
         _context = context;
     }
 
-    public async Task<GetHomeFeedForUserResponse> Handle(GetHomeFeedForUserRequest request, CancellationToken cancellationToken)
+    public async Task<GetHomeFeedForUserResponse> Handle(GetHomeFeedForUserRequest getHomeFeedForUserRequest, CancellationToken cancellationToken)
     {
-        //dodać logikę pobierania postów dla danego użytkownika
-        var userId = Guid.Parse(request.UserId);
-
         var posts = await _context.Posts
             .Include(p => p.CreatedBy)
             .Include(p => p.PostImages)
@@ -29,7 +26,7 @@ public class GetHomeFeedForUserHandler
                 PostTitle = p.Title,
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
-                ImageURL = p.PostImages.First().ImageUrl,
+                Image = p.PostImages.First().ImageUrl,
                 TimePosted = p.PostedDate,
                 LikesCount = p.LikesCount,
                 CommentsCount = p.CommentsCount,

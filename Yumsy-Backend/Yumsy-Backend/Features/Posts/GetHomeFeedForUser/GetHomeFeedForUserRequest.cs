@@ -1,7 +1,6 @@
-namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
+namespace Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
 
 public class GetHomeFeedForUserRequest
 {
-    public string UserId { get; set; } = string.Empty;
-    //dodac kursor zeby nie powtarzaly sie posty
+    public Guid UserId { get; set; }
 }

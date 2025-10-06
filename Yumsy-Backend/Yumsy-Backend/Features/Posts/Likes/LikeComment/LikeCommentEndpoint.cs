@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.Likes.LikeComment;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/comments")]
 public class LikeCommentEndpoint : ControllerBase
@@ -17,23 +19,19 @@ public class LikeCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{commentId}/like")]
-    public async Task<IActionResult> Handle([FromRoute] Guid commentId, [FromBody] LikeCommentRequest likeCommentRequest, CancellationToken cancellationToken)
+    [HttpPost("{commentId:guid}/like")]
+    public async Task<IActionResult> Handle([FromRoute] LikeCommentRequest likeCommentRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new LikeCommentRequest
-        {
-            CommentId = commentId,
-            UserId = likeCommentRequest.UserId
-        };
+        likeCommentRequest.UserId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(likeCommentRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _likeCommentHandler.Handle(fullRequest, cancellationToken);
+        var response = await _likeCommentHandler.Handle(likeCommentRequest, cancellationToken);
             
-        return Created($"api/comments/{response.commentId}/like", response);
+        return Created($"api/comments/{response.Id}/like", response);
     }
 }

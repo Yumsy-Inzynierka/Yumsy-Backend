@@ -1,6 +1,12 @@
-namespace Yumsy_Backend.Features.Comments.DeleteComment;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Yumsy_Backend.Features.Posts.Comments.DeleteComment;
 
 public class DeleteCommentRequest
 {
-    public Guid CommentId { get; init; }
+    [FromRoute(Name = "postId")]
+    public Guid PostId { get; set; }
+    
+    [FromRoute(Name = "commentId")]
+    public Guid CommentId { get; set; }
 }

@@ -2,5 +2,5 @@
 
 public record LikeCommentResponse
 {
-    public Guid commentId { get; init; }
+    public Guid Id { get; init; }
 }

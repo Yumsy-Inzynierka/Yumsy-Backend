@@ -1,12 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
-namespace Yumsy_Backend.Features.Comments.DeleteComment;
+namespace Yumsy_Backend.Features.Posts.Comments.DeleteComment;
 
-// [Authorized]
+[Authorize]
 [ApiController]
-[Route("api/posts/{postId}/comments")]
+[Route("api/posts/")]
 public class DeleteCommentEndpoint : ControllerBase
 {
     private readonly DeleteCommentHandler _handler;
@@ -18,20 +19,14 @@ public class DeleteCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete]
-    [Route("{commentId}")]
-    public async Task<IActionResult> DeleteComment(
-        [FromRoute] DeleteCommentRequest request,
-        CancellationToken cancellationToken
-        )
+    [HttpDelete("{postId:guid}/comments/{commentId:guid}")]
+    public async Task<IActionResult> DeleteComment([FromRoute] DeleteCommentRequest deleteCommentRequest, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(deleteCommentRequest, cancellationToken);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
-
-        var userId = User.GetUserId();
         
-        await _handler.Handle(request, userId, cancellationToken);
+        await _handler.Handle(deleteCommentRequest, cancellationToken);
 
         return NoContent();
     }

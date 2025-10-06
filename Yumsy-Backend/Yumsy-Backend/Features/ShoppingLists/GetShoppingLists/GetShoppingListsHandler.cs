@@ -17,7 +17,7 @@ public class GetShoppingListsHandler
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == getShoppingListsRequest.UserId);
         if (user == null)
         {
-            throw new KeyNotFoundException("User does not exist");
+            throw new KeyNotFoundException($"User with ID: {getShoppingListsRequest.UserId} not found.");
         }
         
         var shoppingLists = await _dbContext.ShoppingLists

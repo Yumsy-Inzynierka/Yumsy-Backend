@@ -1,13 +1,13 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
-namespace Yumsy_Backend.Features.Posts.GetHomeFeed;
+namespace Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
 
-//[Authorize]
+[Authorize]
 [ApiController]
-[Route("/api/posts/feed")]
+[Route("/api/posts")]
 public class GetHomeFeedForUserEndpoint : ControllerBase
 {
     private readonly GetHomeFeedForUserHandler _handler;
@@ -19,17 +19,18 @@ public class GetHomeFeedForUserEndpoint : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<GetHomeFeedForUserResponse>> GetHomeFeedPosts(string userId, CancellationToken cancellationToken)
+    [HttpGet("feed")]
+    public async Task<ActionResult<GetHomeFeedForUserResponse>> GetHomeFeedPosts([FromRoute] GetHomeFeedForUserRequest getHomeFeedForUserRequest, CancellationToken cancellationToken)
     {
-        var request = new GetHomeFeedForUserRequest { UserId = userId };
+        getHomeFeedForUserRequest.UserId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
+        var validationResult = await _validator.ValidateAsync(getHomeFeedForUserRequest, cancellationToken);
         if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
 
-        var response =  await _handler.Handle(request, cancellationToken);
+        var response =  await _handler.Handle(getHomeFeedForUserRequest, cancellationToken);
         
         return Ok(response);
     }

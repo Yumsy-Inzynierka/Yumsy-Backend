@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Users.UnfollowUser;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/users")]
 public class UnfollowUserEndpoint : ControllerBase
@@ -17,22 +19,18 @@ public class UnfollowUserEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{followerId}/unfollow")]
-    public async Task<IActionResult> Handle([FromRoute] Guid followerId, [FromBody] UnfollowUserRequest followUserRequest, CancellationToken cancellationToken)
+    [HttpDelete("unfollow")]
+    public async Task<IActionResult> Handle([FromRoute] UnfollowUserRequest followUserRequest, CancellationToken cancellationToken)
     {
-        var fullRequest = new UnfollowUserRequest
-        {
-            FollowingId = followUserRequest.FollowingId,
-            FollowerId = followerId
-        };
+        followUserRequest.FollowerId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(fullRequest);
+        var validationResult = await _validator.ValidateAsync(followUserRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _unfollowUserHandler.Handle(fullRequest, cancellationToken);
+        await _unfollowUserHandler.Handle(followUserRequest, cancellationToken);
             
         return NoContent();
     }

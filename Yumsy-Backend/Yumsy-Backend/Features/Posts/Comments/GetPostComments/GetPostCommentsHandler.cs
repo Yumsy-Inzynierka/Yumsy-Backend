@@ -14,14 +14,14 @@ public class GetPostCommentsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetPostCommentsResponse> Handle(GetPostCommentsRequest request, CancellationToken cancellationToken)
+    public async Task<GetPostCommentsResponse> Handle(GetPostCommentsRequest getPostCommentsRequest, CancellationToken cancellationToken)
     {
         var comments = await _dbContext.Comments
             .AsNoTracking()
             .Include(c => c.User)
             .Include(c => c.ChildComments)
             .ThenInclude(cc => cc.User)
-            .Where(c => c.PostId == request.PostId && c.ParentCommentId == null)
+            .Where(c => c.PostId == getPostCommentsRequest.PostId && c.ParentCommentId == null)
             .OrderBy(c => c.CommentLikes.Count)
             .Take(YumsyConstants.FETCHED_COMMENTS_AMOUNT)
             .ToListAsync(cancellationToken);

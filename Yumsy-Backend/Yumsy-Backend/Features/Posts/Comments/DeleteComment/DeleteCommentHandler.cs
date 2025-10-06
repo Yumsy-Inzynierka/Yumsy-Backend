@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Comments.DeleteComment;
+namespace Yumsy_Backend.Features.Posts.Comments.DeleteComment;
 
 public class DeleteCommentHandler
 {
@@ -12,22 +12,24 @@ public class DeleteCommentHandler
         _dbContext = dbContext;
     }
 
-    public async Task Handle(DeleteCommentRequest request, Guid userId, CancellationToken cancellationToken)
+    public async Task Handle(DeleteCommentRequest deleteCommentRequest,CancellationToken cancellationToken)
     {
-        var comment = await _dbContext.Comments
-            .Include(c => c.User)
-            .Include(p => p.Post)
-            .FirstOrDefaultAsync(c => c.Id == request.CommentId, cancellationToken);
+        var post = await _dbContext.Posts
+            .Include(p => p.Comments)
+            .FirstOrDefaultAsync(c => c.Id == deleteCommentRequest.PostId, cancellationToken);
         
-        if (comment == null)
-            throw new KeyNotFoundException("Comment does not exist");
+        if (post == null)
+            throw new KeyNotFoundException($"Post with ID: {deleteCommentRequest.PostId} not found.");
         
-        /*if (comment.UserId != userId || comment.User.Role != "admin")
-            throw new UnauthorizedAccessException("Current user does not have permission to delete comment");*/
+        var comment = post.Comments.FirstOrDefault(c => c.Id == deleteCommentRequest.CommentId);
+        
+        if(comment == null)
+            throw new KeyNotFoundException($"Comment with ID: {deleteCommentRequest.CommentId} not found in post with Id: {deleteCommentRequest.PostId}.");
         
         _dbContext.Comments.Remove(comment);
-        comment.Post.CommentsCount = _dbContext.Comments.Count(l => l.PostId == comment.PostId);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         
+        comment.Post.CommentsCount = await _dbContext.Comments.CountAsync(l => l.PostId == deleteCommentRequest.PostId);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

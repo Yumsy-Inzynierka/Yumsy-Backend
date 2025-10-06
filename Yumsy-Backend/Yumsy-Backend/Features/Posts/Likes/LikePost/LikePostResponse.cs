@@ -1,4 +1,4 @@
-namespace Yumsy_Backend.Features.Posts.LikePost;
+namespace Yumsy_Backend.Features.Posts.Likes.LikePost;
 
 public record LikePostResponse
 {

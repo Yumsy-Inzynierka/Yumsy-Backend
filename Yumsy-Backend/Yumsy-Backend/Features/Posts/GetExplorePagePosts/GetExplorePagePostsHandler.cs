@@ -13,8 +13,7 @@ public class GetExplorePagePostsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetExplorePagePostsResponse> Handle(GetExplorePagePostsRequest getExplorePagePostsRequest,
-        CancellationToken cancellationToken)
+    public async Task<GetExplorePagePostsResponse> Handle(GetExplorePagePostsRequest getExplorePagePostsRequest, CancellationToken cancellationToken)
     {
         var query = _dbContext.Posts
             .Include(p => p.PostImages)
@@ -29,7 +28,7 @@ public class GetExplorePagePostsHandler
             .Select(p => new GetExplorePagePostResponse
             {
                 Id = p.Id,
-                ImageUrl = p.PostImages.FirstOrDefault().ImageUrl,
+                Image = p.PostImages.FirstOrDefault().ImageUrl,
             })
             .ToListAsync(cancellationToken);
         

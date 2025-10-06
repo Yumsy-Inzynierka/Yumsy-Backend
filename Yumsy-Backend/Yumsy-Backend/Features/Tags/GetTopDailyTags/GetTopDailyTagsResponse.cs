@@ -8,6 +8,5 @@ public record GetTopDailyTagResponse
 {
     public Guid Id { get; init; }
     public string Name { get; init; }
-    public string? Emote { get; init; }
     public int Count { get; init; }
 }

@@ -13,25 +13,22 @@ public class EditShoppingListHandler
         _dbContext = dbContext;
     }
 
-    public async Task<EditShoppingListResponse> Handle(Guid shoppingListId, 
-        EditShoppingListRequest editShoppingListRequest, 
-        Guid userId, 
-        CancellationToken cancellationToken)
+    public async Task<EditShoppingListResponse> Handle(EditShoppingListRequest editShoppingListRequest, CancellationToken cancellationToken)
     {
         var shoppingList = await _dbContext.ShoppingLists
             .Include(sl => sl.IngredientShoppingLists)
-            .FirstOrDefaultAsync(sl => sl.Id == shoppingListId && sl.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(sl => sl.Id == editShoppingListRequest.ShoppingListId && sl.UserId == editShoppingListRequest.UserId, cancellationToken);
 
         if (shoppingList == null)
         {
             throw new KeyNotFoundException("Shopping list not found or access denied");
         }
 
-        shoppingList.Title = editShoppingListRequest.Title;
+        shoppingList.Title = editShoppingListRequest.Body.Title;
         
         _dbContext.RemoveRange(shoppingList.IngredientShoppingLists);
         
-        foreach (var ingredient in editShoppingListRequest.Ingredients)
+        foreach (var ingredient in editShoppingListRequest.Body.Ingredients)
         {
             shoppingList.IngredientShoppingLists.Add(new IngredientShoppingList
             {
@@ -47,7 +44,7 @@ public class EditShoppingListHandler
         {
             Id = shoppingList.Id,
             Title = shoppingList.Title,
-            Ingredients = editShoppingListRequest.Ingredients
+            Ingredients = editShoppingListRequest.Body.Ingredients
         };
 
     }

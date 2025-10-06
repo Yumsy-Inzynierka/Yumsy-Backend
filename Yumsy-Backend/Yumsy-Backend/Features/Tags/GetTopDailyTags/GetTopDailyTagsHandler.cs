@@ -19,12 +19,11 @@ public class GetTopDailyTagsHandler
         
         var tags = await _dbContext.PostTags
             .Where(pt => pt.Post.PostedDate >= since)
-            .GroupBy(pt => new {pt.Tag.Id, pt.Tag.Name, pt.Tag.Emote})
+            .GroupBy(pt => new {pt.Tag.Id, pt.Tag.Name})
             .Select(g => new GetTopDailyTagResponse
             {
                 Id = g.Key.Id,
                 Name = g.Key.Name,
-                Emote = g.Key.Emote,
                 Count = g.Count()
             })
             .OrderByDescending(t => t.Count)

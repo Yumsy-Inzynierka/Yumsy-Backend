@@ -6,7 +6,8 @@ public class GetPostCommentsValidator : AbstractValidator<GetPostCommentsRequest
 {
     public GetPostCommentsValidator()
     {
-        RuleFor(r => r.PostId)
-            .NotEmpty().WithMessage("PostId is required");
+        RuleFor(x => x.PostId)
+            .NotEmpty().WithMessage("PostId is required.") 
+            .NotEqual(Guid.Empty).WithMessage("PostId must be a valid GUID.");
     }
 }

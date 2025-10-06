@@ -1,10 +1,11 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Tags.GetTopDailyTags;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/tags")]
 public class GetTopDailyTagsController : ControllerBase
