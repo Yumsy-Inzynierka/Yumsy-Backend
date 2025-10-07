@@ -19,7 +19,7 @@ public class SearchIngredientsHandler
         
         var ingredients = await _context.Ingredients
             .Where(i => i.Name.Contains(request.Query))
-            .OrderByDescending(i => i.SearchScore)
+            .OrderByDescending(i => i.SearchCount)
             .Skip(request.Offset)
             .Take(pageSize + 1)
             .Select(i => new SearchIngredientResponse()

@@ -29,7 +29,7 @@ public class Ingredient
 
     public decimal? Salt100g { get; set; }
 
-    public decimal SearchScore { get; set; } = 0.0m;
+    public int SearchCount { get; set; } = 0;
 
     public ICollection<IngredientPost> IngredientPosts { get; set; } = new HashSet<IngredientPost>();
 
