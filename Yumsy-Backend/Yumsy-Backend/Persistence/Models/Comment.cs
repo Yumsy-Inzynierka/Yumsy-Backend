@@ -28,9 +28,9 @@ public class Comment
 
     public ICollection<Comment> ChildComments { get; set; } = new HashSet<Comment>();
 
-    [ForeignKey(nameof(UserId))]
+    [ForeignKey(nameof(PostId))]
     public Post Post { get; set; }
     
-    [ForeignKey(nameof(PostId))]
+    [ForeignKey(nameof(UserId))]
     public User User { get; set; }
 }
