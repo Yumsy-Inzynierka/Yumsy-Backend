@@ -118,6 +118,7 @@ public class GetPostDetailsHandler
         return new GetPostDetailsResponse
         {
             Id = post.Id,
+            UserId = post.UserId,
             Title = post.Title,
             CookingTime = post.CookingTime,
             Description = post.Description,
