@@ -36,7 +36,7 @@ public class GetProfileDetailsHandler
             Bio = profile.Bio,
             ProfilePicture = profile.ProfilePicture,
             ProfilePosts = profile.Posts
-                .Select(p => new GetProfilePostsResponse()
+                .Select(p => new GetProfileDetailsPostsResponse()
                 {
                     Id = p.Id,
                     Image = p.PostImages.FirstOrDefault()?.ImageUrl

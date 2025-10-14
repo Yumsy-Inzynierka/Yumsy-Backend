@@ -11,10 +11,10 @@ public record GetUserProfileDetailsResponse
     public string? Bio { get; init; }
     public string? ProfilePicture { get; init; }
 
-    public List<GetProfilePostsResponse>? ProfilePosts { get; set; }
+    public List<GetUserProfileDetailsPostsResponse>? ProfilePosts { get; set; }
 }
 
-public record GetProfilePostsResponse
+public record GetUserProfileDetailsPostsResponse
 {
     public Guid Id { get; init; }
     public string Image { get; init; }
