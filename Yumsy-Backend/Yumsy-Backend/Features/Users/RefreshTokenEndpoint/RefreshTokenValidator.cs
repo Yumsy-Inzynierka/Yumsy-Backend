@@ -2,9 +2,9 @@
 
 namespace Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
 
-public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
+public class RefreshTokenValidator : AbstractValidator<RefreshTokenRequest>
 {
-    public RefreshTokenRequestValidator()
+    public RefreshTokenValidator()
     {
         RuleFor(x => x.RefreshToken)
             .NotEmpty()

@@ -102,6 +102,7 @@ builder.Services.AddScoped<IValidator<GetTopDailyTagsRequest>, GetTopDailyTagsVa
 builder.Services.AddScoped<IValidator<GetLikedPostsRequest>, GetLikedPostsValidator>();
 builder.Services.AddScoped<IValidator<EditShoppingListRequest>, EditShoppingListValidator>();
 builder.Services.AddScoped<IValidator<AddShoppingListRequest>, AddShoppingListValidator>();
+builder.Services.AddScoped<IValidator<RefreshTokenRequest>, RefreshTokenValidator>();
 builder.Services.AddScoped<IValidator<EditProfileDetailsRequest>, EditProfileDetailsValidator>();
 builder.Services.AddScoped<IValidator<GetExplorePagePostsRequest>, GetExplorePagePostsValidator>();
 builder.Services.AddScoped<IValidator<EditPostRequest>, EditPostValidator>();
