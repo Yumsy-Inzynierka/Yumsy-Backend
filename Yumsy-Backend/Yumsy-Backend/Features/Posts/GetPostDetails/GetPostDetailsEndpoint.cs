@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
@@ -21,6 +22,8 @@ public class GetPostDetailsEndpoint : ControllerBase
     [HttpGet("{postId:guid}")]
     public async Task<ActionResult<GetPostDetailsResponse>> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
     {
+        detailsRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(detailsRequest);
         if (!validationResult.IsValid)
         {

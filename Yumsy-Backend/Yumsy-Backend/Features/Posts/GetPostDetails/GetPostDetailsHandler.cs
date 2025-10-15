@@ -114,11 +114,14 @@ public class GetPostDetailsHandler
         var images = post.PostImages
             .Select(p => p.ImageUrl)
             .ToList();
-
+        
+        var isLiked = await _dbContext.Likes.AnyAsync(l => l.PostId == getPostDetailsRequest.PostId && l.UserId == getPostDetailsRequest.UserId);
+        
         return new GetPostDetailsResponse
         {
             Id = post.Id,
             UserId = post.UserId,
+            IsLiked = isLiked,
             Title = post.Title,
             CookingTime = post.CookingTime,
             Description = post.Description,

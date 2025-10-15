@@ -4,6 +4,7 @@ public record GetPostDetailsResponse
 {
     public Guid Id { get; init; }
     public Guid UserId { get; set; }
+    public bool IsLiked { get; set; }
     public string Title { get; init; }
     public int CookingTime { get; init; }
     public string Description { get; init; }
