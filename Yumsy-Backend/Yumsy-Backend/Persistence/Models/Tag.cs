@@ -17,7 +17,7 @@ public class Tag
 
     public ICollection<QuizQuestion> QuizQuestions { get; set; } = new HashSet<QuizQuestion>();
 
-    public ICollection<RecommendationTag> RecommendationTags { get; set; } = new HashSet<RecommendationTag>();
+    public ICollection<Recommendation> Recommendations { get; set; } = new HashSet<Recommendation>();
 
     public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();
 }
