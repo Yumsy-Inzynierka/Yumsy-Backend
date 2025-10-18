@@ -19,10 +19,9 @@ public class GetProfileDetailsEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpGet]
+    [HttpGet("{userId:guid}")]
     public async Task<ActionResult<GetProfileDetailsResponse>> GetProfileDetails([FromRoute] GetProfileDetailsRequest getProfileDetailsRequest, CancellationToken cancellationToken)
     {
-        getProfileDetailsRequest.UserId = User.GetUserId();
          
         var validationResult = await _validator.ValidateAsync(getProfileDetailsRequest);
         if (!validationResult.IsValid)

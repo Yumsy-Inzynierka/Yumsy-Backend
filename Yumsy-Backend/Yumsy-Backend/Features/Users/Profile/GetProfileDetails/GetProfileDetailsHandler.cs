@@ -24,7 +24,6 @@ public class GetProfileDetailsHandler
             throw new KeyNotFoundException($"User with ID: {request.UserId} does not exist");
         
         
-        
         return new GetProfileDetailsResponse()
         {
             Id = profile.Id,
