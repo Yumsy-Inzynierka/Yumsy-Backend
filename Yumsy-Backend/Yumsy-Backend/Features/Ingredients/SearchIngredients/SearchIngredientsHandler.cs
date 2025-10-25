@@ -18,11 +18,10 @@ public class SearchIngredientsHandler
         const int pageSize = 20;
         
         var ingredients = await _context.Ingredients
-            .Where(i => i.Name.Contains(request.Query))
-            .OrderByDescending(i => i.SearchCount)
+            .FromSqlRaw("SELECT * FROM search_ingredients({0})", request.Query)
             .Skip(request.Offset)
             .Take(pageSize + 1)
-            .Select(i => new SearchIngredientResponse()
+            .Select(i => new SearchIngredientResponse
             {
                 Id = i.Id,
                 Name = i.Name,
