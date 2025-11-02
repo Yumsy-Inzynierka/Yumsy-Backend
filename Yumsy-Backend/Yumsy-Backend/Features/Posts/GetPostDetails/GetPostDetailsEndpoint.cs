@@ -20,17 +20,17 @@ public class GetPostDetailsEndpoint : ControllerBase
     }
     
     [HttpGet("{postId:guid}")]
-    public async Task<ActionResult<GetPostDetailsResponse>> Handle([FromRoute] GetPostDetailsRequest detailsRequest)
+    public async Task<ActionResult<GetPostDetailsResponse>> GetPostDetails([FromRoute] GetPostDetailsRequest getPostDetailsRequest, CancellationToken cancellationToken)
     {
-        detailsRequest.UserId = User.GetUserId();
+        getPostDetailsRequest.UserId = User.GetUserId();
         
-        var validationResult = await _validator.ValidateAsync(detailsRequest);
+        var validationResult = await _validator.ValidateAsync(getPostDetailsRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        GetPostDetailsResponse detailsResponse = await _getPostDetailsRequest.Handle(detailsRequest);
+        GetPostDetailsResponse detailsResponse = await _getPostDetailsRequest.Handle(getPostDetailsRequest, cancellationToken);
             
         return Ok(detailsResponse);
     }

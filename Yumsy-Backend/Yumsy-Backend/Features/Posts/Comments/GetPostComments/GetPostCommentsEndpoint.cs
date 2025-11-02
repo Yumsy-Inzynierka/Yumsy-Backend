@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.Comments.GetPostComments;
 
@@ -21,6 +22,8 @@ public class GetPostCommentsEndpoint : ControllerBase
     [HttpGet("{postId:guid}/comments")]
     public async Task<ActionResult<GetPostCommentsResponse>> GetPostComments([FromRoute] GetPostCommentsRequest getPostCommentsRequest, CancellationToken cancellationToken)
     {
+        getPostCommentsRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(getPostCommentsRequest, cancellationToken);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
