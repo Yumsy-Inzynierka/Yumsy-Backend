@@ -16,6 +16,7 @@ public class GetTopDailyPostsHandler
 
     public async Task<GetTopDailyPostsResponse> Handle(CancellationToken cancellationToken)
     {
+        // to też zostawiam bo nie wiem czy to tak zostanie końcowo
         var since = DateTime.UtcNow.AddHours(-24);
         
         var posts = await _dbContext.Posts

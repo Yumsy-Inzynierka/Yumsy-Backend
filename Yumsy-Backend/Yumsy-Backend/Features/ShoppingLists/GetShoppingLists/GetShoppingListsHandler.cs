@@ -14,6 +14,8 @@ public class GetShoppingListsHandler
 
     public async Task<GetShoppingListsResponse> Handle(GetShoppingListsRequest getShoppingListsRequest)
     {
+        
+        //do przemyślenia response
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == getShoppingListsRequest.UserId);
         if (user == null)
         {

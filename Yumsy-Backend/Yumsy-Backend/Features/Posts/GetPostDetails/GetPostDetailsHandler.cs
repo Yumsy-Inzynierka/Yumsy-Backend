@@ -13,7 +13,7 @@ public class GetPostDetailsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest getPostDetailsRequest, CancellationToken cancellationToken)
+    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .AsNoTracking()
@@ -21,14 +21,14 @@ public class GetPostDetailsHandler
             .Include(p => p.CreatedBy)
             .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
             .Include(p => p.PostImages)
-            .FirstOrDefaultAsync(p => p.Id == getPostDetailsRequest.PostId, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
 
         if (post == null)
-            throw new KeyNotFoundException($"Post with ID: {getPostDetailsRequest.PostId} does not exist.");
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} does not exist.");
 
         var ingredients = await _dbContext.IngredientPosts
             .AsNoTracking()
-            .Where(ip => ip.PostId == getPostDetailsRequest.PostId)
+            .Where(ip => ip.PostId == request.PostId)
             .Include(ip => ip.Ingredient)
             .ToListAsync(cancellationToken);
 
@@ -99,11 +99,11 @@ public class GetPostDetailsHandler
 
         var isLiked = await _dbContext.Likes
             .AsNoTracking()
-            .AnyAsync(l => l.PostId == getPostDetailsRequest.PostId && l.UserId == getPostDetailsRequest.UserId, cancellationToken);
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
 
         var isSaved = await _dbContext.Saved
             .AsNoTracking()
-            .AnyAsync(l => l.PostId == getPostDetailsRequest.PostId && l.UserId == getPostDetailsRequest.UserId, cancellationToken);
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
         
         return new GetPostDetailsResponse
         {

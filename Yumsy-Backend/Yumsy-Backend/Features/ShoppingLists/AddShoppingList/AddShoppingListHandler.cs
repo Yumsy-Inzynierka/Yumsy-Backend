@@ -13,38 +13,51 @@ public class AddShoppingListHandler
         _dbContext = dbContext;
     }
 
-    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest addShoppingListRequest, CancellationToken cancellationToken)
+    public async Task<AddShoppingListResponse> Handle(AddShoppingListRequest request, CancellationToken cancellationToken)
     {
+        var userExists = await _dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == request.UserId, cancellationToken);
+
+        if (!userExists)
+            throw new KeyNotFoundException($"User with ID: {request.UserId} not found.");
+
         var sourcePost = await _dbContext.Posts
             .AsNoTracking()
             .Include(p => p.IngredientPosts)
             .ThenInclude(ip => ip.Ingredient)
-            .FirstOrDefaultAsync(p => p.Id == addShoppingListRequest.Body.CreatedFrom, cancellationToken);
-            
+            .FirstOrDefaultAsync(p => p.Id == request.Body.CreatedFrom, cancellationToken);
+
         if (sourcePost == null)
-            throw new KeyNotFoundException("Post specified in CreatedFrom does not exist");
+            throw new KeyNotFoundException("Post does not exist.");
 
         var shoppingList = new ShoppingList
         {
             Id = Guid.NewGuid(),
-            Title = addShoppingListRequest.Body.Title,
-            UserId = addShoppingListRequest.UserId,
-            CreatedFromId = addShoppingListRequest.Body.CreatedFrom,
-            IngredientShoppingLists = new List<IngredientShoppingList>()
+            Title = request.Body.Title,
+            UserId = request.UserId,
+            CreatedFromId = request.Body.CreatedFrom,
+            IngredientShoppingLists = sourcePost.IngredientPosts
+                .Select(ip => new IngredientShoppingList
+                {
+                    ShoppingListId = Guid.NewGuid(),
+                    IngredientId = ip.Ingredient.Id,
+                    Quantity = ip.Quantity
+                }).ToList()
         };
 
-        foreach (var ingredientPost in sourcePost.IngredientPosts)
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
         {
-            shoppingList.IngredientShoppingLists.Add(new IngredientShoppingList
-            {
-                ShoppingListId = shoppingList.Id,
-                IngredientId = ingredientPost.Ingredient.Id,
-                Quantity = ingredientPost.Quantity
-            });
+            await _dbContext.ShoppingLists.AddAsync(shoppingList, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
         }
-
-        _dbContext.ShoppingLists.Add(shoppingList);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
 
         return new AddShoppingListResponse
         {

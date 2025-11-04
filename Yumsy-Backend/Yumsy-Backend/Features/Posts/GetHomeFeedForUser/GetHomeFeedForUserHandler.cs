@@ -13,8 +13,9 @@ public class GetHomeFeedForUserHandler
         _context = context;
     }
 
-    public async Task<GetHomeFeedForUserResponse> Handle(GetHomeFeedForUserRequest getHomeFeedForUserRequest, CancellationToken cancellationToken)
+    public async Task<GetHomeFeedForUserResponse> Handle(GetHomeFeedForUserRequest request, CancellationToken cancellationToken)
     {
+        // na razie nie zmieniam bo i tak jest logika do zmiany
         var posts = await _context.Posts
             .Include(p => p.CreatedBy)
             .Include(p => p.PostImages)

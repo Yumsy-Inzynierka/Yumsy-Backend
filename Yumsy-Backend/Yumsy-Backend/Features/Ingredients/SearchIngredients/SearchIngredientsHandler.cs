@@ -12,8 +12,7 @@ public class SearchIngredientsHandler
         _context = context;
     }
 
-    public async Task<SearchIngredientsResponse> Handle(SearchIngredientsRequest request,
-        CancellationToken cancellationToken)
+    public async Task<SearchIngredientsResponse> Handle(SearchIngredientsRequest request, CancellationToken cancellationToken)
     {
         const int pageSize = 20;
         

@@ -15,6 +15,7 @@ public class GetTopDailyTagsHandler
 
     public async Task<GetTopDailyTagsResponse> Handle(CancellationToken cancellationToken)
     {
+        //nie zmieniam bo logika pewnie do zmiany
         var since = DateTime.UtcNow.AddHours(-24);
         
         var tags = await _dbContext.PostTags

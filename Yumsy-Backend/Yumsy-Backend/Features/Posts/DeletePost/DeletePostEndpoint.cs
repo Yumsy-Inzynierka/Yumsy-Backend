@@ -19,7 +19,7 @@ public class DeletePostEndpoint : ControllerBase
     }
     
     [HttpDelete("{postId:guid}")]
-    public async Task<IActionResult> Handle([FromRoute] DeletePostRequest deletePostRequest)
+    public async Task<IActionResult> Handle([FromRoute] DeletePostRequest deletePostRequest, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(deletePostRequest);
         if (!validationResult.IsValid)
@@ -27,7 +27,7 @@ public class DeletePostEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _deletePostHandler.Handle(deletePostRequest);
+        await _deletePostHandler.Handle(deletePostRequest, cancellationToken);
             
         return NoContent();
     }

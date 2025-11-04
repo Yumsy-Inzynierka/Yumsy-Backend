@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 
@@ -19,15 +20,17 @@ public class DeleteShoppingListEndpoint : ControllerBase
     }
     
     [HttpDelete("{shoppingListId:guid}")]
-    public async Task<IActionResult> Handle([FromRoute] DeleteShoppingListRequest deleteShoppingListRequest)
+    public async Task<IActionResult> Handle([FromRoute] DeleteShoppingListRequest deleteShoppingListRequest, CancellationToken cancellationToken)
     {
+        deleteShoppingListRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(deleteShoppingListRequest);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
         
-        await _deleteShoppingListHandler.Handle(deleteShoppingListRequest);
+        await _deleteShoppingListHandler.Handle(deleteShoppingListRequest, cancellationToken);
             
         return NoContent();
     }

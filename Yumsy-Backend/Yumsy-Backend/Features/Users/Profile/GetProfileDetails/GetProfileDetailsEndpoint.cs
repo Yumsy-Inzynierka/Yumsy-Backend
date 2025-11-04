@@ -29,7 +29,7 @@ public class GetProfileDetailsEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        GetProfileDetailsResponse response = await _handler.Handle(getProfileDetailsRequest);
+        GetProfileDetailsResponse response = await _handler.Handle(getProfileDetailsRequest, cancellationToken);
             
         return Ok(response);
     }

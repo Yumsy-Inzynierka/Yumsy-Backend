@@ -13,28 +13,48 @@ public class AddPostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<AddPostResponse> Handle(AddPostRequest addPostRequest, CancellationToken cancellationToken)
+    public async Task<AddPostResponse> Handle(AddPostRequest request, CancellationToken cancellationToken)
     {
         var userExists = await _dbContext.Users
-            .AnyAsync(u => u.Id == addPostRequest.UserId);
+            .AnyAsync(u => u.Id == request.UserId);
         
         if (!userExists)
             throw new KeyNotFoundException("User not found.");
         
+        // nie jest to obowiązkowe bo my bierzemy z fronta z listy tagi i ingredients ale może być bo dobra praktyka, oby nie zwalniało (do przemyślenia)
+        var tagIds = request.Body.Tags.Select(t => t.Id).ToList();
+        var existingTags = await _dbContext.Tags
+            .Where(t => tagIds.Contains(t.Id))
+            .Select(t => t.Id)
+            .ToListAsync(cancellationToken);
+        
+        if (existingTags.Count != tagIds.Count)
+            throw new KeyNotFoundException("One or more tags not found.");
+        
+        var ingredientIds = request.Body.Ingredients.Select(i => i.Id).ToList();
+        var existingIngredients = await _dbContext.Ingredients
+            .Where(i => ingredientIds.Contains(i.Id))
+            .Select(i => i.Id)
+            .ToListAsync(cancellationToken);
+        
+        if (existingIngredients.Count != ingredientIds.Count)
+            throw new KeyNotFoundException("One or more ingredients not found.");
+        
+        
         var post = new Post
         {
             Id = Guid.NewGuid(),
-            Title = addPostRequest.Body.Title,
-            Description = addPostRequest.Body.Description,
-            CookingTime = addPostRequest.Body.CookingTime ?? 0,
+            Title = request.Body.Title,
+            Description = request.Body.Description,
+            CookingTime = request.Body.CookingTime ?? 0,
             LikesCount = 0,
             CommentsCount = 0,
             SavedCount = 0,
             SharedCount = 0,
-            UserId = addPostRequest.UserId,
+            UserId = request.UserId,
         };
         
-        foreach (var image in addPostRequest.Body.Images)
+        foreach (var image in request.Body.Images)
         {
             post.PostImages.Add(new PostImage
             {
@@ -44,7 +64,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var tag in addPostRequest.Body.Tags)
+        foreach (var tag in request.Body.Tags)
         {
             post.PostTags.Add(new PostTag
             {
@@ -53,7 +73,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var ingredient in addPostRequest.Body.Ingredients)
+        foreach (var ingredient in request.Body.Ingredients)
         {
             post.IngredientPosts.Add(new IngredientPost
             {
@@ -63,7 +83,7 @@ public class AddPostHandler
             });
         }
         
-        foreach (var step in addPostRequest.Body.RecipeSteps)
+        foreach (var step in request.Body.RecipeSteps)
         {
             post.Steps.Add(new Step
             {
@@ -80,7 +100,7 @@ public class AddPostHandler
         {
             await _dbContext.Posts.AddAsync(post, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);   
         }
         catch
         {

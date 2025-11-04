@@ -13,13 +13,13 @@ public class GetPostCommentsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetPostCommentsResponse> Handle(GetPostCommentsRequest getPostCommentsRequest, CancellationToken cancellationToken)
+    public async Task<GetPostCommentsResponse> Handle(GetPostCommentsRequest request, CancellationToken cancellationToken)
     {
         var postExists = await _dbContext.Posts
-            .AnyAsync(p => p.Id == getPostCommentsRequest.PostId, cancellationToken);
+            .AnyAsync(p => p.Id == request.PostId, cancellationToken);
 
         if (!postExists)
-            throw new KeyNotFoundException($"Post with ID: {getPostCommentsRequest.PostId} not found.");
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found.");
 
         var comments = await _dbContext.Comments
             .AsNoTracking()
@@ -29,13 +29,13 @@ public class GetPostCommentsHandler
                 .ThenInclude(cc => cc.User)
             .Include(c => c.ChildComments)
                 .ThenInclude(cc => cc.CommentLikes)
-            .Where(c => c.PostId == getPostCommentsRequest.PostId && c.ParentCommentId == null)
+            .Where(c => c.PostId == request.PostId && c.ParentCommentId == null)
             .OrderByDescending(c => c.CommentLikes.Count)
             .Take(YumsyConstants.FETCHED_COMMENTS_AMOUNT)
             .ToListAsync(cancellationToken);
 
         var likedCommentIds = await _dbContext.CommentLikes
-            .Where(l => l.UserId == getPostCommentsRequest.UserId)
+            .Where(l => l.UserId == request.UserId)
             .Select(l => l.CommentId)
             .ToListAsync(cancellationToken);
 
