@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Features.Tags.GetTopDailyTags;
 public class GetTopDailyTagsHandler
 {
     private readonly SupabaseDbContext _dbContext;
-    
+
     public GetTopDailyTagsHandler(SupabaseDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -15,12 +15,39 @@ public class GetTopDailyTagsHandler
 
     public async Task<GetTopDailyTagsResponse> Handle(CancellationToken cancellationToken)
     {
-        //nie zmieniam bo logika pewnie do zmiany
-        var since = DateTime.UtcNow.AddHours(-24);
-        
-        var tags = await _dbContext.PostTags
+        var hoursSince = -24;
+        var since = DateTime.UtcNow.AddHours(hoursSince);
+        const int pool = 15;
+
+        var tagsTask = GetTags(since, cancellationToken);
+        var tags = await tagsTask;
+
+        while (tags.Count < pool)
+        {
+            hoursSince *= 2;
+            since = DateTime.UtcNow.AddHours(hoursSince);
+            tags = await GetTags(since, cancellationToken);
+
+            // Zabezpieczenie, żeby nie cofać się w nieskończoność
+            if (hoursSince < -24 * 90)
+                break;
+        }
+
+        var topTags = tags
+            .Take(YumsyConstants.TOP_DAILY_TAGS_AMOUNT)
+            .ToList();
+
+        return new GetTopDailyTagsResponse
+        {
+            Tags = topTags
+        };
+    }
+
+    private async Task<List<GetTopDailyTagResponse>> GetTags(DateTime since, CancellationToken cancellationToken)
+    {
+        return await _dbContext.PostTags
             .Where(pt => pt.Post.PostedDate >= since)
-            .GroupBy(pt => new {pt.Tag.Id, pt.Tag.Name})
+            .GroupBy(pt => new { pt.Tag.Id, pt.Tag.Name })
             .Select(g => new GetTopDailyTagResponse
             {
                 Id = g.Key.Id,
@@ -28,12 +55,6 @@ public class GetTopDailyTagsHandler
                 Count = g.Count()
             })
             .OrderByDescending(t => t.Count)
-            .Take(YumsyConstants.TOP_DAILY_TAGS_AMOUNT)
             .ToListAsync(cancellationToken);
-        
-        return new GetTopDailyTagsResponse
-        {
-            Tags = tags
-        };
     }
 }

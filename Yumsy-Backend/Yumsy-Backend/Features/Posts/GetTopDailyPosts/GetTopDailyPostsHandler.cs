@@ -16,13 +16,35 @@ public class GetTopDailyPostsHandler
 
     public async Task<GetTopDailyPostsResponse> Handle(CancellationToken cancellationToken)
     {
-        // to też zostawiam bo nie wiem czy to tak zostanie końcowo
-        var since = DateTime.UtcNow.AddHours(-24);
+        var hoursSince = -24;
+        var since = DateTime.UtcNow.AddHours(hoursSince);
+        const int pool = 15;
         
-        var posts = await _dbContext.Posts
+        var posts = GetPosts(since, cancellationToken);
+
+        while (posts.Result.Count < pool)
+        {
+            hoursSince *= 2;
+            since = DateTime.UtcNow.AddHours(hoursSince);
+            posts = GetPosts(since, cancellationToken);
+            
+            if (hoursSince < -24 * 90)
+                break;
+        }
+        
+        var topPosts = posts.Result.Take(YumsyConstants.TOP_DAILY_POSTS_AMOUNT).ToList();
+        
+        return new GetTopDailyPostsResponse
+        {
+            Posts = topPosts,
+        };
+    }
+
+    private async Task<List<GetTopDailyPostResponse>> GetPosts(DateTime since, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Posts
             .Where(p => p.PostedDate >= since)
-            .OrderByDescending(p => p.LikesCount + p.CommentsCount)
-            .Take(YumsyConstants.TOP_DAILY_POSTS_AMOUNT)
+            .OrderByDescending(p => p.LikesCount + p.CommentsCount + p.SavedCount)
             .Select(p => new GetTopDailyPostResponse
             {
                 Id = p.Id,
@@ -33,13 +55,8 @@ public class GetTopDailyPostsHandler
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
                 TimePosted = p.PostedDate,
-                Count = p.LikesCount + p.CommentsCount
+                Count = p.LikesCount + p.CommentsCount + p.SavedCount
             })
             .ToListAsync(cancellationToken);
-
-        return new GetTopDailyPostsResponse
-        {
-            Posts = posts
-        };
     }
 }
