@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
+namespace Yumsy_Backend.Features.Ingredients.SearchIngredients;
 
 public class SearchIngredientsRequest
 {

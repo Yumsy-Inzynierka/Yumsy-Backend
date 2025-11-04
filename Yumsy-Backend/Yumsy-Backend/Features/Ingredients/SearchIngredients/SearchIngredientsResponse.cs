@@ -1,4 +1,4 @@
-namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
+namespace Yumsy_Backend.Features.Ingredients.SearchIngredients;
 
 public record SearchIngredientsResponse
 {
