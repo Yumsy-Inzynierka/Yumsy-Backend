@@ -20,7 +20,7 @@ public class GetExplorePagePostsController : ControllerBase
     }
 
     [HttpGet("explore-page")]
-    public async Task<ActionResult<GetExplorePagePostsResponse>> Handle([FromQuery] GetExplorePagePostsRequest getExplorePagePostsRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult<GetExplorePagePostsResponse>> Handle([FromRoute] GetExplorePagePostsRequest getExplorePagePostsRequest, CancellationToken cancellationToken)
     {
         getExplorePagePostsRequest.UserId = User.GetUserId();
         
