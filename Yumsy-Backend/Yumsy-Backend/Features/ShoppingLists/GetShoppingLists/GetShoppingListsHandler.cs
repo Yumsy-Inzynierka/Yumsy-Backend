@@ -16,6 +16,7 @@ public class GetShoppingListsHandler
     {
         
         //do przemyślenia response
+        //do sprawdzenia i możliwe że do zmiany
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == getShoppingListsRequest.UserId);
         if (user == null)
         {

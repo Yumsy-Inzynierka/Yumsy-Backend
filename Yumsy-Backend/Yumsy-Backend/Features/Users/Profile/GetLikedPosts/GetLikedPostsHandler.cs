@@ -15,7 +15,7 @@ public class GetLikedPostsHandler
     public async Task<GetLikedPostsResponse> Handle(Guid userId, CancellationToken cancellationToken)
     {
         
-        ///do zmiany
+        ///do spradzenia i możliwe że do zmiany
         var userExists = await _dbContext.Users
             .AnyAsync(u => u.Id == userId, cancellationToken);
 

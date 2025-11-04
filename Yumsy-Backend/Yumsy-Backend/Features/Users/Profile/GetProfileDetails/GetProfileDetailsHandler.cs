@@ -14,6 +14,7 @@ public class GetProfileDetailsHandler
 
     public async Task<GetProfileDetailsResponse> Handle(GetProfileDetailsRequest request, CancellationToken cancellationToken)
     {
+        //do sprawdzenia i może do zmiany
         var userExists = await _dbContext.Users
             .AnyAsync(u => u.Id == request.UserId, cancellationToken);
 

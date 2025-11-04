@@ -14,7 +14,7 @@ public class EditProfileDetailsHandler
 
     public async Task Handle(EditProfileDetailsRequest request, CancellationToken cancellationToken)
     {
-        /// do sprawdzenia
+        /// do sprawdzenia i mozliwie że do zmiany
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
 
