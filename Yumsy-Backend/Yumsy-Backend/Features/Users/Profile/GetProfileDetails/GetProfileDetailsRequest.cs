@@ -4,6 +4,8 @@ namespace Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 
 public class GetProfileDetailsRequest
 {
-    [FromRoute(Name = "userId")]
     public Guid UserId { get; set; }
+    
+    [FromRoute(Name = "profileOwnerId")]
+    public Guid ProfileOwnerId { get; set; }
 }
