@@ -27,10 +27,18 @@ public class GetHomeFeedForUserHandler
                 PostTitle = p.Title,
                 UserId = p.UserId,
                 Username = p.CreatedBy.Username,
+                Description = p.Description,
+                CookingTime = p.CookingTime,
                 Image = p.PostImages.First().ImageUrl,
                 TimePosted = p.PostedDate,
                 LikesCount = p.LikesCount,
                 CommentsCount = p.CommentsCount,
+                Tags = p.PostTags.Select(pt => new GetHomeFeedForUserPostTagResponse
+                    {
+                        Id = pt.Tag.Id,
+                        Name = pt.Tag.Name
+                    })
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
 
