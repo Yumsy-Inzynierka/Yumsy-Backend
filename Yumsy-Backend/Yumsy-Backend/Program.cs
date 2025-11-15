@@ -3,7 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Yumsy_Backend.Features.Ingredients.SearchIngredient;
+using Yumsy_Backend.Features.Ingredients.SearchIngredients;
 using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.AddComment;
 using Yumsy_Backend.Features.Posts.Comments.DeleteComment;

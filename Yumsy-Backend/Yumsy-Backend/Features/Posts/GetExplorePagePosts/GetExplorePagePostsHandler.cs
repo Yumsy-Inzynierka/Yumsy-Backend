@@ -13,8 +13,9 @@ public class GetExplorePagePostsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetExplorePagePostsResponse> Handle(GetExplorePagePostsRequest getExplorePagePostsRequest, CancellationToken cancellationToken)
+    public async Task<GetExplorePagePostsResponse> Handle(GetExplorePagePostsRequest request, CancellationToken cancellationToken)
     {
+        // na razie nie zmieniam bo i tak jest logika do zmiany
         var query = _dbContext.Posts
             .Include(p => p.PostImages)
             .AsNoTracking();
@@ -22,7 +23,7 @@ public class GetExplorePagePostsHandler
         var totalCount = await query.CountAsync(cancellationToken);
         
         var posts = await query
-            .Skip((getExplorePagePostsRequest.CurrentPage - 1) * YumsyConstants.FETCHED_POSTS_AMOUNT)
+            .Skip((request.CurrentPage - 1) * YumsyConstants.FETCHED_POSTS_AMOUNT)
             .OrderBy(x => Guid.NewGuid()) // pseudo losowy algorytm
             .Take(YumsyConstants.FETCHED_POSTS_AMOUNT)
             .Select(p => new GetExplorePagePostResponse
@@ -35,8 +36,8 @@ public class GetExplorePagePostsHandler
         return new GetExplorePagePostsResponse
         {
             Posts = posts,
-            CurrentPage = getExplorePagePostsRequest.CurrentPage,
-            HasMore = getExplorePagePostsRequest.CurrentPage * YumsyConstants.FETCHED_POSTS_AMOUNT < totalCount
+            CurrentPage = request.CurrentPage,
+            HasMore = request.CurrentPage * YumsyConstants.FETCHED_POSTS_AMOUNT < totalCount
         };
     }
 }

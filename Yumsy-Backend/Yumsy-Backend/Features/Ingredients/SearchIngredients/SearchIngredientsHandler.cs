@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 
-namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
+namespace Yumsy_Backend.Features.Ingredients.SearchIngredients;
 
 public class SearchIngredientsHandler
 {
@@ -12,8 +12,7 @@ public class SearchIngredientsHandler
         _context = context;
     }
 
-    public async Task<SearchIngredientsResponse> Handle(SearchIngredientsRequest request,
-        CancellationToken cancellationToken)
+    public async Task<SearchIngredientsResponse> Handle(SearchIngredientsRequest request, CancellationToken cancellationToken)
     {
         const int pageSize = 20;
         

@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Yumsy_Backend.Features.Ingredients.SearchIngredient;
+namespace Yumsy_Backend.Features.Ingredients.SearchIngredients;
 
 [ApiController]
 [Route("/api/ingredients")]

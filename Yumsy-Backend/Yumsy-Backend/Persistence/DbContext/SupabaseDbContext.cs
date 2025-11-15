@@ -55,19 +55,19 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     base.OnModelCreating(modelBuilder);
 
     modelBuilder.Entity<UserFollower>()
-        .HasKey(uf => new { uf.FollowingId, uf.FollowerId });
-
-    modelBuilder.Entity<UserFollower>()
-        .HasOne(uf => uf.Following)
-        .WithMany(u => u.Followers)
-        .HasForeignKey(uf => uf.FollowingId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .HasKey(uf => new { uf.FollowerId, uf.FollowingId });
 
     modelBuilder.Entity<UserFollower>()
         .HasOne(uf => uf.Follower)
         .WithMany(u => u.Followings)
         .HasForeignKey(uf => uf.FollowerId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.NoAction);
+
+    modelBuilder.Entity<UserFollower>()
+        .HasOne(uf => uf.Following)
+        .WithMany(u => u.Followers)
+        .HasForeignKey(uf => uf.FollowingId)
+        .OnDelete(DeleteBehavior.NoAction);
 
     modelBuilder.Entity<Post>()
         .HasMany(p => p.PostImages)

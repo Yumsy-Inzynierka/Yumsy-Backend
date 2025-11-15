@@ -6,6 +6,6 @@ public class LikeCommentRequest
 {
     public Guid UserId { get; set; }   
     
-    [FromForm(Name = "commentId")]
+    [FromRoute(Name = "commentId")]
     public Guid CommentId { get; set; }
 }

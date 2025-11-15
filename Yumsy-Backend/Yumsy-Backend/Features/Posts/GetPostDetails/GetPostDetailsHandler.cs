@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Persistence.Models;
 
 namespace Yumsy_Backend.Features.Posts.GetPostDetails;
 
@@ -12,7 +13,7 @@ public class GetPostDetailsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest getPostDetailsRequest)
+    public async Task<GetPostDetailsResponse> Handle(GetPostDetailsRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .AsNoTracking()
@@ -20,90 +21,73 @@ public class GetPostDetailsHandler
             .Include(p => p.CreatedBy)
             .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
             .Include(p => p.PostImages)
-            .FirstOrDefaultAsync(p => p.Id == getPostDetailsRequest.PostId);
+            .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
 
-        if (post is null)
-            throw new KeyNotFoundException("Post does not exist");
+        if (post == null)
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} does not exist.");
 
         var ingredients = await _dbContext.IngredientPosts
-            .Where(ip => ip.PostId == getPostDetailsRequest.PostId)
-            .Select(ip => new
-            {
-                ip.IngredientId,
-                ip.Quantity,
-                ip.Ingredient.Name,
-                ip.Ingredient.EnergyKcal100g,
-                ip.Ingredient.Fat100g,
-                ip.Ingredient.Carbohydrates100g,
-                ip.Ingredient.Fiber100g,
-                ip.Ingredient.Sugars100g,
-                ip.Ingredient.Proteins100g,
-                ip.Ingredient.Salt100g
-            })
-            .ToListAsync();
-
-        decimal? totalCalories = 0,
-                 totalFats = 0,
-                 totalCarbs = 0,
-                 totalFiber = 0,
-                 totalSugars = 0,
-                 totalProtein = 0,
-                 totalSalt = 0;
-
-        bool caloriesNull = false,
-             fatsNull = false,
-             carbsNull = false,
-             fiberNull = false,
-             sugarsNull = false,
-             proteinNull = false,
-             saltNull = false;
+            .AsNoTracking()
+            .Where(ip => ip.PostId == request.PostId)
+            .Include(ip => ip.Ingredient)
+            .ToListAsync(cancellationToken);
 
         var ingredientResponses = new List<GetPostIngredientResponse>();
 
-        foreach (var ingredient in ingredients)
+        decimal totalCalories = 0m;
+        decimal totalFats = 0m;
+        decimal totalCarbs = 0m;
+        decimal totalProtein = 0m;
+
+        decimal? totalFiber = 0m;
+        decimal? totalSugars = 0m;
+        decimal? totalSalt = 0m;
+
+        bool fiberNull = false;
+        bool sugarsNull = false;
+        bool saltNull = false;
+
+        foreach (var ip in ingredients)
         {
-            var multiplier = ingredient.Quantity / 100m;
+            var multiplier = ip.Quantity / 100m;
 
-            void AddNutrition(ref decimal? total, ref bool nullFlag, decimal? valuePer100g)
-            {
-                if (valuePer100g is null)
-                {
-                    nullFlag = true;
-                }
-                else
-                {
-                    total += valuePer100g * multiplier;
-                }
-            }
+            totalCalories += ip.Ingredient.EnergyKcal100g * multiplier;
+            totalFats += ip.Ingredient.Fat100g * multiplier;
+            totalCarbs += ip.Ingredient.Carbohydrates100g * multiplier;
+            totalProtein += ip.Ingredient.Proteins100g * multiplier;
 
-            AddNutrition(ref totalCalories, ref caloriesNull, ingredient.EnergyKcal100g);
-            AddNutrition(ref totalFats, ref fatsNull, ingredient.Fat100g);
-            AddNutrition(ref totalCarbs, ref carbsNull, ingredient.Carbohydrates100g);
-            AddNutrition(ref totalProtein, ref proteinNull, ingredient.Proteins100g);
-            AddNutrition(ref totalFiber, ref fiberNull, ingredient.Fiber100g);
-            AddNutrition(ref totalSugars, ref sugarsNull, ingredient.Sugars100g);
-            AddNutrition(ref totalSalt, ref saltNull, ingredient.Salt100g);
+            if (ip.Ingredient.Fiber100g.HasValue)
+                totalFiber += ip.Ingredient.Fiber100g.Value * multiplier;
+            else fiberNull = true;
+
+            if (ip.Ingredient.Sugars100g.HasValue)
+                totalSugars += ip.Ingredient.Sugars100g.Value * multiplier;
+            else sugarsNull = true;
+
+            if (ip.Ingredient.Salt100g.HasValue)
+                totalSalt += ip.Ingredient.Salt100g.Value * multiplier;
+            else saltNull = true;
 
             ingredientResponses.Add(new GetPostIngredientResponse
             {
-                Id = ingredient.IngredientId,
-                Quantity = ingredient.Quantity,
-                Name = ingredient.Name
+                Id = ip.IngredientId,
+                Quantity = ip.Quantity,
+                Name = ip.Ingredient.Name
             });
         }
 
         var recipeSteps = post.Steps
-            .OrderBy(rs => rs.StepNumber)
-            .Select(rs => new GetPostRecipeStepResponse
+            .OrderBy(s => s.StepNumber)
+            .Select(s => new GetPostRecipeStepResponse
             {
-                Id = rs.Id,
-                StepNumber = rs.StepNumber,
-                Description = rs.Description,
-                Image = rs.ImageUrl
+                Id = s.Id,
+                StepNumber = s.StepNumber,
+                Description = s.Description,
+                Image = s.ImageUrl
             })
             .ToList();
 
-        var postTags = post.PostTags
+        var tags = post.PostTags
             .Select(pt => new GetPostTagResponse
             {
                 Id = pt.Tag.Id,
@@ -111,34 +95,39 @@ public class GetPostDetailsHandler
             })
             .ToList();
 
-        var images = post.PostImages
-            .Select(p => p.ImageUrl)
-            .ToList();
-        
-        var isLiked = await _dbContext.Likes.AnyAsync(l => l.PostId == getPostDetailsRequest.PostId && l.UserId == getPostDetailsRequest.UserId);
+        var images = post.PostImages.Select(pi => pi.ImageUrl).ToList();
+
+        var isLiked = await _dbContext.Likes
+            .AsNoTracking()
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
+
+        var isSaved = await _dbContext.Saved
+            .AsNoTracking()
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
         
         return new GetPostDetailsResponse
         {
             Id = post.Id,
             UserId = post.UserId,
-            IsLiked = isLiked,
-            Title = post.Title,
-            CookingTime = post.CookingTime,
-            Description = post.Description,
-            Tags = postTags,
             Username = post.CreatedBy.Username,
+            IsLiked = isLiked,
+            IsSaved = isSaved,
+            Title = post.Title,
+            Description = post.Description,
+            CookingTime = post.CookingTime,
             LikesCount = post.LikesCount,
             CommentsCount = post.CommentsCount,
+            Tags = tags,
             Images = images,
             Ingredients = ingredientResponses,
             Nutrition = new GetPostNutritionResponse
             {
-                Calories = caloriesNull ? null : totalCalories,
-                Fats = fatsNull ? null : totalFats,
-                TotalCarbohydrates = carbsNull ? null : totalCarbs,
+                Calories = totalCalories,
+                Fats = totalFats,
+                TotalCarbohydrates = totalCarbs,
+                Protein = totalProtein,
                 Fiber = fiberNull ? null : totalFiber,
                 Sugars = sugarsNull ? null : totalSugars,
-                Protein = proteinNull ? null : totalProtein,
                 Sodium = saltNull ? null : totalSalt
             },
             RecipeSteps = recipeSteps

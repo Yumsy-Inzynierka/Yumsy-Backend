@@ -3,6 +3,7 @@ namespace Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 public record GetProfileDetailsResponse
 {
     public Guid Id { get; init; }
+    public bool? IsFollowed { get; init; }
     public string Username { get; init; }
     public string ProfileName { get; init; }
     public int RecipesCount { get; init; }

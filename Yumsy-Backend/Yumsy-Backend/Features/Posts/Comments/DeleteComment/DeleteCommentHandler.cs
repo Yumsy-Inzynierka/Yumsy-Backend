@@ -12,24 +12,35 @@ public class DeleteCommentHandler
         _dbContext = dbContext;
     }
 
-    public async Task Handle(DeleteCommentRequest deleteCommentRequest,CancellationToken cancellationToken)
+    public async Task Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
-            .Include(p => p.Comments)
-            .FirstOrDefaultAsync(c => c.Id == deleteCommentRequest.PostId, cancellationToken);
-        
+            .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
+
         if (post == null)
-            throw new KeyNotFoundException($"Post with ID: {deleteCommentRequest.PostId} not found.");
-        
-        var comment = post.Comments.FirstOrDefault(c => c.Id == deleteCommentRequest.CommentId);
-        
-        if(comment == null)
-            throw new KeyNotFoundException($"Comment with ID: {deleteCommentRequest.CommentId} not found in post with Id: {deleteCommentRequest.PostId}.");
-        
-        _dbContext.Comments.Remove(comment);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        
-        comment.Post.CommentsCount = await _dbContext.Comments.CountAsync(l => l.PostId == deleteCommentRequest.PostId);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found.");
+
+        var comment = await _dbContext.Comments
+            .FirstOrDefaultAsync(c => c.Id == request.CommentId && c.PostId == request.PostId, cancellationToken);
+
+        if (comment == null)
+            throw new KeyNotFoundException($"Comment with ID: {request.CommentId} not found in post with ID: {request.PostId}.");
+
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            _dbContext.Comments.Remove(comment);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            post.CommentsCount = await _dbContext.Comments.CountAsync(c => c.PostId == request.PostId, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
     }
 }

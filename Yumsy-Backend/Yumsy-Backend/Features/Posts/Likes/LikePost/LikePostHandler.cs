@@ -13,34 +13,46 @@ public class LikePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<LikePostResponse> Handle(LikePostRequest likePostRequest, CancellationToken cancellationToken)
+    public async Task<LikePostResponse> Handle(LikePostRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
-            .Include(p => p.Likes)
-            .FirstOrDefaultAsync(p => p.Id == likePostRequest.PostId, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
 
         if (post == null)
-            throw new KeyNotFoundException($"Post with ID: {likePostRequest.PostId} not found");
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found");
 
         var alreadyLiked = await _dbContext.Likes
-            .AnyAsync(l => l.PostId == likePostRequest.PostId && l.UserId == likePostRequest.UserId);
+            .AsNoTracking()
+            .AnyAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
 
-        if (!alreadyLiked)
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
         {
-            var like = new Like()
+            if (!alreadyLiked)
             {
-                UserId = likePostRequest.UserId,
-                PostId = likePostRequest.PostId
-            };
+                var like = new Like
+                {
+                    UserId = request.UserId,
+                    PostId = request.PostId
+                };
 
-            _dbContext.Likes.Add(like);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
-            post.LikesCount = await _dbContext.Likes.CountAsync(l => l.PostId == likePostRequest.PostId, cancellationToken);
+                await _dbContext.Likes.AddAsync(like, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+                post.LikesCount = await _dbContext.Likes
+                    .CountAsync(l => l.PostId == request.PostId, cancellationToken);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            await transaction.CommitAsync(cancellationToken);
         }
-        
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
+
         return new LikePostResponse
         {
             Id = post.Id,

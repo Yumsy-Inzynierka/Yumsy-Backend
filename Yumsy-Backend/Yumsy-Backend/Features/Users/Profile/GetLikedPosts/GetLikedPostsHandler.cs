@@ -12,20 +12,27 @@ public class GetLikedPostsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetLikedPostsResponse> Handle(Guid userId, 
-        CancellationToken cancellationToken)
+    public async Task<GetLikedPostsResponse> Handle(Guid userId, CancellationToken cancellationToken)
     {
+        
+        ///do spradzenia i możliwe że do zmiany
+        var userExists = await _dbContext.Users
+            .AnyAsync(u => u.Id == userId, cancellationToken);
+
+        if (!userExists)
+            throw new KeyNotFoundException($"User with ID: {userId} not found.");
+
         var posts = await _dbContext.Likes
+            .AsNoTracking()
             .Where(l => l.UserId == userId)
             .Select(l => new GetLikedPostResponse
             {
                 Id = l.PostId,
                 Image = l.Post.PostImages
                     .Select(pi => pi.ImageUrl)
-                    .FirstOrDefault(),
+                    .FirstOrDefault()
             })
             .ToListAsync(cancellationToken);
-            
         
         return new GetLikedPostsResponse
         {

@@ -13,36 +13,57 @@ public class AddCommentHandler
         _dbContext = dbContext;
     }
 
-    public async Task<AddCommentResponse> Handle(AddCommentRequest addCommentRequest, CancellationToken cancellationToken)
+    public async Task<AddCommentResponse> Handle(AddCommentRequest request, CancellationToken cancellationToken)
     {
         var userExists = await _dbContext.Users
-            .AnyAsync(u => u.Id == addCommentRequest.UserId, cancellationToken);
+            .AnyAsync(u => u.Id == request.UserId, cancellationToken);
 
         if (!userExists)
-            throw new KeyNotFoundException($"User with ID: {addCommentRequest.UserId} not found.");
+            throw new KeyNotFoundException($"User with ID: {request.UserId} not found.");
     
         var post = await _dbContext.Posts
-            .FirstOrDefaultAsync(u => u.Id == addCommentRequest.PostId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == request.PostId, cancellationToken);
 
         if (post == null)
-            throw new KeyNotFoundException($"Post with ID: {addCommentRequest.PostId} not found.");
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found.");
+        
+        if (request.Body.ParentCommentId.HasValue)
+        {
+            var parentExists = await _dbContext.Comments
+                .AnyAsync(c => c.Id == request.Body.ParentCommentId.Value, cancellationToken);
+    
+            if (!parentExists)
+                throw new KeyNotFoundException($"Parent comment with ID: {request.Body.ParentCommentId} not found.");
+        }
         
         var comment = new Comment
         {
             Id = Guid.NewGuid(),
-            Content = addCommentRequest.Body.Content,
-            PostId = addCommentRequest.PostId,
-            ParentCommentId = addCommentRequest.Body.ParentCommentId,
-            UserId = addCommentRequest.UserId,
+            Content = request.Body.Content,
+            PostId = request.PostId,
+            ParentCommentId = request.Body.ParentCommentId,
+            UserId = request.UserId,
             CommentedDate = DateTime.UtcNow,
         };
         
-        _dbContext.Comments.Add(comment);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        
-        post.CommentsCount = await _dbContext.Comments.CountAsync(l => l.PostId == addCommentRequest.PostId, cancellationToken);
-            
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            _dbContext.Comments.Add(comment);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            post.CommentsCount = await _dbContext.Comments
+                .CountAsync(c => c.PostId == request.PostId, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
         
         return new AddCommentResponse()
         {
