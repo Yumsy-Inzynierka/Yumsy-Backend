@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.GetTopDailyPosts;
 
@@ -19,9 +20,13 @@ public class GetTopDailyPostsController : ControllerBase
     }
 
     [HttpGet("top-daily")]
-    public async Task<ActionResult<GetTopDailyPostsResponse>> GetTopDailyPosts(CancellationToken cancellationToken)
+    public async Task<ActionResult<GetTopDailyPostsResponse>> GetTopDailyPosts(
+        [FromRoute] GetTopDailyPostsRequest request,
+        CancellationToken cancellationToken)
     {
-        var response = await _getTopDailyPostsHandler.Handle(cancellationToken);
+        request.UserId = User.GetUserId();
+        
+        var response = await _getTopDailyPostsHandler.Handle(request, cancellationToken);
             
         return Ok(response);
     }

@@ -39,7 +39,7 @@ public class GetHomeFeedForUserHandler
                         Name = pt.Tag.Name
                     })
                     .ToList(),
-                IsLiked = p.Likes.Any(l => l.UserId == p.UserId),
+                IsLiked = p.Likes.Any(l => l.UserId == request.UserId),
             })
             .ToListAsync(cancellationToken);
 

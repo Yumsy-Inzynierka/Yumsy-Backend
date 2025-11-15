@@ -14,25 +14,26 @@ public class GetTopDailyPostsHandler
         _dbContext = dbContext;
     }
 
-    public async Task<GetTopDailyPostsResponse> Handle(CancellationToken cancellationToken)
+    public async Task<GetTopDailyPostsResponse> Handle(GetTopDailyPostsRequest request, 
+        CancellationToken cancellationToken)
     {
         var hoursSince = -24;
         var since = DateTime.UtcNow.AddHours(hoursSince);
-        const int pool = 15;
-        
-        var posts = GetPosts(since, cancellationToken);
+    
+        List<GetTopDailyPostResponse> posts;
 
-        while (posts.Result.Count < pool)
+        do
         {
-            hoursSince *= 2;
-            since = DateTime.UtcNow.AddHours(hoursSince);
-            posts = GetPosts(since, cancellationToken);
-            
+            posts = await GetPosts(since, request.UserId, cancellationToken);
             if (hoursSince < -24 * 90)
                 break;
-        }
+
+            hoursSince *= 2;
+            since = DateTime.UtcNow.AddHours(hoursSince);
+
+        } while (posts.Count < YumsyConstants.NEW_POSTS_AMOUNT);
         
-        var topPosts = posts.Result.Take(YumsyConstants.TOP_DAILY_POSTS_AMOUNT).ToList();
+        var topPosts = posts.Take(YumsyConstants.TOP_DAILY_POSTS_AMOUNT).ToList();
         
         return new GetTopDailyPostsResponse
         {
@@ -40,7 +41,7 @@ public class GetTopDailyPostsHandler
         };
     }
 
-    private async Task<List<GetTopDailyPostResponse>> GetPosts(DateTime since, CancellationToken cancellationToken)
+    private async Task<List<GetTopDailyPostResponse>> GetPosts(DateTime since, Guid userId, CancellationToken cancellationToken)
     {
         return await _dbContext.Posts
             .Where(p => p.PostedDate >= since)
@@ -55,7 +56,7 @@ public class GetTopDailyPostsHandler
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
                 TimePosted = p.PostedDate,
-                IsLiked = p.Likes.Any(l => l.UserId == p.UserId),
+                IsLiked = p.Likes.Any(l => l.UserId == userId),
                 Count = p.LikesCount + p.CommentsCount + p.SavedCount
             })
             .ToListAsync(cancellationToken);
