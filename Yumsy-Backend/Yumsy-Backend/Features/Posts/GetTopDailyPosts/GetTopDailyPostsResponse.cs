@@ -13,6 +13,7 @@ public record GetTopDailyPostResponse
     public string Username { get; init; }
     public string Image { get; init; }
     public DateTime TimePosted { get; init; }
+    public bool IsLiked { get; init; }
     public int Count { get; init; }
     
 }

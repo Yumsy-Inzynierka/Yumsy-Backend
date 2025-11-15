@@ -55,6 +55,7 @@ public class GetTopDailyPostsHandler
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault(),
                 TimePosted = p.PostedDate,
+                IsLiked = p.Likes.Any(l => l.UserId == p.UserId),
                 Count = p.LikesCount + p.CommentsCount + p.SavedCount
             })
             .ToListAsync(cancellationToken);

@@ -30,6 +30,7 @@ public class GetHomeFeedForUserHandler
                 TimePosted = p.PostedDate,
                 LikesCount = p.LikesCount,
                 CommentsCount = p.CommentsCount,
+                IsLiked = p.Likes.Any(l => l.UserId == p.UserId),
             })
             .ToListAsync(cancellationToken);
 
