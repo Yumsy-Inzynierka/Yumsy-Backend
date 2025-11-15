@@ -12,6 +12,8 @@ using Yumsy_Backend.Features.Posts.EditPost;
 using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
+using Yumsy_Backend.Features.Posts.GetNewPosts;
+using Yumsy_Backend.Features.Posts.GetSavedPosts;
 using Yumsy_Backend.Features.Posts.GetTopDailyPosts;
 using Yumsy_Backend.Features.Posts.Likes.LikeComment;
 using Yumsy_Backend.Features.Posts.Likes.LikePost;
@@ -74,6 +76,8 @@ builder.Services.AddScoped<RefreshTokenHandler>();
 builder.Services.AddScoped<EditProfileDetailsHandler>();
 builder.Services.AddScoped<GetExplorePagePostsHandler>();
 builder.Services.AddScoped<EditPostHandler>();
+builder.Services.AddScoped<GetNewPostsHandler>();
+builder.Services.AddScoped<GetSavedPostsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -106,6 +110,8 @@ builder.Services.AddScoped<IValidator<RefreshTokenRequest>, RefreshTokenValidato
 builder.Services.AddScoped<IValidator<EditProfileDetailsRequest>, EditProfileDetailsValidator>();
 builder.Services.AddScoped<IValidator<GetExplorePagePostsRequest>, GetExplorePagePostsValidator>();
 builder.Services.AddScoped<IValidator<EditPostRequest>, EditPostValidator>();
+builder.Services.AddScoped<IValidator<GetNewPostsRequest>, GetNewPostsValidator>();
+builder.Services.AddScoped<IValidator<GetSavedPostsRequest>, GetSavedPostsValidator>();
 
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
