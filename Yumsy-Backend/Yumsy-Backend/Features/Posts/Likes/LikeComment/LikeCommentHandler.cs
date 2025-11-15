@@ -13,7 +13,7 @@ public class LikeCommentHandler
         _dbContext = dbContext;
     }
 
-    public async Task<LikeCommentResponse> Handle(LikeCommentRequest request, CancellationToken cancellationToken)
+    public async Task Handle(LikeCommentRequest request, CancellationToken cancellationToken)
         {
             var userExists = await _dbContext.Users
                 .AsNoTracking()
@@ -59,10 +59,5 @@ public class LikeCommentHandler
                 await transaction.RollbackAsync(cancellationToken);
                 throw;
             }
-    
-            return new LikeCommentResponse
-            {
-                Id = commentLike.CommentId
-            };
         }
 }

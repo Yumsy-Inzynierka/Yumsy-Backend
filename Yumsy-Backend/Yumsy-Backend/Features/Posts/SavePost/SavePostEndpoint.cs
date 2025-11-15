@@ -29,8 +29,8 @@ public class SavePostEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _savePostHandler.Handle(savePostRequest, cancellationToken);
+        await _savePostHandler.Handle(savePostRequest, cancellationToken);
             
-        return Created($"api/posts/{response.PostId}/save", response);
+        return NoContent();
     }
 }

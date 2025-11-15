@@ -2,5 +2,5 @@
 
 public record FollowUserResponse
 {
-    public Guid FollowingId { get; init; }
+    
 }

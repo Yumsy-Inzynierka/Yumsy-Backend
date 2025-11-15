@@ -30,8 +30,8 @@ public class LikeCommentEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _likeCommentHandler.Handle(likeCommentRequest, cancellationToken);
+        await _likeCommentHandler.Handle(likeCommentRequest, cancellationToken);
             
-        return Created($"api/comments/{response.Id}/like", response);
+        return NoContent();
     }
 }

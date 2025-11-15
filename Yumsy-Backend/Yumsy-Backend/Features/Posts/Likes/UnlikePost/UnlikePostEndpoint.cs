@@ -28,7 +28,7 @@ public class UnlikePostEndpoint : ControllerBase
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var result = await _handler.Handle(unlikePostRequest, cancellationToken);
-        return Ok(result);
+        await _handler.Handle(unlikePostRequest, cancellationToken);
+        return NoContent();
     }
 }

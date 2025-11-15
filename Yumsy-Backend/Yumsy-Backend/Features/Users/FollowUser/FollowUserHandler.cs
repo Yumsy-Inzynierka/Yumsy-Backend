@@ -13,7 +13,7 @@ public class FollowUserHandler
         _dbContext = dbContext;
     }
 
-    public async Task<FollowUserResponse> Handle(FollowUserRequest request, CancellationToken cancellationToken)
+    public async Task Handle(FollowUserRequest request, CancellationToken cancellationToken)
     {
         var users = await _dbContext.Users
             .Where(u => u.Id == request.FollowerId || u.Id == request.Body.FollowingId)
@@ -53,10 +53,5 @@ public class FollowUserHandler
 
         await _dbContext.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
-
-        return new FollowUserResponse
-        {
-            FollowingId = follow.FollowingId
-        };
     }
 }

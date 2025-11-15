@@ -30,8 +30,8 @@ public class FollowUserEndpoint : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
         
-        var response = await _followUserHandler.Handle(followUserRequest, cancellationToken);
+        await _followUserHandler.Handle(followUserRequest, cancellationToken);
             
-        return Created($"api/users/follow", response);
+        return NoContent();
     }
 }

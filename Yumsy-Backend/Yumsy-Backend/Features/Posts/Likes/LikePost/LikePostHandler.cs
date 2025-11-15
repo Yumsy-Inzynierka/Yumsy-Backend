@@ -13,7 +13,7 @@ public class LikePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<LikePostResponse> Handle(LikePostRequest request, CancellationToken cancellationToken)
+    public async Task Handle(LikePostRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
@@ -52,12 +52,5 @@ public class LikePostHandler
             await transaction.RollbackAsync(cancellationToken);
             throw;
         }
-
-        return new LikePostResponse
-        {
-            Id = post.Id,
-            Liked = true,
-            LikesCount = post.LikesCount
-        };
     }
 }
