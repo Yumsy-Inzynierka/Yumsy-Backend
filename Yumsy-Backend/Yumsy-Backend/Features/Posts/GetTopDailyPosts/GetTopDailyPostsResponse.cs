@@ -14,6 +14,5 @@ public record GetTopDailyPostResponse
     public string Image { get; init; }
     public DateTime TimePosted { get; init; }
     public bool IsLiked { get; init; }
-    public int Count { get; init; }
     
 }
