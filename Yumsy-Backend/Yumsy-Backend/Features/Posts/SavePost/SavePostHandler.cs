@@ -13,7 +13,7 @@ public class SavePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<SavePostResponse> Handle(SavePostRequest request, CancellationToken cancellationToken)
+    public async Task Handle(SavePostRequest request, CancellationToken cancellationToken)
     {
         var userExists = await _dbContext.Users
             .AsNoTracking()
@@ -59,10 +59,5 @@ public class SavePostHandler
             await transaction.RollbackAsync(cancellationToken);
             throw;
         }
-
-        return new SavePostResponse
-        {
-            PostId = savedPost.PostId
-        };
     }
 }

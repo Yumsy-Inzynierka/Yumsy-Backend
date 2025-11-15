@@ -13,7 +13,7 @@ public class UnlikePostHandler
         _dbContext = dbContext;
     }
 
-    public async Task<UnlikePostResponse> Handle(UnlikePostRequest request, CancellationToken cancellationToken)
+    public async Task Handle(UnlikePostRequest request, CancellationToken cancellationToken)
     {
         var post = await _dbContext.Posts
             .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
@@ -23,16 +23,9 @@ public class UnlikePostHandler
 
         var like = await _dbContext.Likes
             .FirstOrDefaultAsync(l => l.PostId == request.PostId && l.UserId == request.UserId, cancellationToken);
-
+        
         if (like == null)
-        {
-            return new UnlikePostResponse
-            {
-                Id = post.Id,
-                Liked = false,
-                LikesCount = post.LikesCount
-            };
-        }
+            throw new InvalidOperationException($"User with ID: {request.UserId} does not like post with ID: {request.PostId}.");
 
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
@@ -52,12 +45,5 @@ public class UnlikePostHandler
             await transaction.RollbackAsync(cancellationToken);
             throw;
         }
-
-        return new UnlikePostResponse
-        {
-            Id = post.Id,
-            Liked = false,
-            LikesCount = post.LikesCount
-        };
     }
 }

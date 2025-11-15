@@ -2,5 +2,5 @@
 
 public record SavePostResponse
 {
-    public Guid PostId { get; init; }
+
 }

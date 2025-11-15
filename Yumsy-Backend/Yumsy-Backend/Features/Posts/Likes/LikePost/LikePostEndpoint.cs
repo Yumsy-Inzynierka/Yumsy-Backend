@@ -20,7 +20,7 @@ public class LikePostEndpoint : ControllerBase
     }
     
     [HttpPost("{postId:guid}/likes")]
-    public async Task<ActionResult<LikePostResponse>> LikePost([FromRoute] LikePostRequest likePostRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult> LikePost([FromRoute] LikePostRequest likePostRequest, CancellationToken cancellationToken)
     {
         likePostRequest.UserId = User.GetUserId();
         
@@ -28,7 +28,7 @@ public class LikePostEndpoint : ControllerBase
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
-        var result = await _handler.Handle(likePostRequest, cancellationToken);
-        return Ok(result);
+        await _handler.Handle(likePostRequest, cancellationToken);
+        return NoContent();
     }
 }
