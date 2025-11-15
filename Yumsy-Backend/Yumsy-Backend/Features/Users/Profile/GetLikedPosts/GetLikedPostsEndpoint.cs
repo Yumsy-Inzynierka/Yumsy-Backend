@@ -8,23 +8,26 @@ namespace Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
 [Authorize]
 [ApiController]
 [Route("api/profiles")]
-public class Controller : ControllerBase
+public class GetLikedPostsController : ControllerBase
 {
     private readonly GetLikedPostsHandler _getLikedPostsHandler;
     private readonly IValidator<GetLikedPostsRequest> _validator;
 
-    public Controller(GetLikedPostsHandler getLikedPostsHandler, IValidator<GetLikedPostsRequest> validator)
+    public GetLikedPostsController(GetLikedPostsHandler getLikedPostsHandler, IValidator<GetLikedPostsRequest> validator)
     {
         _getLikedPostsHandler = getLikedPostsHandler;
         _validator = validator;
     }
 
     [HttpGet("liked-posts")]
-    public async Task<ActionResult<GetLikedPostsResponse>> Handle(CancellationToken cancellationToken)
+    public async Task<ActionResult<GetLikedPostsResponse>> Handle(
+        [FromRoute] GetLikedPostsRequest request,
+        CancellationToken cancellationToken
+        )
     {
         var userId = User.GetUserId();
         
-        var response = await _getLikedPostsHandler.Handle(userId, cancellationToken);
+        var response = await _getLikedPostsHandler.Handle(request, userId, cancellationToken);
             
         return Ok(response);
     }
