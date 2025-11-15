@@ -14,8 +14,12 @@ public class Tag
 
     [MaxLength(300)]
     public string? Emote { get; set; }
+    public Guid TagCategoryId { get; set; }
+    
+    [ForeignKey(nameof(TagCategoryId))]
+    public TagCategory TagCategory { get; set; }
 
-    public ICollection<QuizQuestion> QuizQuestions { get; set; } = new HashSet<QuizQuestion>();
+    public ICollection<QuizAnswer> QuizAnswers { get; set; } = new HashSet<QuizAnswer>();
 
     public ICollection<Recommendation> Recommendations { get; set; } = new HashSet<Recommendation>();
     public ICollection<PostTag> PostTags { get; set; } = new HashSet<PostTag>();

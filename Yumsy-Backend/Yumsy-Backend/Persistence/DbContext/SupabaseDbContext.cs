@@ -19,26 +19,22 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<CommentLike> CommentLikes { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
     public DbSet<IngredientPost> IngredientPosts { get; set; }
-
     public DbSet<IngredientShoppingList> IngredientShoppingLists { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<Post> Posts { get; set; }
-
     public DbSet<PostImage> PostImages { get; set; }
     public DbSet<PostTag> PostTags { get; set; }
-
-    public DbSet<QuizQuestion> QuizQuestions { get; set; }
-
     public DbSet<Recommendation> Recommendations { get; set; }
     public DbSet<Saved> Saved { get; set; }
     public DbSet<ShoppingList> ShoppingLists { get; set; }
-
     public DbSet<Step> Steps { get; set; }
-
     public DbSet<Tag> Tags { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserFollower> UserFollowers { get; set; }
-
+    public DbSet<SeenPost> SeenPosts { get; set; }
+    public DbSet<TagCategory> TagCategories { get; set; }
+    public DbSet<QuizQuestion> QuizQuestions { get; set; }
+    public DbSet<QuizAnswer> QuizAnswers { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
