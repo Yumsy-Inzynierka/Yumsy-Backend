@@ -1,11 +1,11 @@
-namespace Yumsy_Backend.Features.Posts.GetTopDailyPosts;
+namespace Yumsy_Backend.Features.Posts.GetNewPosts;
 
-public record GetTopDailyPostsResponse
+public record GetNewPostsResponse
 {
-    public List<GetTopDailyPostResponse> Posts { get; init; }
+    public List<GetNewPostResponse> Posts { get; init; }
 }
 
-public record GetTopDailyPostResponse
+public record GetNewPostResponse
 {
     public Guid Id { get; init; }
     public string PostTitle { get; init; }
@@ -14,6 +14,4 @@ public record GetTopDailyPostResponse
     public string Image { get; init; }
     public DateTime TimePosted { get; init; }
     public bool IsLiked { get; init; }
-    public int Count { get; init; }
-    
 }
