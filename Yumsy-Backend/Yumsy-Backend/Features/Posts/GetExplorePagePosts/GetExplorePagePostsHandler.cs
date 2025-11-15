@@ -22,22 +22,10 @@ public class GetExplorePagePostsHandler
 
         var totalCount = await query.CountAsync(cancellationToken);
         
-        var posts = await query
-            .Skip((request.CurrentPage - 1) * YumsyConstants.FETCHED_POSTS_AMOUNT)
-            .OrderBy(x => Guid.NewGuid()) // pseudo losowy algorytm
-            .Take(YumsyConstants.FETCHED_POSTS_AMOUNT)
-            .Select(p => new GetExplorePagePostResponse
-            {
-                Id = p.Id,
-                Image = p.PostImages.FirstOrDefault().ImageUrl,
-            })
-            .ToListAsync(cancellationToken);
         
         return new GetExplorePagePostsResponse
         {
-            Posts = posts,
             CurrentPage = request.CurrentPage,
-            HasMore = request.CurrentPage * YumsyConstants.FETCHED_POSTS_AMOUNT < totalCount
         };
     }
 }

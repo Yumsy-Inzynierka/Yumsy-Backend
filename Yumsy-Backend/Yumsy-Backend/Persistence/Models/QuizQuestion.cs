@@ -8,15 +8,13 @@ public class QuizQuestion
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
-
-    [MaxLength(100)]
-    public string Description { get; set; }
-
-    [MaxLength(40)]
-    public string Name { get; set; }
-
-    public Guid TagId { get; set; }
     
-    [ForeignKey(nameof(TagId))]
-    public Tag Tag { get; set; }
+    public string Question { get; set; }
+
+    public Guid TagCategoryId { get; set; }
+    
+    [ForeignKey(nameof(TagCategoryId))]
+    public TagCategory TagCategory { get; set; }
+    
+    public ICollection<QuizAnswer> QuizAnswers { get; set; } = new HashSet<QuizAnswer>();
 }

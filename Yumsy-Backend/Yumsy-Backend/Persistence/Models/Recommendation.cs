@@ -16,4 +16,6 @@ public class Recommendation
     
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
+
+    public int Score { get; set; }
 }
