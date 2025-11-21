@@ -38,20 +38,18 @@ public class EditProfileDetailsHandler
                 throw new InvalidOperationException($"Username '{request.Body.Username}' is already taken.");
         }
 
-        var hasChanges =
-            user.Username != request.Body.Username ||
-            user.ProfileName != request.Body.ProfileName ||
-            user.ProfilePicture != request.Body.ProfilePicture ||
-            user.Bio != request.Body.Bio;
-
-        if (hasChanges)
-        {
+        if (request.Body.Username is not null)
             user.Username = request.Body.Username;
+        
+        if (request.Body.ProfileName is not null)
             user.ProfileName = request.Body.ProfileName;
+        
+        if (request.Body.ProfilePicture is not null)
             user.ProfilePicture = request.Body.ProfilePicture;
+        
+        if (request.Body.Bio is not null)
             user.Bio = request.Body.Bio;
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
