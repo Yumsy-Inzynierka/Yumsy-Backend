@@ -10,6 +10,7 @@ public class QuizQuestion
     public Guid Id { get; set; } = Guid.NewGuid();
     
     public string Question { get; set; }
+    public bool Mandatory { get; set; }
 
     public Guid TagCategoryId { get; set; }
     
