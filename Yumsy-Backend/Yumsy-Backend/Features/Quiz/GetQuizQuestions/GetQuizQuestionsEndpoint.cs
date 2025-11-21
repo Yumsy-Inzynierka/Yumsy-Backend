@@ -21,10 +21,11 @@ public class GetSavedPostsController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<GetQuizQuestionsResponse>> Handle(
-        [FromRoute] GetQuizQuestionsRequest getQuizQuestionsRequest,
+        [FromRoute] GetQuizQuestionsRequest request,
         CancellationToken cancellationToken)
     {
-        var response = await _getQuizQuestionsHandler.Handle(getQuizQuestionsRequest, cancellationToken);
+        
+        var response = await _getQuizQuestionsHandler.Handle(request, cancellationToken);
             
         return Ok(response);
     }
