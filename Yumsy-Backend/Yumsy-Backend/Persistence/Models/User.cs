@@ -17,7 +17,6 @@ public class User
     public string Username { get; set; }
     
     [MaxLength(20)]
-
     public string? ProfileName { get; set; }
     
     public string? ProfilePicture { get; set; }

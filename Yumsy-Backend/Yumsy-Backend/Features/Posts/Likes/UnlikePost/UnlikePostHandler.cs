@@ -30,6 +30,39 @@ public class UnlikePostHandler
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
+            var tagIds = await _dbContext.PostTags
+                .Where(t => t.PostId == request.PostId)
+                .Select(i => i.TagId)
+                .ToListAsync(cancellationToken);
+
+            if (tagIds.Any())
+            {
+                await _dbContext.Recommendations
+                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId) && r.Score >= 1)
+                    .ExecuteUpdateAsync(s =>
+                        s.SetProperty(r => r.Score, r => r.Score - 1), cancellationToken);
+
+                var existingTagIds = await _dbContext.Recommendations
+                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId))
+                    .Select(r => r.TagId)
+                    .ToListAsync(cancellationToken);
+
+                var newTagIds = tagIds.Except(existingTagIds).ToList();
+
+                if (newTagIds.Any())
+                {
+                    var newRecs = newTagIds.Select(tagId => new Recommendation
+                    {
+                        TagId = tagId,
+                        UserId = request.UserId,
+                        Score = 0
+                    });
+
+                    _dbContext.Recommendations.AddRange(newRecs);
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+            }
+            
             _dbContext.Likes.Remove(like);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

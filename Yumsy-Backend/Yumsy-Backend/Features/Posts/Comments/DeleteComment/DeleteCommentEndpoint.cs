@@ -20,13 +20,15 @@ public class DeleteCommentEndpoint : ControllerBase
     }
     
     [HttpDelete("{postId:guid}/comments/{commentId:guid}")]
-    public async Task<IActionResult> DeleteComment([FromRoute] DeleteCommentRequest deleteCommentRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteComment([FromRoute] DeleteCommentRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(deleteCommentRequest, cancellationToken);
+        request.UserId = User.GetUserId();
+        
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
-        await _handler.Handle(deleteCommentRequest, cancellationToken);
+        await _handler.Handle(request, cancellationToken);
 
         return NoContent();
     }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Persistence.Models;
 
 namespace Yumsy_Backend.Features.Posts.Comments.DeleteComment;
 
@@ -14,6 +15,11 @@ public class DeleteCommentHandler
 
     public async Task Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
     {
+        var isUserCommentOwner = await _dbContext.Comments.AnyAsync(c => c.UserId == request.UserId, cancellationToken);
+
+        if (!isUserCommentOwner)
+            throw new KeyNotFoundException($"User with ID: {request.UserId} is not owner of this comment.");
+        
         var post = await _dbContext.Posts
             .FirstOrDefaultAsync(p => p.Id == request.PostId, cancellationToken);
 
@@ -34,6 +40,39 @@ public class DeleteCommentHandler
 
             post.CommentsCount = await _dbContext.Comments.CountAsync(c => c.PostId == request.PostId, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            var tagIds = await _dbContext.PostTags
+                .Where(t => t.PostId == request.PostId)
+                .Select(i => i.TagId)
+                .ToListAsync(cancellationToken);
+
+            if (tagIds.Any())
+            {
+                await _dbContext.Recommendations
+                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId) && r.Score >= 2)
+                    .ExecuteUpdateAsync(s =>
+                        s.SetProperty(r => r.Score, r => r.Score - 2), cancellationToken);
+
+                var existingTagIds = await _dbContext.Recommendations
+                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId))
+                    .Select(r => r.TagId)
+                    .ToListAsync(cancellationToken);
+
+                var newTagIds = tagIds.Except(existingTagIds).ToList();
+
+                if (newTagIds.Any())
+                {
+                    var newRecs = newTagIds.Select(tagId => new Recommendation
+                    {
+                        TagId = tagId,
+                        UserId = request.UserId,
+                        Score = 0
+                    });
+
+                    _dbContext.Recommendations.AddRange(newRecs);
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+            }
 
             await transaction.CommitAsync(cancellationToken);
         }
