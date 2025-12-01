@@ -23,22 +23,12 @@ public class AddPostHandler
         
         // nie jest to obowiązkowe bo my bierzemy z fronta z listy tagi i ingredients ale może być bo dobra praktyka, oby nie zwalniało (do przemyślenia)
         var tagIds = request.Body.Tags.Select(t => t.Id).ToList();
-        var existingTags = await _dbContext.Tags
-            .Where(t => tagIds.Contains(t.Id))
-            .Select(t => t.Id)
-            .ToListAsync(cancellationToken);
-        
-        if (existingTags.Count != tagIds.Count)
+
+        var existingCount = await _dbContext.Tags
+            .CountAsync(t => tagIds.Contains(t.Id), cancellationToken);
+
+        if (existingCount != tagIds.Count)
             throw new KeyNotFoundException("One or more tags not found.");
-        
-        var ingredientIds = request.Body.Ingredients.Select(i => i.Id).ToList();
-        var existingIngredients = await _dbContext.Ingredients
-            .Where(i => ingredientIds.Contains(i.Id))
-            .Select(i => i.Id)
-            .ToListAsync(cancellationToken);
-        
-        if (existingIngredients.Count != ingredientIds.Count)
-            throw new KeyNotFoundException("One or more ingredients not found.");
         
         
         var post = new Post
