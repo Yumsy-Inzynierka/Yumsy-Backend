@@ -27,6 +27,7 @@ using Yumsy_Backend.Features.ShoppingLists.AddShoppingList;
 using Yumsy_Backend.Features.ShoppingLists.DeleteShoppingList;
 using Yumsy_Backend.Features.ShoppingLists.EditShoppingList;
 using Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
+using Yumsy_Backend.Features.Tags.GetTags;
 using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
@@ -82,6 +83,7 @@ builder.Services.AddScoped<GetNewPostsHandler>();
 builder.Services.AddScoped<GetSavedPostsHandler>();
 builder.Services.AddScoped<GetQuizQuestionsHandler>();
 builder.Services.AddScoped<GetQuizResultHandler>();
+builder.Services.AddScoped<GetTagsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -118,6 +120,7 @@ builder.Services.AddScoped<IValidator<GetNewPostsRequest>, GetNewPostsValidator>
 builder.Services.AddScoped<IValidator<GetSavedPostsRequest>, GetSavedPostsValidator>();
 builder.Services.AddScoped<IValidator<GetQuizQuestionsRequest>, GetQuizQuestionsValidator>();
 builder.Services.AddScoped<IValidator<GetQuizResultRequest>, GetQuizResultValidator>();
+builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
 builder.Services.AddScoped<GetHomeFeedForUserValidator>();
