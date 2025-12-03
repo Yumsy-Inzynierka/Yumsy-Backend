@@ -5,7 +5,7 @@ using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Quiz.GetQuizQuestions;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/quizzes")]
 public class GetSavedPostsController : ControllerBase
