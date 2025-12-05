@@ -16,17 +16,18 @@ public class GetQuizResultHandler
     public async Task<GetQuizResultResponse> Handle(GetQuizResultRequest request, CancellationToken cancellationToken)
     {
         var existingCount = await _dbContext.QuizAnswers
-            .CountAsync(qa => request.QuizAnswersIds.Contains(qa.Id), cancellationToken);
+            .CountAsync(qa => request.Body.QuizAnswersIds.Contains(qa.Id), cancellationToken);
 
-        if (existingCount != request.QuizAnswersIds.Count())
+        if (existingCount != request.Body.QuizAnswersIds.Count())
             throw new KeyNotFoundException("One or more quiz answers not found.");
         
         var tagsIds = _dbContext.QuizAnswers
-            .Where(qa => request.QuizAnswersIds.Contains(qa.Id))
+            .Where(qa => request.Body.QuizAnswersIds.Contains(qa.Id))
             .Select(qa => qa.TagId).ToList();
         
-        var matchedPosts = await _dbContext.Posts
-            .Where(p => p.CookingTime <= request.MaxCookingTime && p.CookingTime >= request.MinCookingTime)
+        var matchedPost = await _dbContext.Posts
+            .Include(p => p.PostImages)
+            .Where(p => p.CookingTime <= request.Body.MaxCookingTime && p.CookingTime >= request.Body.MinCookingTime)
             .Select(p => new
             {
                 Post = p,
@@ -38,6 +39,23 @@ public class GetQuizResultHandler
             .Select(x => x.Post)
             .FirstOrDefaultAsync();
         
-        return new GetQuizResultResponse();
+        if (matchedPost == null)
+        {
+            matchedPost = await _dbContext.Posts
+                .OrderByDescending(p => p.LikesCount)
+                .FirstOrDefaultAsync();
+        }
+        
+        return new GetQuizResultResponse()
+        {
+            Id = matchedPost.Id,
+            Title = matchedPost.Title,
+            Username = await _dbContext.Users
+                .Where(u => u.Id == matchedPost.UserId)
+                .Select(u => u.Username)
+                .FirstOrDefaultAsync(),
+            Image = matchedPost.PostImages.Select(pi => pi.ImageUrl).FirstOrDefault(),
+            CookingTime = matchedPost.CookingTime,
+        };
     }
 }

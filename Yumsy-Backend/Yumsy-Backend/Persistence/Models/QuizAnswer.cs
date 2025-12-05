@@ -15,8 +15,8 @@ public class QuizAnswer
     [ForeignKey(nameof(QuizQuestionId))]
     public QuizQuestion QuizQuestion { get; set; }
 
-    public Guid TagId { get; set; }
+    public Guid? TagId { get; set; }
 
     [ForeignKey(nameof(TagId))]
-    public Tag Tag { get; set; }
+    public Tag? Tag { get; set; }
 }

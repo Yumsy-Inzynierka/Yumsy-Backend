@@ -5,7 +5,7 @@ using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Quiz.GetQuizResult;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/quizzes")]
 public class GetSavedPostsController : ControllerBase
@@ -19,7 +19,7 @@ public class GetSavedPostsController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("/result")]
+    [HttpPost("result")]
     public async Task<ActionResult<GetQuizResultResponse>> Handle(
         [FromRoute] GetQuizResultRequest request,
         CancellationToken cancellationToken)
