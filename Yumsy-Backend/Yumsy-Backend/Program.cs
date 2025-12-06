@@ -20,6 +20,7 @@ using Yumsy_Backend.Features.Posts.Likes.LikePost;
 using Yumsy_Backend.Features.Posts.Likes.UnlikeComment;
 using Yumsy_Backend.Features.Posts.Likes.UnlikePost;
 using Yumsy_Backend.Features.Posts.SavePost;
+using Yumsy_Backend.Features.Posts.SearchPosts;
 using Yumsy_Backend.Features.Posts.UnsavePost;
 using Yumsy_Backend.Features.Quiz.GetQuizQuestions;
 using Yumsy_Backend.Features.Quiz.GetQuizResult;
@@ -86,6 +87,7 @@ builder.Services.AddScoped<GetSavedPostsHandler>();
 builder.Services.AddScoped<GetQuizQuestionsHandler>();
 builder.Services.AddScoped<GetQuizResultHandler>();
 builder.Services.AddScoped<GetTagsHandler>();
+builder.Services.AddScoped<SearchPostsHandler>();
 
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
@@ -124,6 +126,7 @@ builder.Services.AddScoped<IValidator<GetSavedPostsRequest>, GetSavedPostsValida
 builder.Services.AddScoped<IValidator<GetQuizQuestionsRequest>, GetQuizQuestionsValidator>();
 builder.Services.AddScoped<IValidator<GetQuizResultRequest>, GetQuizResultValidator>();
 builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
+builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
 
 builder.Services.AddScoped<GetHomeFeedForUserHandler>();
 builder.Services.AddScoped<GetHomeFeedForUserValidator>();
