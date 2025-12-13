@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 
 [Authorize]
 [ApiController]
-[Route("api/posts/")]
+[Route("api/posts")]
 public class GetExplorePagePostsController : ControllerBase
 {
     private readonly GetExplorePagePostsHandler _getExplorePagePostsHandler;

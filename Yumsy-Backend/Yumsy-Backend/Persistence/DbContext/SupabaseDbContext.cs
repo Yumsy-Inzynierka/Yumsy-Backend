@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Persistence.Models;
-
 
 namespace Yumsy_Backend.Persistence.DbContext;
 
@@ -35,7 +35,7 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<TagCategory> TagCategories { get; set; }
     public DbSet<QuizQuestion> QuizQuestions { get; set; }
     public DbSet<QuizAnswer> QuizAnswers { get; set; }
-    
+    public DbSet<RecommendPostResultDTO> RecommendPosts { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql("Host=aws-0-eu-north-1.pooler.supabase.com;Port=6543;Database=postgres;Username=postgres.kitubqamchqakbyysyuk;Password=k2ig2odPgpKNISFC;Ssl Mode=Require;Trust Server Certificate=true;Pooling=false;Timeout=60;Command Timeout=120;");
@@ -47,9 +47,10 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
         */
 
    protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
+   {
     base.OnModelCreating(modelBuilder);
-
+    modelBuilder.Entity<RecommendPostResultDTO>().HasNoKey();
+    
     modelBuilder.Entity<UserFollower>()
         .HasKey(uf => new { uf.FollowerId, uf.FollowingId });
 
@@ -136,5 +137,6 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
         .WithMany(t => t.PostTags)
         .HasForeignKey(pt => pt.TagId)
         .OnDelete(DeleteBehavior.Cascade);
-}
+    
+   }
 }

@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Yumsy_Backend.Extensions;
 using Yumsy_Backend.Features.Ingredients.SearchIngredients;
 using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.AddComment;
@@ -31,6 +32,7 @@ using Yumsy_Backend.Features.ShoppingLists.EditShoppingList;
 using Yumsy_Backend.Features.ShoppingLists.GetShoppingLists;
 using Yumsy_Backend.Features.Tags.GetTags;
 using Yumsy_Backend.Features.Tags.GetTopDailyTags;
+using Yumsy_Backend.Features.Temporary.DropSeenPost;
 using Yumsy_Backend.Features.Users.FollowUser;
 using Yumsy_Backend.Features.Users.Login;
 using Yumsy_Backend.Features.Users.Profile.GetLikedPosts;
@@ -39,6 +41,7 @@ using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
 using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Features.Users.UnfollowUser;
+using Yumsy_Backend.Middlewares.ExceptionHandlingMiddleware;
 using Yumsy_Backend.Persistence.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,7 +91,8 @@ builder.Services.AddScoped<GetQuizQuestionsHandler>();
 builder.Services.AddScoped<GetQuizResultHandler>();
 builder.Services.AddScoped<GetTagsHandler>();
 builder.Services.AddScoped<SearchPostsHandler>();
-
+//to be removed:
+builder.Services.AddScoped<DropSeenPostHandler>();
 
 builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
@@ -128,8 +132,7 @@ builder.Services.AddScoped<IValidator<GetQuizResultRequest>, GetQuizResultValida
 builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
 
-builder.Services.AddScoped<GetHomeFeedForUserHandler>();
-builder.Services.AddScoped<GetHomeFeedForUserValidator>();
+builder.Services.AddSingleton<IExceptionStatusCodeMapper, ExceptionStatusCodeMapper>();
 
 // Konfiguracja uwierzytelniania JWT z Supabase
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -148,43 +151,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(configuration["Supabase:JwtSecret"])
             )
         };
-
-        //Logi do debugowania
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine("Authentication failed:");
-                Console.WriteLine(context.Exception.ToString());
-                return Task.CompletedTask;
-            },
-            OnTokenValidated = context =>
-            {
-                Console.WriteLine("Token validated successfully.");
-                var claimsIdentity = context.Principal.Identity as System.Security.Claims.ClaimsIdentity;
-                if (claimsIdentity != null)
-                {
-                    Console.WriteLine("Claims:");
-                    foreach (var claim in claimsIdentity.Claims)
-                    {
-                        Console.WriteLine($" - {claim.Type}: {claim.Value}");
-                    }
-                }
-
-                Console.WriteLine("Issuer claim (iss):");
-                Console.WriteLine(context.Principal?.FindFirst("iss")?.Value);
-
-                return Task.CompletedTask;
-            },
-            OnChallenge = context =>
-            {
-                Console.WriteLine("OnChallenge error:");
-                Console.WriteLine(context.ErrorDescription);
-                return Task.CompletedTask;
-            }
-        };
     });
-
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
