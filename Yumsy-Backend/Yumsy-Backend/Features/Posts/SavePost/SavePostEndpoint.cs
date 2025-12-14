@@ -19,7 +19,7 @@ public class SavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{postId:guid}/save")]
+    [HttpPost("{postId:guid}/saved")]
     public async Task<ActionResult<SavePostResponse>> Handle([FromRoute] SavePostRequest savePostRequest, CancellationToken cancellationToken)
     {
         savePostRequest.UserId = User.GetUserId();

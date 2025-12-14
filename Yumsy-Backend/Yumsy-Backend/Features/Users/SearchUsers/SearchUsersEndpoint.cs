@@ -18,7 +18,7 @@ public class SearchUsersController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("search")]
+    [HttpGet]
     public async Task<ActionResult<SearchUsersResponse>> Handle([FromQuery] SearchUsersRequest searchUsersRequest,
         CancellationToken cancellationToken)
     {

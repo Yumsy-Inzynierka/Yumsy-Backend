@@ -19,7 +19,7 @@ public class UnsavePostEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{postId:guid}/unsave")]
+    [HttpDelete("{postId:guid}/saved")]
     public async Task<IActionResult> Handle([FromRoute] UnsavePostRequest unsavePostRequest, CancellationToken cancellationToken)
     {
         unsavePostRequest.UserId = User.GetUserId(); 

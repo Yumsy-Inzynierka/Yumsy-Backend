@@ -19,7 +19,7 @@ public class UnlikeCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("{commentId:guid}/unlike")]
+    [HttpDelete("{commentId:guid}/likes")]
     public async Task<IActionResult> Handle([FromRoute] UnlikeCommentRequest unlikeCommentRequest, CancellationToken cancellationToken)
     {
         unlikeCommentRequest.UserId = User.GetUserId();

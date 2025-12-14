@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 
 [Authorize]
 [ApiController]
-[Route("api/profiles")]
+[Route("api/users")]
 public class GetProfileDetailsEndpoint : ControllerBase
 {
     private readonly GetProfileDetailsHandler _handler;
@@ -19,7 +19,7 @@ public class GetProfileDetailsEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpGet("{profileOwnerId:guid}")]
+    [HttpGet("profile/{profileOwnerId:guid}")]
     public async Task<ActionResult<GetProfileDetailsResponse>> GetProfileDetails([FromRoute] GetProfileDetailsRequest getProfileDetailsRequest, CancellationToken cancellationToken)
     {
         getProfileDetailsRequest.UserId = User.GetUserId(); 

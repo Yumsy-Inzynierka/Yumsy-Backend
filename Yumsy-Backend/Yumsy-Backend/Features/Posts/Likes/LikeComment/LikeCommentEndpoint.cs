@@ -19,7 +19,7 @@ public class LikeCommentEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("{commentId:guid}/like")]
+    [HttpPost("{commentId:guid}/likes")]
     public async Task<IActionResult> Handle([FromRoute] LikeCommentRequest likeCommentRequest, CancellationToken cancellationToken)
     {
         likeCommentRequest.UserId = User.GetUserId();
