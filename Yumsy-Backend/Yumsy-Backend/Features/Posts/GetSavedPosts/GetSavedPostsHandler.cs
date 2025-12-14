@@ -17,6 +17,7 @@ public class GetSavedPostsHandler
         CancellationToken cancellationToken)
     {
         var page = request.CurrentPage;
+        var pageSize = YumsyConstants.SAVED_POSTS_AMOUNT;
         
         var query = _dbContext.Saved
             .Where(s => s.UserId == userId)
@@ -26,19 +27,18 @@ public class GetSavedPostsHandler
                 saved => saved.PostId,
                 post => post.Id,
                 (saved, post) => post
-                );
+            );
         
         int totalCount = await query.CountAsync(cancellationToken);
         
         var posts = await query
-            .Skip((int)(page - 1) * YumsyConstants.SAVED_POSTS_AMOUNT)
-            .Take(YumsyConstants.SAVED_POSTS_AMOUNT)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(post => new GetSavedPostResponse
             {
                 Id = post.Id,
                 Image = _dbContext.PostImages
                     .Where(pi => pi.PostId == post.Id)
-                    .OrderBy(pi => pi.Id)
                     .Select(pi => pi.ImageUrl)
                     .FirstOrDefault()
             })
@@ -48,7 +48,7 @@ public class GetSavedPostsHandler
         {
             SavedPosts = posts,
             CurrentPage = page,
-            HasMore = page * YumsyConstants.SAVED_POSTS_AMOUNT < totalCount
+            HasMore = page * pageSize < totalCount
         };
     }
 }
