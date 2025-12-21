@@ -19,7 +19,7 @@ public class DeleteCommentHandler
             .FirstOrDefaultAsync(
                 c => c.Id == request.CommentId 
                      && c.PostId == request.PostId
-                     && c.UserId == request.UserId,  // 👈 Sprawdzamy ownership
+                     && c.UserId == request.UserId,
                 cancellationToken);
 
         if (comment == null)
