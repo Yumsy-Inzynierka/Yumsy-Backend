@@ -7,7 +7,10 @@ namespace Yumsy_Backend.Persistence.Models;
 [PrimaryKey(nameof(UserId), nameof(PostId))]
 public class SeenPost
 {
+    [Column("user_id")]
     public Guid UserId { get; set; }
+    
+    [Column("post_id")]
     public Guid PostId { get; set; }
     
     [ForeignKey(nameof(PostId))]

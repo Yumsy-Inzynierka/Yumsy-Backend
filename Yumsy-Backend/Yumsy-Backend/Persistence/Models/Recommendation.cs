@@ -7,8 +7,10 @@ namespace Yumsy_Backend.Persistence.Models;
 [PrimaryKey(nameof(TagId), nameof(UserId))]
 public class Recommendation
 {
-    
+    [Column("tag_id")]
     public Guid TagId { get; set; }
+    
+    [Column("user_id")]
     public Guid UserId { get; set; }
     
     [ForeignKey(nameof(TagId))]
@@ -17,5 +19,6 @@ public class Recommendation
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
 
+    [Column("score")]
     public int Score { get; set; }
 }

@@ -50,7 +50,7 @@ var configuration = builder.Configuration;
 
 // Dodanie DbContext z EF Core
 builder.Services.AddDbContext<SupabaseDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("SupabaseConnection")));
+    options.UseNpgsql(configuration.GetConnectionString("SupabaseConnection")).UseSnakeCaseNamingConvention());
 
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton(configuration);

@@ -7,32 +7,43 @@ namespace Yumsy_Backend.Persistence.Models;
 public class User
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
 
     [EmailAddress]
     [MaxLength(320)]
+    [Column("email")]
     public string Email { get; set; }
     
     [MaxLength(20)]
+    [Column("username")]
     public string Username { get; set; }
     
     [MaxLength(20)]
+    [Column("profile_name")]
     public string? ProfileName { get; set; }
     
+    [Column("profile_picture")]
     public string? ProfilePicture { get; set; }
 
     [MaxLength(400)]
+    [Column("bio")]
     public string? Bio { get; set; }
 
+    [Column("followers_count")]
     public int FollowersCount { get; set; }
 
+    [Column("following_count")]
     public int FollowingCount { get; set; }
 
+    [Column("recipes_count")]
     public int RecipesCount { get; set; }
 
+    [Column("registration_date")]
     public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
 
     [MaxLength(20)]
+    [Column("role")]
     public string Role { get; set; }
 
     public ICollection<CommentLike> CommentLikes { get; set; } = new HashSet<CommentLike>();
