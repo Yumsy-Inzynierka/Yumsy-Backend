@@ -7,11 +7,16 @@ namespace Yumsy_Backend.Persistence.Models;
 public class QuizQuestion
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
     
+    [Column("question")]
     public string Question { get; set; }
+    
+    [Column("mandatory")]
     public bool Mandatory { get; set; }
 
+    [Column("tag_category_id")]
     public Guid TagCategoryId { get; set; }
     
     [ForeignKey(nameof(TagCategoryId))]

@@ -19,7 +19,7 @@ public class UnfollowUserEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpDelete("unfollow")]
+    [HttpDelete("followers")]
     public async Task<IActionResult> Handle([FromRoute] UnfollowUserRequest followUserRequest, CancellationToken cancellationToken)
     {
         followUserRequest.FollowerId = User.GetUserId();

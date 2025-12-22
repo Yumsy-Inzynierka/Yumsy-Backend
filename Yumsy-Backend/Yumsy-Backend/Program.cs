@@ -40,6 +40,7 @@ using Yumsy_Backend.Features.Users.Profile.EditProfileDetails;
 using Yumsy_Backend.Features.Users.Profile.GetProfileDetails;
 using Yumsy_Backend.Features.Users.RefreshTokenEndpoint;
 using Yumsy_Backend.Features.Users.Register;
+using Yumsy_Backend.Features.Users.SearchUsers;
 using Yumsy_Backend.Features.Users.UnfollowUser;
 using Yumsy_Backend.Middlewares.ExceptionHandlingMiddleware;
 using Yumsy_Backend.Persistence.DbContext;
@@ -50,7 +51,7 @@ var configuration = builder.Configuration;
 
 // Dodanie DbContext z EF Core
 builder.Services.AddDbContext<SupabaseDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("SupabaseConnection")));
+    options.UseNpgsql(configuration.GetConnectionString("SupabaseConnection")).UseSnakeCaseNamingConvention());
 
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton(configuration);
@@ -92,6 +93,7 @@ builder.Services.AddScoped<GetQuizQuestionsHandler>();
 builder.Services.AddScoped<GetQuizResultHandler>();
 builder.Services.AddScoped<GetTagsHandler>();
 builder.Services.AddScoped<SearchPostsHandler>();
+builder.Services.AddScoped<SearchUsersHandler>();
 //to be removed:
 builder.Services.AddScoped<DropSeenPostHandler>();
 
@@ -132,6 +134,7 @@ builder.Services.AddScoped<IValidator<GetQuizQuestionsRequest>, GetQuizQuestions
 builder.Services.AddScoped<IValidator<GetQuizResultRequest>, GetQuizResultValidator>();
 builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
+builder.Services.AddScoped<IValidator<SearchUsersRequest>, SearchUsersValidator>();
 
 builder.Services.AddSingleton<IExceptionStatusCodeMapper, ExceptionStatusCodeMapper>();
 builder.Services.AddScoped<IAppEventLogger, AppEventLogger>();

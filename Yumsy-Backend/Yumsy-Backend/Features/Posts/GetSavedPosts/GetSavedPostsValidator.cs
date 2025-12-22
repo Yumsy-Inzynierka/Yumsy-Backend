@@ -6,8 +6,7 @@ public class GetSavedPostsValidator : AbstractValidator<GetSavedPostsRequest>
 {
     public GetSavedPostsValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.")
-            .NotEqual(Guid.Empty).WithMessage("UserId must be a valid GUID.");
+        RuleFor(x => x.CurrentPage)
+            .GreaterThan(0).WithMessage("Page must be greater than 0.");
     }
 }

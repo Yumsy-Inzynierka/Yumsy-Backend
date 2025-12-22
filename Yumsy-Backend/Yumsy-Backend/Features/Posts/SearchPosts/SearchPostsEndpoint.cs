@@ -19,7 +19,7 @@ public class SearchPostsController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("search")]
+    [HttpGet]
     public async Task<ActionResult<SearchPostsResponse>> SearchPosts(
         [FromQuery] SearchPostsRequest searchPostsRequest,
         CancellationToken cancellationToken)
@@ -29,8 +29,6 @@ public class SearchPostsController : ControllerBase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        
-        //var userId = User.GetUserId();
         
         var response = await _searchPostsHandler.Handle(searchPostsRequest, cancellationToken);
             

@@ -7,13 +7,18 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Tag
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(50)]
+    [Column("name")]
     public string Name { get; set; } = null!;
 
     [MaxLength(300)]
+    [Column("emote")]
     public string? Emote { get; set; }
+    
+    [Column("tag_category_id")]
     public Guid TagCategoryId { get; set; }
     
     [ForeignKey(nameof(TagCategoryId))]

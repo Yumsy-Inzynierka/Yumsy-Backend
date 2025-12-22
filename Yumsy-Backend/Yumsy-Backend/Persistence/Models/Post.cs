@@ -7,23 +7,36 @@ namespace Yumsy_Backend.Persistence.Models;
 public class Post
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [MaxLength(50)]
+    [Column("title")]
     public string Title { get; set; }
 
+    [Column("posted_date")]
     public DateTime PostedDate { get; set; } = DateTime.UtcNow;
+    
     [MaxLength(400)]
+    [Column("description")]
     public string Description { get; set; }
+    
+    [Column("cooking_time")]
     public int CookingTime { get; set; }
 
+    [Column("likes_count")]
     public int LikesCount { get; set; }
 
+    [Column("comments_count")]
     public int CommentsCount { get; set; }
 
+    [Column("saved_count")]
     public int SavedCount { get; set; }
 
+    [Column("shared_count")]
     public int SharedCount { get; set; }
+    
+    [Column("user_id")]
     public Guid UserId { get; set; }
     
     [ForeignKey(nameof(UserId))]

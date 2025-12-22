@@ -7,7 +7,7 @@ namespace Yumsy_Backend.Features.Posts.EditPost;
 
 [Authorize]
 [ApiController]
-[Route("api/post")]
+[Route("api/posts")]
 public class Controller : ControllerBase
 {
     private readonly EditPostHandler _editPostHandler;

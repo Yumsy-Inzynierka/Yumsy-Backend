@@ -19,7 +19,7 @@ public class FollowUserEndpoint : ControllerBase
         _validator = validator;
     }
     
-    [HttpPost("follow")]
+    [HttpPost("followers")]
     public async Task<IActionResult> Handle([FromRoute] FollowUserRequest followUserRequest, CancellationToken cancellationToken)
     {
         followUserRequest.FollowerId = User.GetUserId();

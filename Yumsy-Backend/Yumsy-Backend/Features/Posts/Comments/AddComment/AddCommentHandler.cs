@@ -19,13 +19,13 @@ public class AddCommentHandler
             .AnyAsync(u => u.Id == request.UserId, cancellationToken);
 
         if (!userExists)
-            throw new KeyNotFoundException($"User with ID: {request.UserId} not found.");
+            throw new KeyNotFoundException($"User with ID: {request.UserId} not found");
     
-        var post = await _dbContext.Posts
-            .FirstOrDefaultAsync(u => u.Id == request.PostId, cancellationToken);
+        var postExists = await _dbContext.Posts
+            .AnyAsync(p => p.Id == request.PostId, cancellationToken);
 
-        if (post == null)
-            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found.");
+        if (!postExists)
+            throw new KeyNotFoundException($"Post with ID: {request.PostId} not found");
         
         if (request.Body.ParentCommentId.HasValue)
         {
@@ -33,7 +33,8 @@ public class AddCommentHandler
                 .AnyAsync(c => c.Id == request.Body.ParentCommentId.Value, cancellationToken);
     
             if (!parentExists)
-                throw new KeyNotFoundException($"Parent comment with ID: {request.Body.ParentCommentId} not found.");
+                throw new KeyNotFoundException(
+                    $"Parent comment with ID: {request.Body.ParentCommentId} not found");
         }
         
         var comment = new Comment
@@ -46,57 +47,10 @@ public class AddCommentHandler
             CommentedDate = DateTime.UtcNow,
         };
         
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-        try
-        {
-            _dbContext.Comments.Add(comment);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            post.CommentsCount = await _dbContext.Comments
-                .CountAsync(c => c.PostId == request.PostId, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            var tagIds = await _dbContext.PostTags
-                .Where(t => t.PostId == request.PostId)
-                .Select(i => i.TagId)
-                .ToListAsync(cancellationToken);
-
-            if (tagIds.Any())
-            {
-                await _dbContext.Recommendations
-                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId))
-                    .ExecuteUpdateAsync(s => s.SetProperty(r => r.Score, r => r.Score + 2), cancellationToken);
-
-                var existingTagIds = await _dbContext.Recommendations
-                    .Where(r => r.UserId == request.UserId && tagIds.Contains(r.TagId))
-                    .Select(r => r.TagId)
-                    .ToListAsync(cancellationToken);
-
-                var newTagIds = tagIds.Except(existingTagIds).ToList();
-
-                if (newTagIds.Any())
-                {
-                    var newRecs = newTagIds.Select(tagId => new Recommendation
-                    {
-                        TagId = tagId,
-                        UserId = request.UserId,
-                        Score = 2
-                    });
-
-                    _dbContext.Recommendations.AddRange(newRecs);
-                    await _dbContext.SaveChangesAsync(cancellationToken);
-                }
-            }
-
-            await transaction.CommitAsync(cancellationToken);
-        }
-        catch
-        {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
+        _dbContext.Comments.Add(comment);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         
-        return new AddCommentResponse()
+        return new AddCommentResponse
         {
             Id = comment.Id,
             Content = comment.Content,

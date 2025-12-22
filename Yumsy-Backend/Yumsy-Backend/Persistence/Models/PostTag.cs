@@ -9,7 +9,10 @@ namespace Yumsy_Backend.Persistence.Models;
 [PrimaryKey(nameof(PostId), nameof(TagId))]
 public class PostTag
 {
+    [Column("post_id")]
     public Guid PostId { get; set; }
+    
+    [Column("tag_id")]
     public Guid TagId { get; set; }
     
     [ForeignKey(nameof(PostId))]

@@ -18,7 +18,7 @@ public class SearchIngredientsEndpoint : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("search")]
+    [HttpGet]
     public async Task<ActionResult<SearchIngredientsResponse>> SearchIngredient(
         [FromQuery] SearchIngredientsRequest request,
         CancellationToken cancellationToken = default)

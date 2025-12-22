@@ -7,9 +7,11 @@ namespace Yumsy_Backend.Persistence.Models;
 public class TagCategory
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [MaxLength(50)]
+    [Column("name")]
     public string Name { get; set; }
 
     public ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();

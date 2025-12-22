@@ -24,6 +24,12 @@ public class GetSavedPostsController : ControllerBase
         [FromRoute] GetSavedPostsRequest getSavedPostsRequest,
         CancellationToken cancellationToken)
     {
+        var validationResult = await _validator.ValidateAsync(getSavedPostsRequest);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        
         var userId = User.GetUserId();
         
         var response = await _getSavedPostsHandler.Handle(getSavedPostsRequest, userId, cancellationToken);

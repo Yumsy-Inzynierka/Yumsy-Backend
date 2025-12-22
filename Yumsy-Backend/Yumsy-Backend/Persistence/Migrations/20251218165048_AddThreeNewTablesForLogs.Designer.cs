@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Yumsy_Backend.Persistence.DbContext;
@@ -11,9 +12,11 @@ using Yumsy_Backend.Persistence.DbContext;
 namespace Yumsy_Backend.Persistence.Migrations
 {
     [DbContext(typeof(SupabaseDbContext))]
-    partial class SupabaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251218165048_AddThreeNewTablesForLogs")]
+    partial class AddThreeNewTablesForLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,23 +29,47 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<string>("category")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("category");
+                        .HasColumnType("text");
 
                     b.Property<string>("image")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("post_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<decimal?>("score")
-                        .HasColumnType("numeric")
-                        .HasColumnName("score");
+                        .HasColumnType("numeric");
 
-                    b.ToTable("recommend_posts", (string)null);
+                    b.ToTable("RecommendPosts");
+                });
+
+            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.AppEventLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("EntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("app_event_log");
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Comment", b =>
@@ -104,6 +131,79 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("comment_like");
+                });
+
+            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.ErrorLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CorrelationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ExceptionType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StackTrace")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("error_log");
+                });
+
+            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.HttpLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CorrelationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("http_log");
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Ingredient", b =>

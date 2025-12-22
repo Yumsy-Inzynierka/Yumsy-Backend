@@ -12,5 +12,6 @@ public static class YumsyConstants
     public static readonly int SAVED_POSTS_AMOUNT = 14;
     public static readonly int LIKED_POSTS_AMOUNT = 14;
     public static readonly int SEARCH_POSTS_AMOUNT = 14;
+    public static readonly int SEARCH_USERS_AMOUNT = 14;
     
 }
