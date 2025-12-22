@@ -43,6 +43,7 @@ using Yumsy_Backend.Features.Users.Register;
 using Yumsy_Backend.Features.Users.UnfollowUser;
 using Yumsy_Backend.Middlewares.ExceptionHandlingMiddleware;
 using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Shared.EventLogger;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -133,6 +134,7 @@ builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
 
 builder.Services.AddSingleton<IExceptionStatusCodeMapper, ExceptionStatusCodeMapper>();
+builder.Services.AddScoped<IAppEventLogger, AppEventLogger>();
 
 // Konfiguracja uwierzytelniania JWT z Supabase
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -199,7 +201,8 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 
-app.UseGlobalExceptionHandler();
+app.UseGlobalExceptionMiddleware();
+app.UseGlobalHttpLoggingMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 

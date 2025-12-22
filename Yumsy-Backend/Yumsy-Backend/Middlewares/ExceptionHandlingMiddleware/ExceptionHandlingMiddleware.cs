@@ -1,24 +1,24 @@
 ﻿using System.Text.Json;
 using FluentValidation;
+using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Persistence.Models;
+
 namespace Yumsy_Backend.Middlewares.ExceptionHandlingMiddleware;
 
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
     private readonly IExceptionStatusCodeMapper _statusCodeMapper;
 
     public ExceptionHandlingMiddleware(
-        RequestDelegate next, 
-        ILogger<ExceptionHandlingMiddleware> logger,
+        RequestDelegate next,
         IExceptionStatusCodeMapper statusCodeMapper)
     {
         _next = next;
-        _logger = logger;
         _statusCodeMapper = statusCodeMapper;
     }
 
-    public async Task Invoke(HttpContext context)
+    public async Task Invoke(HttpContext context, SupabaseDbContext dbContext)
     {
         var traceId = Guid.NewGuid().ToString();
         context.Response.Headers["Trace-Id"] = traceId;
@@ -33,20 +33,30 @@ public class ExceptionHandlingMiddleware
 
             var response = new ErrorResponse
             {
-                TraceId = traceId,
+                TraceId = Guid.Parse(traceId),
                 ExceptionType = ex.GetType().Name,
-                Message = ex is ValidationException ? "Validation failed" : ex.Message,
-                Errors = ex is ValidationException validationEx 
+                Message = ex is ValidationException
+                    ? "Validation failed"
+                    : ex.Message,
+                Errors = ex is ValidationException validationEx
                     ? validationEx.Errors.Select(e => e.ErrorMessage).ToList()
                     : null
             };
 
-            if (statusCode >= 500)
-                _logger.LogCritical(ex, "Critical server error. TraceId: {TraceId}. Response: {@Response}", traceId, response);
-            else if (statusCode >= 400)
-                _logger.LogWarning(ex, "Client/validation error. TraceId: {TraceId}. Response: {@Response}", traceId, response);
-            else
-                _logger.LogError(ex, "Unhandled error. TraceId: {TraceId}. Response: {@Response}", traceId, response);
+            var errorLog = new ErrorLog
+            {
+                Path = context.Request.Path,
+                ExceptionType = ex.GetType().Name,
+                Message = ex.Message,
+                StackTrace = ex.StackTrace ?? string.Empty,
+                CorrelationId = Guid.Parse(traceId),
+                UserId = context.User.Identity?.IsAuthenticated == true
+                    ? Guid.Parse(context.User.Identity.Name)
+                    : null
+            };
+
+            dbContext.ErrorLogs.Add(errorLog);
+            await dbContext.SaveChangesAsync();
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
@@ -56,9 +66,9 @@ public class ExceptionHandlingMiddleware
 
     private class ErrorResponse
     {
-        public string TraceId { get; set; }
-        public string ExceptionType { get; set; }
-        public string Message { get; set; }
+        public Guid TraceId { get; set; }
+        public string ExceptionType { get; set; } = null!;
+        public string Message { get; set; } = null!;
         public List<string>? Errors { get; set; }
     }
 }

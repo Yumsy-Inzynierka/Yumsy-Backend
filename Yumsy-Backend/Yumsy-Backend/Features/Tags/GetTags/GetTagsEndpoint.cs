@@ -1,10 +1,11 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Tags.GetTags;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/")]
 public class GetTagsController : ControllerBase

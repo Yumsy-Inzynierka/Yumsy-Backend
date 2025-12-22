@@ -1,11 +1,12 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Supabase.Gotrue;
 using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.GetNewPosts;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/posts")]
 public class GetNewPostsController : ControllerBase

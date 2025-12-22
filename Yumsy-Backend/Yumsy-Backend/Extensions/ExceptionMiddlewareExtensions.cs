@@ -3,7 +3,7 @@ namespace Yumsy_Backend.Extensions;
 
 public static class ExceptionMiddlewareExtensions
 {
-    public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder app)
+    public static IApplicationBuilder UseGlobalExceptionMiddleware(this IApplicationBuilder app)
     {
         return app.UseMiddleware<ExceptionHandlingMiddleware>();
     }

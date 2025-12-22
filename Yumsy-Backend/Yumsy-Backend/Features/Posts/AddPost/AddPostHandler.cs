@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
+using Yumsy_Backend.Shared.EventLogger;
 
 namespace Yumsy_Backend.Features.Posts.AddPost;
 
 public class AddPostHandler
 {
     private readonly SupabaseDbContext _dbContext;
+    private readonly IAppEventLogger _appEventLogger;
     
-    public AddPostHandler(SupabaseDbContext dbContext)
+    public AddPostHandler(SupabaseDbContext dbContext, IAppEventLogger appEventLogger)
     {
         _dbContext = dbContext;
+        _appEventLogger = appEventLogger;
     }
 
     public async Task<AddPostResponse> Handle(AddPostRequest request, CancellationToken cancellationToken)
@@ -21,7 +24,6 @@ public class AddPostHandler
         if (!userExists)
             throw new KeyNotFoundException("User not found.");
         
-        // nie jest to obowiązkowe bo my bierzemy z fronta z listy tagi i ingredients ale może być bo dobra praktyka, oby nie zwalniało (do przemyślenia)
         var tagIds = request.Body.Tags.Select(t => t.Id).ToList();
 
         var existingCount = await _dbContext.Tags
@@ -90,11 +92,23 @@ public class AddPostHandler
         {
             await _dbContext.Posts.AddAsync(post, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);   
+            await transaction.CommitAsync(cancellationToken);
+            await _appEventLogger.LogAsync(
+                action: "create_post",
+                userId: request.UserId,
+                entityId: post.Id,
+                result: "success"
+            );
         }
         catch
         {
             await transaction.RollbackAsync(cancellationToken);
+            await _appEventLogger.LogAsync(
+                action: "create_post",
+                userId: request.UserId,
+                entityId: null,
+                result: "fail"
+            );
             throw;
         }
 

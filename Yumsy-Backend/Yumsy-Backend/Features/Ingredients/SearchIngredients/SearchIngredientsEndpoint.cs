@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Yumsy_Backend.Features.Ingredients.SearchIngredients;
 
+[Authorize]
 [ApiController]
 [Route("/api/ingredients")]
 public class SearchIngredientsEndpoint : ControllerBase
