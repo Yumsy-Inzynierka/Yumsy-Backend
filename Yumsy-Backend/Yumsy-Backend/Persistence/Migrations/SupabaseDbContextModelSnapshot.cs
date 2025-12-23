@@ -22,53 +22,6 @@ namespace Yumsy_Backend.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Yumsy_Backend.Features.Posts.GetExplorePagePosts.RecommendPostResultDTO", b =>
-                {
-                    b.Property<string>("category")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("image")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("post_id")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal?>("score")
-                        .HasColumnType("numeric");
-
-                    b.ToTable("RecommendPosts", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.AppEventLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("EntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Result")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("app_event_log", (string)null);
-                });
-
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Comment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -128,79 +81,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("comment_like", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.ErrorLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ExceptionType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("StackTrace")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("error_log", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.HttpLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Method")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("http_log", (string)null);
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Ingredient", b =>
