@@ -26,56 +26,45 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<string>("category")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("category");
+                        .HasColumnType("text");
 
                     b.Property<string>("image")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("post_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<decimal?>("score")
-                        .HasColumnType("numeric")
-                        .HasColumnName("score");
+                        .HasColumnType("numeric");
 
-                    b.ToTable("recommend_post_result_dto", (string)null);
+                    b.ToTable("RecommendPosts", (string)null);
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.AppEventLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("EntityId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("entity_id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Result")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("result");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_app_event_log");
+                    b.HasKey("Id");
 
                     b.ToTable("app_event_log", (string)null);
                 });
@@ -84,46 +73,35 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CommentedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("commented_date");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("character varying(400)")
-                        .HasColumnName("content");
+                        .HasColumnType("character varying(400)");
 
                     b.Property<int>("LikesCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("likes_count");
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("ParentCommentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("parent_comment_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_comment");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ParentCommentId")
-                        .HasDatabaseName("ix_comment_parent_comment_id");
+                    b.HasIndex("ParentCommentId");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_comment_post_id");
+                    b.HasIndex("PostId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_comment_user_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("comment", (string)null);
                 });
@@ -132,29 +110,22 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CommentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("comment_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_comment_like");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CommentId")
-                        .HasDatabaseName("ix_comment_like_comment_id");
+                    b.HasIndex("CommentId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_comment_like_user_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("comment_like", (string)null);
                 });
@@ -163,47 +134,37 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("correlation_id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ExceptionType")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("exception_type");
+                        .HasColumnType("text");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("message");
+                        .HasColumnType("text");
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
+                        .HasColumnType("text");
 
                     b.Property<string>("StackTrace")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("stack_trace");
+                        .HasColumnType("text");
 
                     b.Property<int>("StatusCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_code");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_error_log");
+                    b.HasKey("Id");
 
                     b.ToTable("error_log", (string)null);
                 });
@@ -212,41 +173,32 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("correlation_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Duration")
-                        .HasColumnType("integer")
-                        .HasColumnName("duration_ms");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Method")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("method");
+                        .HasColumnType("text");
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
+                        .HasColumnType("text");
 
                     b.Property<int>("StatusCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_code");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_http_log");
+                    b.HasKey("Id");
 
                     b.ToTable("http_log", (string)null);
                 });
@@ -255,56 +207,43 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Brand")
-                        .HasColumnType("text")
-                        .HasColumnName("brand");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Carbohydrates100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("carbohydrates_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("EnergyKcal100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("energy_kcal_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("Fat100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("fat_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal?>("Fiber100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("fiber_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("MainCategory")
-                        .HasColumnType("text")
-                        .HasColumnName("main_category");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Proteins100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("proteins_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal?>("Salt100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("salt_100g");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("SearchCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("search_count");
+                        .HasColumnType("integer");
 
                     b.Property<decimal?>("Sugars100g")
-                        .HasColumnType("numeric")
-                        .HasColumnName("sugars_100g");
+                        .HasColumnType("numeric");
 
-                    b.HasKey("Id")
-                        .HasName("pk_ingredient");
+                    b.HasKey("Id");
 
                     b.ToTable("ingredient", (string)null);
                 });
@@ -312,22 +251,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.IngredientPost", b =>
                 {
                     b.Property<Guid>("IngredientId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("ingredient_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
+                        .HasColumnType("integer");
 
-                    b.HasKey("IngredientId", "PostId")
-                        .HasName("pk_ingredient_post");
+                    b.HasKey("IngredientId", "PostId");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_ingredient_post_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("ingredient_post", (string)null);
                 });
@@ -335,22 +269,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.IngredientShoppingList", b =>
                 {
                     b.Property<Guid>("IngredientId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("ingredient_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ShoppingListId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("shopping_list_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
+                        .HasColumnType("integer");
 
-                    b.HasKey("IngredientId", "ShoppingListId")
-                        .HasName("pk_ingredient_shopping_list");
+                    b.HasKey("IngredientId", "ShoppingListId");
 
-                    b.HasIndex("ShoppingListId")
-                        .HasDatabaseName("ix_ingredient_shopping_list_shopping_list_id");
+                    b.HasIndex("ShoppingListId");
 
                     b.ToTable("ingredient_shopping_list", (string)null);
                 });
@@ -358,22 +287,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Like", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("UserId", "PostId")
-                        .HasName("pk_like");
+                    b.HasKey("UserId", "PostId");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_like_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("like", (string)null);
                 });
@@ -382,54 +306,42 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("CommentsCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("comments_count");
+                        .HasColumnType("integer");
 
                     b.Property<int>("CookingTime")
-                        .HasColumnType("integer")
-                        .HasColumnName("cooking_time");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("character varying(400)")
-                        .HasColumnName("description");
+                        .HasColumnType("character varying(400)");
 
                     b.Property<int>("LikesCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("likes_count");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("PostedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("posted_date");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("SavedCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("saved_count");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SharedCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("shared_count");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("title");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_post");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_post_user_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("post", (string)null);
                 });
@@ -438,23 +350,18 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_post_image");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_post_image_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("post_image", (string)null);
                 });
@@ -462,18 +369,14 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.PostTag", b =>
                 {
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TagId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("PostId", "TagId")
-                        .HasName("pk_post_tag");
+                    b.HasKey("PostId", "TagId");
 
-                    b.HasIndex("TagId")
-                        .HasDatabaseName("ix_post_tag_tag_id");
+                    b.HasIndex("TagId");
 
                     b.ToTable("post_tag", (string)null);
                 });
@@ -482,30 +385,23 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Answer")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("answer");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("QuizQuestionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("quiz_question_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("TagId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_quiz_answer");
+                    b.HasKey("Id");
 
-                    b.HasIndex("QuizQuestionId")
-                        .HasDatabaseName("ix_quiz_answer_quiz_question_id");
+                    b.HasIndex("QuizQuestionId");
 
-                    b.HasIndex("TagId")
-                        .HasDatabaseName("ix_quiz_answer_tag_id");
+                    b.HasIndex("TagId");
 
                     b.ToTable("quiz_answer", (string)null);
                 });
@@ -514,27 +410,21 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Mandatory")
-                        .HasColumnType("boolean")
-                        .HasColumnName("mandatory");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Question")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("question");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("TagCategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_category_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_quiz_question");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TagCategoryId")
-                        .HasDatabaseName("ix_quiz_question_tag_category_id");
+                    b.HasIndex("TagCategoryId");
 
                     b.ToTable("quiz_question", (string)null);
                 });
@@ -542,22 +432,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Recommendation", b =>
                 {
                     b.Property<Guid>("TagId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Score")
-                        .HasColumnType("integer")
-                        .HasColumnName("score");
+                        .HasColumnType("integer");
 
-                    b.HasKey("TagId", "UserId")
-                        .HasName("pk_recommendation");
+                    b.HasKey("TagId", "UserId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_recommendation_user_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("recommendation", (string)null);
                 });
@@ -565,22 +450,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Saved", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("SavedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("saved_at");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("UserId", "PostId")
-                        .HasName("pk_saved");
+                    b.HasKey("UserId", "PostId");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_saved_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("saved", (string)null);
                 });
@@ -588,18 +468,14 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.SeenPost", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("UserId", "PostId")
-                        .HasName("pk_seen_post");
+                    b.HasKey("UserId", "PostId");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_seen_post_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("seen_post", (string)null);
                 });
@@ -608,31 +484,24 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("CreatedFromId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_from_id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("title");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_shopping_list");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CreatedFromId")
-                        .HasDatabaseName("ix_shopping_list_created_from_id");
+                    b.HasIndex("CreatedFromId");
 
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_shopping_list_user_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("shopping_list", (string)null);
                 });
@@ -641,32 +510,25 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasColumnName("description");
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("StepNumber")
-                        .HasColumnType("integer")
-                        .HasColumnName("step_number");
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id")
-                        .HasName("pk_step");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_step_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("step", (string)null);
                 });
@@ -675,29 +537,23 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Emote")
                         .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasColumnName("emote");
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<Guid>("TagCategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_category_id");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("pk_tag");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TagCategoryId")
-                        .HasDatabaseName("ix_tag_tag_category_id");
+                    b.HasIndex("TagCategoryId");
 
                     b.ToTable("tag", (string)null);
                 });
@@ -706,138 +562,63 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnType("character varying(50)");
 
-                    b.HasKey("Id")
-                        .HasName("pk_tag_category");
+                    b.HasKey("Id");
 
                     b.ToTable("tag_category", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyPost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date")
-                        .HasColumnName("date");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("integer")
-                        .HasColumnName("rank");
-
-                    b.HasKey("Id")
-                        .HasName("pk_top_daily_post");
-
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_top_daily_post_post_id");
-
-                    b.HasIndex("Date", "Rank")
-                        .IsUnique()
-                        .HasDatabaseName("unique_date_rank");
-
-                    b.ToTable("top_daily_post", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date")
-                        .HasColumnName("date");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("integer")
-                        .HasColumnName("rank");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_top_daily_tag");
-
-                    b.HasIndex("TagId")
-                        .HasDatabaseName("ix_top_daily_tag_tag_id");
-
-                    b.ToTable("top_daily_tag", (string)null);
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Bio")
                         .HasMaxLength(400)
-                        .HasColumnType("character varying(400)")
-                        .HasColumnName("bio");
+                        .HasColumnType("character varying(400)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
-                        .HasColumnType("character varying(320)")
-                        .HasColumnName("email");
+                        .HasColumnType("character varying(320)");
 
                     b.Property<int>("FollowersCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("followers_count");
+                        .HasColumnType("integer");
 
                     b.Property<int>("FollowingCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("following_count");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ProfileName")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("profile_name");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("ProfilePicture")
-                        .HasColumnType("text")
-                        .HasColumnName("profile_picture");
+                        .HasColumnType("text");
 
                     b.Property<int>("RecipesCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("recipes_count");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("registration_date");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("role");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("username");
+                        .HasColumnType("character varying(20)");
 
-                    b.HasKey("Id")
-                        .HasName("pk_user");
+                    b.HasKey("Id");
 
                     b.ToTable("user", (string)null);
                 });
@@ -845,22 +626,17 @@ namespace Yumsy_Backend.Persistence.Migrations
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.UserFollower", b =>
                 {
                     b.Property<Guid>("FollowerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("follower_id");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("FollowingId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("following_id");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("FollowedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("followed_at");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("FollowerId", "FollowingId")
-                        .HasName("pk_user_follower");
+                    b.HasKey("FollowerId", "FollowingId");
 
-                    b.HasIndex("FollowingId")
-                        .HasDatabaseName("ix_user_follower_following_id");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("user_follower", (string)null);
                 });
@@ -869,22 +645,19 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.HasOne("Yumsy_Backend.Persistence.Models.Comment", "ParentComment")
                         .WithMany("ChildComments")
-                        .HasForeignKey("ParentCommentId")
-                        .HasConstraintName("fk_comment_comment_parent_comment_id");
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_comment_post_post_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_comment_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("ParentComment");
 
@@ -899,15 +672,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("CommentLikes")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_comment_like_comment_comment_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("CommentLikes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_comment_like_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("Comment");
 
@@ -920,15 +691,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("IngredientPosts")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_ingredient_post_ingredient_ingredient_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.Post", "Post")
                         .WithMany("IngredientPosts")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_ingredient_post_post_post_id");
+                        .IsRequired();
 
                     b.Navigation("Ingredient");
 
@@ -941,15 +710,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("IngredientShoppingLists")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_ingredient_shopping_list_ingredient_ingredient_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.ShoppingList", "ShoppingList")
                         .WithMany("IngredientShoppingLists")
                         .HasForeignKey("ShoppingListId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_ingredient_shopping_list_shopping_list_shopping_list_id");
+                        .IsRequired();
 
                     b.Navigation("Ingredient");
 
@@ -962,15 +729,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_like_post_post_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_like_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
 
@@ -983,8 +748,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_post_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
                 });
@@ -995,8 +759,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("PostImages")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_post_image_post_post_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
                 });
@@ -1007,15 +770,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("PostTags")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_post_tag_post_post_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.Tag", "Tag")
                         .WithMany("PostTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_post_tag_tag_tag_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
 
@@ -1028,13 +789,11 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("QuizAnswers")
                         .HasForeignKey("QuizQuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_quiz_answer_quiz_question_quiz_question_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.Tag", "Tag")
                         .WithMany("QuizAnswers")
-                        .HasForeignKey("TagId")
-                        .HasConstraintName("fk_quiz_answer_tag_tag_id");
+                        .HasForeignKey("TagId");
 
                     b.Navigation("QuizQuestion");
 
@@ -1047,8 +806,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("QuizQuestions")
                         .HasForeignKey("TagCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_quiz_question_tag_category_tag_category_id");
+                        .IsRequired();
 
                     b.Navigation("TagCategory");
                 });
@@ -1059,15 +817,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Recommendations")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_recommendation_tag_tag_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("Recommendations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_recommendation_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("Tag");
 
@@ -1080,15 +836,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Saved")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_saved_post_post_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("Saved")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_saved_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
 
@@ -1101,15 +855,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_seen_post_post_post_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_seen_post_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
 
@@ -1120,15 +872,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                 {
                     b.HasOne("Yumsy_Backend.Persistence.Models.Post", "CreatedFrom")
                         .WithMany("ShoppingLists")
-                        .HasForeignKey("CreatedFromId")
-                        .HasConstraintName("fk_shopping_list_post_created_from_id");
+                        .HasForeignKey("CreatedFromId");
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "User")
                         .WithMany("ShoppingLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_shopping_list_user_user_id");
+                        .IsRequired();
 
                     b.Navigation("CreatedFrom");
 
@@ -1141,8 +891,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Steps")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_step_post_post_id");
+                        .IsRequired();
 
                     b.Navigation("Post");
                 });
@@ -1153,34 +902,9 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Tags")
                         .HasForeignKey("TagCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_tag_tag_category_tag_category_id");
+                        .IsRequired();
 
                     b.Navigation("TagCategory");
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyPost", b =>
-                {
-                    b.HasOne("Yumsy_Backend.Persistence.Models.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_top_daily_post_post_post_id");
-
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyTag", b =>
-                {
-                    b.HasOne("Yumsy_Backend.Persistence.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_top_daily_tag_tag_tag_id");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.UserFollower", b =>
@@ -1189,15 +913,13 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .WithMany("Followings")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_follower_user_follower_id");
+                        .IsRequired();
 
                     b.HasOne("Yumsy_Backend.Persistence.Models.User", "Following")
                         .WithMany("Followers")
                         .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_follower_user_following_id");
+                        .IsRequired();
 
                     b.Navigation("Follower");
 

@@ -35,9 +35,11 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<TagCategory> TagCategories { get; set; }
     public DbSet<QuizQuestion> QuizQuestions { get; set; }
     public DbSet<QuizAnswer> QuizAnswers { get; set; }
-    public DbSet<RecommendPostResultDTO> RecommendPosts { get; set; }
     public DbSet<TopDailyPost> TopDailyPosts { get; set; }
     public DbSet<TopDailyTag> TopDailyTags { get; set; }
+    public DbSet<AppEventLog> AppEventLogs { get; set; }
+    public DbSet<HttpLog> HttpLogs { get; set; }
+    public DbSet<ErrorLog> ErrorLogs { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -47,7 +49,6 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
    protected override void OnModelCreating(ModelBuilder modelBuilder)
    {
     base.OnModelCreating(modelBuilder);
-    modelBuilder.Entity<RecommendPostResultDTO>().HasNoKey();
     
     modelBuilder.Entity<UserFollower>()
         .HasKey(uf => new { uf.FollowerId, uf.FollowingId });
