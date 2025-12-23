@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Yumsy_Backend.Persistence.DbContext;
@@ -11,9 +12,11 @@ using Yumsy_Backend.Persistence.DbContext;
 namespace Yumsy_Backend.Persistence.Migrations
 {
     [DbContext(typeof(SupabaseDbContext))]
-    partial class SupabaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251222220028_AddTopDailyTables")]
+    partial class AddTopDailyTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,42 +45,7 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("score");
 
-                    b.ToTable("recommend_post_result_dto", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.AppEventLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<Guid?>("EntityId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("entity_id");
-
-                    b.Property<string>("Result")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("result");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_app_event_log");
-
-                    b.ToTable("app_event_log", (string)null);
+                    b.ToTable("recommend_posts", (string)null);
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Comment", b =>
@@ -157,98 +125,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .HasDatabaseName("ix_comment_like_user_id");
 
                     b.ToTable("comment_like", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.ErrorLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("correlation_id");
-
-                    b.Property<string>("ExceptionType")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("exception_type");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("message");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
-                    b.Property<string>("StackTrace")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("stack_trace");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_code");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_error_log");
-
-                    b.ToTable("error_log", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.HttpLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("correlation_id");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer")
-                        .HasColumnName("duration_ms");
-
-                    b.Property<string>("Method")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("method");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_code");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_http_log");
-
-                    b.ToTable("http_log", (string)null);
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.Ingredient", b =>
@@ -721,66 +597,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                     b.ToTable("tag_category", (string)null);
                 });
 
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyPost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date")
-                        .HasColumnName("date");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("post_id");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("integer")
-                        .HasColumnName("rank");
-
-                    b.HasKey("Id")
-                        .HasName("pk_top_daily_post");
-
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_top_daily_post_post_id");
-
-                    b.HasIndex("Date", "Rank")
-                        .IsUnique()
-                        .HasDatabaseName("unique_date_rank");
-
-                    b.ToTable("top_daily_post", (string)null);
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date")
-                        .HasColumnName("date");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("integer")
-                        .HasColumnName("rank");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tag_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_top_daily_tag");
-
-                    b.HasIndex("TagId")
-                        .HasDatabaseName("ix_top_daily_tag_tag_id");
-
-                    b.ToTable("top_daily_tag", (string)null);
-                });
-
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1157,30 +973,6 @@ namespace Yumsy_Backend.Persistence.Migrations
                         .HasConstraintName("fk_tag_tag_category_tag_category_id");
 
                     b.Navigation("TagCategory");
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyPost", b =>
-                {
-                    b.HasOne("Yumsy_Backend.Persistence.Models.Post", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_top_daily_post_post_post_id");
-
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Yumsy_Backend.Persistence.Models.TopDailyTag", b =>
-                {
-                    b.HasOne("Yumsy_Backend.Persistence.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_top_daily_tag_tag_tag_id");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Yumsy_Backend.Persistence.Models.UserFollower", b =>
