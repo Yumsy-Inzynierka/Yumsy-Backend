@@ -1,4 +1,4 @@
-using FluentValidation;
+/*using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yumsy_Backend.Extensions;
@@ -34,4 +34,4 @@ public class GetExplorePagePostsController : ControllerBase
             
         return Ok(response);
     }
-}
+}*/

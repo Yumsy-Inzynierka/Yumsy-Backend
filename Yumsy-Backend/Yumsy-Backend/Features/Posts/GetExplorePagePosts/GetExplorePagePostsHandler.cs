@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+/*using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
@@ -45,4 +45,4 @@ public class GetExplorePagePostsHandler
             Posts = recommendationResult
         };
     }
-}
+}*/

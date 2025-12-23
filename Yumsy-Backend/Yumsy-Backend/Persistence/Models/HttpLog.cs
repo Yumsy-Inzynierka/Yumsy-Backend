@@ -7,12 +7,27 @@ namespace Yumsy_Backend.Persistence.Models;
 public class HttpLog
 {
     [Key]
+    [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
+
+    [Column("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-    public string Method { get; set; }
-    public string Path { get; set; }
+
+    [Column("method")]
+    public string Method { get; set; } = null!;
+
+    [Column("path")]
+    public string Path { get; set; } = null!;
+
+    [Column("status_code")]
     public int StatusCode { get; set; }
+
+    [Column("duration_ms")]
     public int Duration { get; set; }
+
+    [Column("user_id")]
     public Guid? UserId { get; set; }
+
+    [Column("correlation_id")]
     public Guid CorrelationId { get; set; }
 }
