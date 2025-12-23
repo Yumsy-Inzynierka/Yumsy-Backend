@@ -36,6 +36,9 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<QuizQuestion> QuizQuestions { get; set; }
     public DbSet<QuizAnswer> QuizAnswers { get; set; }
     public DbSet<RecommendPostResultDTO> RecommendPosts { get; set; }
+    public DbSet<TopDailyPost> TopDailyPosts { get; set; }
+    public DbSet<TopDailyTag> TopDailyTags { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql("Host=aws-0-eu-north-1.pooler.supabase.com;Port=6543;Database=postgres;Username=postgres.kitubqamchqakbyysyuk;Password=k2ig2odPgpKNISFC;Ssl Mode=Require;Trust Server Certificate=true;Pooling=false;Timeout=60;Command Timeout=120;");
@@ -138,5 +141,16 @@ public class SupabaseDbContext : Microsoft.EntityFrameworkCore.DbContext
         .HasForeignKey(pt => pt.TagId)
         .OnDelete(DeleteBehavior.Cascade);
     
+    modelBuilder.Entity<TopDailyPost>(entity =>
+    {
+        entity.HasIndex(e => new { e.Date, e.Rank })
+            .IsUnique()
+            .HasDatabaseName("unique_date_rank");
+            
+        entity.HasOne(e => e.Post)
+            .WithMany()
+            .HasForeignKey(e => e.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+    });
    }
 }
