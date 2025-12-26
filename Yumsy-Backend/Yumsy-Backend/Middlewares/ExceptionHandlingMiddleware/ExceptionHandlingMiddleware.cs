@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using FluentValidation;
+using System.Security.Claims;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
@@ -20,9 +21,6 @@ public class ExceptionHandlingMiddleware
 
     public async Task Invoke(HttpContext context, SupabaseDbContext dbContext)
     {
-        var traceId = Guid.NewGuid().ToString();
-        context.Response.Headers["Trace-Id"] = traceId;
-
         try
         {
             await _next(context);
@@ -31,9 +29,34 @@ public class ExceptionHandlingMiddleware
         {
             var statusCode = _statusCodeMapper.Map(ex);
 
+            var correlationId =
+                context.Items.TryGetValue("CorrelationId", out var value) && value is Guid guid
+                    ? guid
+                    : Guid.Empty;
+
+            Guid? userId = null;
+            var sub = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (Guid.TryParse(sub, out var parsedUserId))
+            {
+                userId = parsedUserId;
+            }
+
+            var errorLog = new ErrorLog
+            {
+                Path = context.Request.Path,
+                ExceptionType = ex.GetType().Name,
+                Message = ex.Message,
+                StackTrace = ex.StackTrace ?? string.Empty,
+                CorrelationId = correlationId,
+                UserId = userId
+            };
+
+            dbContext.ErrorLogs.Add(errorLog);
+            await dbContext.SaveChangesAsync();
+
             var response = new ErrorResponse
             {
-                TraceId = Guid.Parse(traceId),
+                TraceId = correlationId,
                 ExceptionType = ex.GetType().Name,
                 Message = ex is ValidationException
                     ? "Validation failed"
@@ -42,21 +65,6 @@ public class ExceptionHandlingMiddleware
                     ? validationEx.Errors.Select(e => e.ErrorMessage).ToList()
                     : null
             };
-
-            var errorLog = new ErrorLog
-            {
-                Path = context.Request.Path,
-                ExceptionType = ex.GetType().Name,
-                Message = ex.Message,
-                StackTrace = ex.StackTrace ?? string.Empty,
-                CorrelationId = Guid.Parse(traceId),
-                UserId = context.User.Identity?.IsAuthenticated == true
-                    ? Guid.Parse(context.User.Identity.Name)
-                    : null
-            };
-
-            dbContext.ErrorLogs.Add(errorLog);
-            await dbContext.SaveChangesAsync();
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;

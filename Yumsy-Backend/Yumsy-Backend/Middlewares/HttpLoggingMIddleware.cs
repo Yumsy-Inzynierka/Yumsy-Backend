@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
@@ -15,25 +16,34 @@ public class HttpLoggingMiddleware
 
     public async Task InvokeAsync(HttpContext context, SupabaseDbContext dbContext)
     {
-        var sw = Stopwatch.StartNew();
-        var correlationId = Guid.NewGuid();
+        var stopwatch = Stopwatch.StartNew();
 
+        // 🔑 ONE CorrelationId PER REQUEST
+        var correlationId = Guid.NewGuid();
         context.Items["CorrelationId"] = correlationId;
+
+        // expose to client
+        context.Response.Headers["Trace-Id"] = correlationId.ToString();
 
         await _next(context);
 
-        sw.Stop();
+        stopwatch.Stop();
+
+        Guid? userId = null;
+        var sub = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (Guid.TryParse(sub, out var parsedUserId))
+        {
+            userId = parsedUserId;
+        }
 
         var log = new HttpLog
         {
             Method = context.Request.Method,
             Path = context.Request.Path,
             StatusCode = context.Response.StatusCode,
-            Duration= (int)sw.ElapsedMilliseconds,
+            Duration = (int)stopwatch.ElapsedMilliseconds,
             CorrelationId = correlationId,
-            UserId = context.User.Identity?.IsAuthenticated == true
-                ? Guid.Parse(context.User.Identity.Name)
-                : null,
+            UserId = userId
         };
 
         dbContext.HttpLogs.Add(log);
