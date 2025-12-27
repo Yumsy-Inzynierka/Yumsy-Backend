@@ -84,7 +84,7 @@ builder.Services.AddScoped<EditShoppingListHandler>();
 builder.Services.AddScoped<AddShoppingListHandler>();
 builder.Services.AddScoped<RefreshTokenHandler>();
 builder.Services.AddScoped<EditProfileDetailsHandler>();
-//builder.Services.AddScoped<GetExplorePagePostsHandler>();
+builder.Services.AddScoped<GetExplorePagePostsHandler>();
 builder.Services.AddScoped<EditPostHandler>();
 builder.Services.AddScoped<CreateShoppingListHandler>();
 builder.Services.AddScoped<GetNewPostsHandler>();
