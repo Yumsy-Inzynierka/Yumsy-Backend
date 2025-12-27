@@ -2,5 +2,5 @@
 
 public interface IAppEventLogger
 {
-    Task LogAsync(string action, Guid? userId, Guid? entityId, string result);
+    Task LogAsync(string action, Guid? userId, Guid? entityId);
 }

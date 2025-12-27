@@ -12,14 +12,13 @@ public class AppEventLogger : IAppEventLogger
         _dbContext = dbContext;
     }
 
-    public async Task LogAsync(string action, Guid? userId, Guid? entityId, string result)
+    public async Task LogAsync(string action, Guid? userId, Guid? entityId)
     {
         _dbContext.AppEventLogs.Add(new AppEventLog
         {
             Action = action,
             EntityId = entityId,
             UserId = userId,
-            Result = result
         });
 
         await _dbContext.SaveChangesAsync();
