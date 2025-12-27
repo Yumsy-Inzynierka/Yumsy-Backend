@@ -17,10 +17,11 @@ public class GetTopDailyPostsHandler
     public async Task<GetTopDailyPostsResponse> Handle(GetTopDailyPostsRequest request, 
         CancellationToken cancellationToken)
     {
-        var yesterday = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+        var latestDate = await _dbContext.TopDailyPosts
+            .MaxAsync(tdp => tdp.Date, cancellationToken);
         
         var posts = await _dbContext.TopDailyPosts
-            .Where(tdp => tdp.Date == yesterday)
+            .Where(tdp => tdp.Date == latestDate)
             .OrderBy(tdp => tdp.Rank)
             .Select(tdp => new GetTopDailyPostResponse
             {

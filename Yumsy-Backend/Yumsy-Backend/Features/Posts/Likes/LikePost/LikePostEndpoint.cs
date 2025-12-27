@@ -20,7 +20,7 @@ public class LikePostEndpoint : ControllerBase
     }
     
     [HttpPost("{postId:guid}/likes")]
-    public async Task<ActionResult> LikePost([FromRoute] LikePostRequest likePostRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult> LikePost(LikePostRequest likePostRequest, CancellationToken cancellationToken)
     {
         likePostRequest.UserId = User.GetUserId();
         
