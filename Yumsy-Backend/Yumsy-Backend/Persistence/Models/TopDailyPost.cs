@@ -19,7 +19,7 @@ public class TopDailyPost
     public DateOnly Date { get; set; }
     
     [Required]
-    [Range(1, 8)]
+    [Range(1, 6)]
     [Column("rank")]
     public int Rank { get; set; }
     

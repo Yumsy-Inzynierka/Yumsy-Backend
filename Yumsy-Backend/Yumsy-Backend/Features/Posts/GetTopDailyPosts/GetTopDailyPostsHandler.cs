@@ -17,47 +17,29 @@ public class GetTopDailyPostsHandler
     public async Task<GetTopDailyPostsResponse> Handle(GetTopDailyPostsRequest request, 
         CancellationToken cancellationToken)
     {
-        var hoursSince = -24;
-        var since = DateTime.UtcNow.AddHours(hoursSince);
-    
-        List<GetTopDailyPostResponse> posts;
-
-        do
-        {
-            posts = await GetPosts(since, request.UserId, cancellationToken);
-            if (hoursSince < -24 * 90)
-                break;
-
-            hoursSince *= 2;
-            since = DateTime.UtcNow.AddHours(hoursSince);
-
-        } while (posts.Count < YumsyConstants.NEW_POSTS_AMOUNT);
+        var latestDate = await _dbContext.TopDailyPosts
+            .MaxAsync(tdp => tdp.Date, cancellationToken);
         
-        var topPosts = posts.Take(YumsyConstants.TOP_DAILY_POSTS_AMOUNT).ToList();
+        var posts = await _dbContext.TopDailyPosts
+            .Where(tdp => tdp.Date == latestDate)
+            .OrderBy(tdp => tdp.Rank)
+            .Select(tdp => new GetTopDailyPostResponse
+            {
+                Id = tdp.Post.Id,
+                PostTitle = tdp.Post.Title,
+                UserId = tdp.Post.UserId,
+                Username = tdp.Post.CreatedBy.Username,
+                Image = tdp.Post.PostImages
+                    .Select(pi => pi.ImageUrl)
+                    .FirstOrDefault(),
+                TimePosted = tdp.Post.PostedDate,
+                IsLiked = tdp.Post.Likes.Any(l => l.UserId == request.UserId),
+            })
+            .ToListAsync(cancellationToken);
         
         return new GetTopDailyPostsResponse
         {
-            Posts = topPosts,
+            Posts = posts
         };
-    }
-
-    private async Task<List<GetTopDailyPostResponse>> GetPosts(DateTime since, Guid userId, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Posts
-            .Where(p => p.PostedDate >= since)
-            .OrderByDescending(p => p.LikesCount + p.CommentsCount + p.SavedCount)
-            .Select(p => new GetTopDailyPostResponse
-            {
-                Id = p.Id,
-                PostTitle = p.Title,
-                UserId = p.UserId,
-                Username = p.CreatedBy.Username,
-                Image = p.PostImages
-                    .Select(pi => pi.ImageUrl)
-                    .FirstOrDefault(),
-                TimePosted = p.PostedDate,
-                IsLiked = p.Likes.Any(l => l.UserId == userId),
-            })
-            .ToListAsync(cancellationToken);
     }
 }

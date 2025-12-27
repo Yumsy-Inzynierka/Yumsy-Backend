@@ -15,27 +15,28 @@ public class FollowUserHandler
 
     public async Task Handle(FollowUserRequest request, CancellationToken cancellationToken)
     {
-        var users = await _dbContext.Users
-            .Where(u => u.Id == request.FollowerId || u.Id == request.Body.FollowingId)
+        if (request.FollowerId == request.Body.FollowingId)
+            throw new InvalidOperationException("User cannot follow themselves");
+
+        var userIds = new[] { request.FollowerId, request.Body.FollowingId };
+        var existingUsers = await _dbContext.Users
+            .Where(u => userIds.Contains(u.Id))
+            .Select(u => u.Id)
             .ToListAsync(cancellationToken);
 
-        var follower = users.FirstOrDefault(u => u.Id == request.FollowerId);
-        var following = users.FirstOrDefault(u => u.Id == request.Body.FollowingId);
+        if (!existingUsers.Contains(request.FollowerId))
+            throw new KeyNotFoundException($"User with ID: {request.FollowerId} not found");
 
-        if (follower is null)
-            throw new KeyNotFoundException($"User with ID: {request.FollowerId} not found.");
-
-        if (following is null)
-            throw new KeyNotFoundException($"User with ID: {request.Body.FollowingId} not found.");
-
-        if (follower.Id == following.Id)
-            throw new InvalidOperationException($"User with ID: {request.FollowerId} cannot follow themselves.");
+        if (!existingUsers.Contains(request.Body.FollowingId))
+            throw new KeyNotFoundException($"User with ID: {request.Body.FollowingId} not found");
 
         var alreadyFollowed = await _dbContext.UserFollowers
-            .AnyAsync(l => l.FollowerId == request.FollowerId && l.FollowingId == request.Body.FollowingId, cancellationToken);
+            .AnyAsync(
+                f => f.FollowerId == request.FollowerId && f.FollowingId == request.Body.FollowingId, 
+                cancellationToken);
 
         if (alreadyFollowed)
-            throw new InvalidOperationException($"User with ID: {request.FollowerId} already follows user with ID: {request.Body.FollowingId}.");
+            throw new InvalidOperationException("User already follows this user");
 
         var follow = new UserFollower
         {
@@ -43,15 +44,7 @@ public class FollowUserHandler
             FollowerId = request.FollowerId
         };
 
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-
         await _dbContext.UserFollowers.AddAsync(follow, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        follower.FollowingCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowerId == request.FollowerId, cancellationToken);
-        following.FollowersCount = await _dbContext.UserFollowers.CountAsync(l => l.FollowingId == request.Body.FollowingId, cancellationToken);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
     }
 }
