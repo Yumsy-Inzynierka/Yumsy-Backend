@@ -21,7 +21,4 @@ public class AppEventLog
 
     [Column("action")]
     public string Action { get; set; } = null!;
-
-    [Column("result")]
-    public string Result { get; set; } = null!;
 }

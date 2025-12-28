@@ -27,3 +27,7 @@ public record GetHomeFeedForUserPostTagResponse
     public Guid Id { get; init; }
     public string Name { get; init; }
 }
+public record GetRecommendedPostDTO
+{
+    public Guid Id { get; init; }
+}

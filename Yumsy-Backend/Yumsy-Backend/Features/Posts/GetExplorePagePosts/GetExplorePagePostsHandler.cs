@@ -1,4 +1,4 @@
-/*using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
 
@@ -15,15 +15,13 @@ public class GetExplorePagePostsHandler
 
     public async Task<GetExplorePagePostsResponse> Handle(GetExplorePagePostsRequest request, CancellationToken cancellationToken)
     {
-        var recommendationResult = await _dbContext.RecommendPosts
-            .FromSqlRaw(
-                "SELECT * FROM recommend_posts({0}, {1}, {2}, {3})",
-                request.UserId, 6, 6, 3)
-            .Select(rr => new GetExplorePagePostResponse
-            {
-                Id = rr.post_id,
-                Image = rr.image,
-            })
+        var recommendationResult = await _dbContext.Database
+            .SqlQueryRaw<GetExplorePagePostResponse>(@"
+                SELECT 
+                    post_id AS ""Id"",
+                    image   AS ""Image""
+                FROM recommend_posts({0}, {1}, {2}, {3})",
+                request.UserId, 7, 6 ,3)
             .ToListAsync(cancellationToken);
 
         var rnd = new Random();
@@ -45,4 +43,4 @@ public class GetExplorePagePostsHandler
             Posts = recommendationResult
         };
     }
-}*/
+}
