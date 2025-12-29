@@ -21,13 +21,13 @@ public class SearchPostsHandler
         
         var searchResult = await _dbContext.Database.SqlQueryRaw<SearchPostResponse>(@"
                 SELECT 
-                    ""Id"", 
-                    ""PostTitle"", 
-                    ""UserId"", 
-                    ""Username"", 
-                    ""ImageUrl"", 
-                    ""CookingTime"", 
-                    ""RelevanceScore""
+                    id, 
+                    post_title, 
+                    user_id, 
+                    username, 
+                    image_url, 
+                    cooking_time, 
+                    relevance_score
                 FROM search_posts({0}:: TEXT, {1}::INT)", 
                 searchPostsRequest.Query, offset
             )
@@ -37,13 +37,13 @@ public class SearchPostsHandler
         var hasMoreCheck = await _dbContext.Database
             .SqlQueryRaw<SearchPostResponse>(@"
                 SELECT 
-                    ""Id"",
-                    ""PostTitle"",
-                    ""UserId"",
-                    ""Username"",
-                    ""ImageUrl"",
-                    ""CookingTime"",
-                    ""RelevanceScore""
+                    id, 
+                    post_title, 
+                    user_id, 
+                    username, 
+                    image_url, 
+                    cooking_time, 
+                    relevance_score
                 FROM search_posts(
                     {0}::TEXT,
                     {1}::INT
