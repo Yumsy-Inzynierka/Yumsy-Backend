@@ -2,9 +2,9 @@
 
 namespace Yumsy_Backend.Features.Posts.DeletePost;
 
-public class GetPostValidator : AbstractValidator<DeletePostRequest>
+public class DeletePostValidator : AbstractValidator<DeletePostRequest>
 {
-    public GetPostValidator()
+    public DeletePostValidator()
     {
         RuleFor(x => x.PostId)
             .NotEmpty().WithMessage("PostId is required.")
