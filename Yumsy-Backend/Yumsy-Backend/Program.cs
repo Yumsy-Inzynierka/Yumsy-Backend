@@ -9,6 +9,7 @@ using Yumsy_Backend.Features.Posts.AddPost;
 using Yumsy_Backend.Features.Posts.Comments.AddComment;
 using Yumsy_Backend.Features.Posts.Comments.DeleteComment;
 using Yumsy_Backend.Features.Posts.Comments.GetPostComments;
+using Yumsy_Backend.Features.Posts.DeletePost;
 using Yumsy_Backend.Features.Posts.EditPost;
 using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
@@ -94,6 +95,7 @@ builder.Services.AddScoped<GetQuizResultHandler>();
 builder.Services.AddScoped<GetTagsHandler>();
 builder.Services.AddScoped<SearchPostsHandler>();
 builder.Services.AddScoped<SearchUsersHandler>();
+builder.Services.AddScoped<DeletePostHandler>();
 //to be removed:
 builder.Services.AddScoped<DropSeenPostHandler>();
 
@@ -135,6 +137,7 @@ builder.Services.AddScoped<IValidator<GetQuizResultRequest>, GetQuizResultValida
 builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
 builder.Services.AddScoped<IValidator<SearchUsersRequest>, SearchUsersValidator>();
+builder.Services.AddScoped<IValidator<DeletePostRequest>, DeletePostValidator>();
 
 builder.Services.AddSingleton<IExceptionStatusCodeMapper, ExceptionStatusCodeMapper>();
 builder.Services.AddScoped<IAppEventLogger, AppEventLogger>();

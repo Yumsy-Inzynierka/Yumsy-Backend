@@ -26,13 +26,18 @@ public class AddPostHandler
 
         var post = new Post
         {
-            Id = Guid.NewGuid(),
             Title = request.Body.Title,
             Description = request.Body.Description,
             CookingTime = request.Body.CookingTime ?? 0,
-            UserId = request.UserId
+            UserId = request.UserId,
+            PostImages = request.Body.Images
+                .Select(img => new PostImage
+                {
+                    ImageUrl = img.Image
+                })
+                .ToList()
         };
-
+        
         await using var transaction =
             await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 

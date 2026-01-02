@@ -28,7 +28,7 @@ public class AddPostRequestTag
 
 public class AddPostRequestImage
 {
-    public string Image { get; set; } = string.Empty;
+    public string Image { get; set; }
 }
 
 public class AddPostRequestIngredient
