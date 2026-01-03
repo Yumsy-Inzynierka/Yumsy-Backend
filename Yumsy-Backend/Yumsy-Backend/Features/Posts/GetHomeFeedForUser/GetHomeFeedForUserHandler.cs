@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
+using Yumsy_Backend.Persistence.Models;
 using Yumsy_Backend.Shared;
 
 namespace Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
@@ -67,6 +68,15 @@ public class GetHomeFeedForUserHandler
         posts = posts
             .OrderBy(p => rnd.Next())
             .ToList();
+        
+        var seenPosts = posts.Select(r => new SeenPost
+        {
+            UserId = request.UserId,
+            PostId = r.Id,
+        }).ToList();
+
+        await _dbContext.SeenPosts.AddRangeAsync(seenPosts, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new GetHomeFeedForUserResponse
         {

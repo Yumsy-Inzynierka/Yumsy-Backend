@@ -9,3 +9,8 @@ public record GetExplorePagePostResponse
     public Guid Id { get; init; }
     public string Image { get; init; }
 }
+
+public record GetExplorePagePostResponseDTO
+{
+    public Guid Id { get; init; }
+}
