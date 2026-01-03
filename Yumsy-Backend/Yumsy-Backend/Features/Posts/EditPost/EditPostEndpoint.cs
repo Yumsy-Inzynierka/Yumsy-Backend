@@ -8,12 +8,12 @@ namespace Yumsy_Backend.Features.Posts.EditPost;
 [Authorize]
 [ApiController]
 [Route("api/posts")]
-public class Controller : ControllerBase
+public class EditPostController : ControllerBase
 {
     private readonly EditPostHandler _editPostHandler;
     private readonly IValidator<EditPostRequest> _validator;
 
-    public Controller(EditPostHandler editPostHandler, IValidator<EditPostRequest> validator)
+    public EditPostController(EditPostHandler editPostHandler, IValidator<EditPostRequest> validator)
     {
         _editPostHandler = editPostHandler;
         _validator = validator;

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yumsy_Backend.Extensions;
 
 namespace Yumsy_Backend.Features.Posts.DeletePost;
 
@@ -21,6 +22,8 @@ public class DeletePostEndpoint : ControllerBase
     [HttpDelete("{postId:guid}")]
     public async Task<IActionResult> Handle([FromRoute] DeletePostRequest deletePostRequest, CancellationToken cancellationToken)
     {
+        deletePostRequest.UserId = User.GetUserId();
+        
         var validationResult = await _validator.ValidateAsync(deletePostRequest);
         if (!validationResult.IsValid)
         {
