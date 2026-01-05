@@ -38,7 +38,7 @@ public class GetShoppingListsHandler
                 Id = sl.Id,
                 Name = sl.Title,
                 Username = sl.CreatedFrom.CreatedBy.Username,
-                PostId = sl.CreatedFrom.Id,
+                PostId = sl.CreatedFrom?.Id,
                 Ingredients = sl.IngredientShoppingLists.Select(isl => new GetShoppingListIngredientResponse
                 {
                     Id = isl.Ingredient.Id,
