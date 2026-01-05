@@ -30,10 +30,27 @@ public class AddPostHandler
             Description = request.Body.Description,
             CookingTime = request.Body.CookingTime ?? 0,
             UserId = request.UserId,
+
             PostImages = request.Body.Images
                 .Select(img => new PostImage
                 {
                     ImageUrl = img.Image
+                })
+                .ToList(),
+
+            Steps = request.Body.RecipeSteps
+                .Select(rs => new Step
+                {
+                    StepNumber = rs.StepNumber,
+                    Description = rs.Description,
+                    ImageUrl = rs.Image
+                })
+                .ToList(),
+
+            PostTags = request.Body.Tags
+                .Select(t => new PostTag
+                {
+                    TagId = t.Id
                 })
                 .ToList()
         };
