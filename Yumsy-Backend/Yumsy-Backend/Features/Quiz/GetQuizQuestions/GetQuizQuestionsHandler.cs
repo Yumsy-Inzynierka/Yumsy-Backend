@@ -24,7 +24,7 @@ public class GetQuizQuestionsHandler
             .Include(qq => qq.QuizAnswers)
             .Where(qq => qq.Mandatory == true)
             .FirstOrDefaultAsync();
-        Console.WriteLine(mandatoryQuestion);
+
         var questions = new List<GetQuizQuestionsQuestionResponse>();
         
         questions.Add(new GetQuizQuestionsQuestionResponse()

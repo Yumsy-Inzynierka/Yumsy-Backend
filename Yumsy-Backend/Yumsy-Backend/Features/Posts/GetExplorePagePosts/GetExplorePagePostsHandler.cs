@@ -40,7 +40,13 @@ public class GetExplorePagePostsHandler
                 Id = p.Id,
                 Image = p.PostImages
                     .Select(i => i.ImageUrl)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                CookingTime = p.CookingTime,
+                Tags = p.PostTags.Select(pt => new GetExplorePagePostTagResponse
+                {
+                    Id = pt.Tag.Id,
+                    Name = pt.Tag.Name
+                })
             })
             .ToListAsync(cancellationToken);
         
