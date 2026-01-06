@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
+using Yumsy_Backend.Shared.EventLogger;
 
 namespace Yumsy_Backend.Features.Users.Register;
 
@@ -8,11 +9,13 @@ public class RegisterHandler
 {
     private readonly IConfiguration _config;
     private readonly SupabaseDbContext _dbContext;
+    private readonly IAppEventLogger _appEventLogger;
 
-    public RegisterHandler(IConfiguration config, SupabaseDbContext dbContext)
+    public RegisterHandler(IConfiguration config, SupabaseDbContext dbContext, IAppEventLogger appEventLogger)
     {
         _config = config;
         _dbContext = dbContext;
+        _appEventLogger = appEventLogger;
     }
 
     public async Task Handle(RegisterRequest request)
@@ -64,6 +67,12 @@ public class RegisterHandler
             FollowingCount = 0,
             RecipesCount = 0
         };
+        
+        await _appEventLogger.LogAsync(
+            action: "create_user",
+            userId: userId,
+            entityId: userId
+        );
         
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
