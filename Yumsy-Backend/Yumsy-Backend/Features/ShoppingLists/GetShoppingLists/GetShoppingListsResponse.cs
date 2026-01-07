@@ -10,7 +10,7 @@ public record GetShoppingListResponse
     public Guid Id { get; init; }
     public string Name { get; init; }
     public string Username { get; init; }
-    public Guid PostId { get; init; }
+    public Guid? PostId { get; init; }
     public IEnumerable<GetShoppingListIngredientResponse> Ingredients { get; init; }
 }
 
