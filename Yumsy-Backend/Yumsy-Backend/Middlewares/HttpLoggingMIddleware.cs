@@ -18,11 +18,9 @@ public class HttpLoggingMiddleware
     {
         var stopwatch = Stopwatch.StartNew();
 
-        // 🔑 ONE CorrelationId PER REQUEST
         var correlationId = Guid.NewGuid();
         context.Items["CorrelationId"] = correlationId;
 
-        // expose to client
         context.Response.Headers["Trace-Id"] = correlationId.ToString();
 
         await _next(context);

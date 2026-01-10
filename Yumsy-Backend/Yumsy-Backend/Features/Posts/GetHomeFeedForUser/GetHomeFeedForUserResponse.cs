@@ -18,7 +18,6 @@ public record GetHomeFeedForUserPostResponse
     public int LikesCount { get; init; }
     public int CommentsCount { get; init; }
     public bool IsLiked { get; init; }
-
     public IEnumerable<GetHomeFeedForUserPostTagResponse> Tags { get; init; }
 }
 

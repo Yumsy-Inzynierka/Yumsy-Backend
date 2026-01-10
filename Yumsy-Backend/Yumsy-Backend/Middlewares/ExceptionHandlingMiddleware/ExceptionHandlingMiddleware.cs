@@ -56,14 +56,11 @@ public class ExceptionHandlingMiddleware
 
             var response = new ErrorResponse
             {
-                TraceId = correlationId,
+                Id = correlationId,
                 ExceptionType = ex.GetType().Name,
                 Message = ex is ValidationException
                     ? "Validation failed"
                     : ex.Message,
-                Errors = ex is ValidationException validationEx
-                    ? validationEx.Errors.Select(e => e.ErrorMessage).ToList()
-                    : null
             };
 
             context.Response.ContentType = "application/json";
@@ -74,9 +71,8 @@ public class ExceptionHandlingMiddleware
 
     private class ErrorResponse
     {
-        public Guid TraceId { get; set; }
+        public Guid Id { get; set; }
         public string ExceptionType { get; set; } = null!;
         public string Message { get; set; } = null!;
-        public List<string>? Errors { get; set; }
     }
 }

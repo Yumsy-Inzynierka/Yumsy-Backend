@@ -24,7 +24,7 @@ public class GetQuizQuestionsHandler
             .Include(qq => qq.QuizAnswers)
             .Where(qq => qq.Mandatory == true)
             .FirstOrDefaultAsync();
-        Console.WriteLine(mandatoryQuestion);
+
         var questions = new List<GetQuizQuestionsQuestionResponse>();
         
         questions.Add(new GetQuizQuestionsQuestionResponse()
@@ -41,7 +41,7 @@ public class GetQuizQuestionsHandler
         {
             var questionsFromCategory = await _dbContext.QuizQuestions
                 .Include(q => q.QuizAnswers)
-                .Where(q => q.TagCategoryId == c)
+                .Where(q => q.TagCategoryId == c && q.Mandatory == false)
                 .OrderBy(r => EF.Functions.Random())
                 .FirstOrDefaultAsync();
             

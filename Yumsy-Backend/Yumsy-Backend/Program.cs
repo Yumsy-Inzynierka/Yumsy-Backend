@@ -156,7 +156,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["Supabase:JwtSecret"])
+                Encoding.UTF8.GetBytes(configuration["Supabase:JwtSecret"]!)
             )
         };
     });
