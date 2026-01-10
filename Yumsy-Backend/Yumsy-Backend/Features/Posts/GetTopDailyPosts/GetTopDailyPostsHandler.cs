@@ -19,14 +19,11 @@ public class GetTopDailyPostsHandler
         CancellationToken cancellationToken)
     {
         var sw = Stopwatch.StartNew();
-        
-        var latestDate = await _dbContext.TopDailyPosts
-            .MaxAsync(tdp => tdp.Date, cancellationToken);
     
         var posts = await _dbContext.TopDailyPosts
             .AsNoTracking()
-            .Where(tdp => tdp.Date == latestDate)
-            .OrderBy(tdp => tdp.Rank)
+            .OrderByDescending(tdp => tdp.Date)
+            .ThenBy(tdp => tdp.Rank)
             .Select(tdp => new GetTopDailyPostResponse
             {
                 Id = tdp.PostId,
