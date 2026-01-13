@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Features.Tags.GetTopDailyTags;
 using Yumsy_Backend.Persistence.DbContext;
@@ -17,25 +18,26 @@ public class GetTopDailyPostsHandler
     public async Task<GetTopDailyPostsResponse> Handle(GetTopDailyPostsRequest request, 
         CancellationToken cancellationToken)
     {
-        var latestDate = await _dbContext.TopDailyPosts
-            .MaxAsync(tdp => tdp.Date, cancellationToken);
-        
+        var sw = Stopwatch.StartNew();
+    
         var posts = await _dbContext.TopDailyPosts
-            .Where(tdp => tdp.Date == latestDate)
-            .OrderBy(tdp => tdp.Rank)
+            .AsNoTracking()
+            .OrderByDescending(tdp => tdp.Date)
+            .ThenBy(tdp => tdp.Rank)
             .Select(tdp => new GetTopDailyPostResponse
             {
-                Id = tdp.Post.Id,
-                PostTitle = tdp.Post.Title,
-                UserId = tdp.Post.UserId,
-                Username = tdp.Post.CreatedBy.Username,
-                Image = tdp.Post.PostImages
-                    .Select(pi => pi.ImageUrl)
-                    .FirstOrDefault(),
-                TimePosted = tdp.Post.PostedDate,
-                IsLiked = tdp.Post.Likes.Any(l => l.UserId == request.UserId),
+                Id = tdp.PostId,
+                PostTitle = tdp.Title, 
+                UserId = tdp.UserId,
+                Username = tdp.Username,
+                Image = tdp.ImageUrl,
+                TimePosted = tdp.PostedDate,
+                IsLiked = _dbContext.Likes.Any(l => l.PostId == tdp.PostId && l.UserId == request.UserId),
             })
             .ToListAsync(cancellationToken);
+    
+        sw.Stop();
+        Console.WriteLine($"GetTopDailyPostsHandler.Handle {sw.ElapsedMilliseconds}ms");
         
         return new GetTopDailyPostsResponse
         {
