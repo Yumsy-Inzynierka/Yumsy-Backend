@@ -15,6 +15,34 @@ public class TopDailyPost
     public Guid PostId { get; set; }
     
     [Required]
+    [Column("title")]
+    public string Title { get; set; }
+    
+    [Required]
+    [Column("username")]
+    public string Username { get; set; }
+    
+    [Required]
+    [Column("user_id")]
+    public Guid UserId { get; set; }
+    
+    [Required]
+    [Column("image_url")]
+    public string ImageUrl { get; set; }
+    
+    [Required]
+    [Column("posted_date")]
+    public DateTime PostedDate { get; set; }
+    
+    [Required]
+    [Column("likes_count")]
+    public string LikesCount { get; set; }
+    
+    [Required]
+    [Column("comments_count")]
+    public string CommentsCount { get; set; }
+    
+    [Required]
     [Column("date")]
     public DateOnly Date { get; set; }
     
