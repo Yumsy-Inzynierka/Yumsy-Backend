@@ -14,38 +14,49 @@ public class GetShoppingListsHandler
 
     public async Task<GetShoppingListsResponse> Handle(GetShoppingListsRequest getShoppingListsRequest)
     {
-        
-        //do przemyślenia response
-        //do sprawdzenia i możliwe że do zmiany
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == getShoppingListsRequest.UserId);
-        if (user == null)
+        var userExists = await _dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == getShoppingListsRequest.UserId);
+
+        if (!userExists)
         {
-            throw new KeyNotFoundException($"User with ID: {getShoppingListsRequest.UserId} not found.");
+            throw new KeyNotFoundException(
+                $"User with ID: {getShoppingListsRequest.UserId} not found."
+            );
         }
-        
+
         var shoppingLists = await _dbContext.ShoppingLists
             .AsNoTracking()
-            .Where((u => u.UserId == getShoppingListsRequest.UserId))
-            .Include(si => si.CreatedFrom)
+            .Where(sl => sl.UserId == getShoppingListsRequest.UserId)
+            .Include(sl => sl.CreatedFrom)
             .ThenInclude(post => post.CreatedBy)
-            .Include(si => si.IngredientShoppingLists)
-            .ThenInclude(si => si.Ingredient)
+            .Include(sl => sl.IngredientShoppingLists)
+            .ThenInclude(isl => isl.Ingredient)
             .ToListAsync();
-        
-        return new GetShoppingListsResponse
-        {
-            ShoppingLists = shoppingLists.Select(sl => new GetShoppingListResponse{
+
+        var responseLists = shoppingLists.Select(sl => new GetShoppingListResponse
+            {
                 Id = sl.Id,
                 Name = sl.Title,
-                Username = sl.CreatedFrom.CreatedBy.Username,
-                PostId = sl.CreatedFrom.Id,
-                Ingredients = sl.IngredientShoppingLists.Select(isl => new GetShoppingListIngredientResponse
-                {
-                    Id = isl.Ingredient.Id,
-                    Name = isl.Ingredient.Name,
-                    Quantity = isl.Quantity
-                }).ToList()
+
+                PostId = sl.CreatedFrom?.Id,
+                Username = sl.CreatedFrom?.CreatedBy?.Username,
+
+                Ingredients = sl.IngredientShoppingLists
+                    .Where(isl => isl.Ingredient != null)
+                    .Select(isl => new GetShoppingListIngredientResponse
+                    {
+                        Id = isl.Ingredient!.Id,
+                        Name = isl.Ingredient.Name,
+                        Quantity = isl.Quantity
+                    })
+                    .ToList()
             })
+            .ToList();
+
+        return new GetShoppingListsResponse
+        {
+            ShoppingLists = responseLists
         };
     }
 }
