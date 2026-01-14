@@ -8,12 +8,12 @@ namespace Yumsy_Backend.Features.ShoppingLists.CreateShoppingList;
 [Authorize]
 [ApiController]
 [Route("api/shopping-lists")]
-public class AddShoppingListController : ControllerBase
+public class CreateShoppingListController : ControllerBase
 {
     private readonly CreateShoppingListHandler _createShoppingListHandler;
     private readonly IValidator<CreateShoppingListRequest> _validator;
     
-    public AddShoppingListController(CreateShoppingListHandler createShoppingListHandler, IValidator<CreateShoppingListRequest> validator)
+    public CreateShoppingListController(CreateShoppingListHandler createShoppingListHandler, IValidator<CreateShoppingListRequest> validator)
     {
         _createShoppingListHandler = createShoppingListHandler;
         _validator = validator;
