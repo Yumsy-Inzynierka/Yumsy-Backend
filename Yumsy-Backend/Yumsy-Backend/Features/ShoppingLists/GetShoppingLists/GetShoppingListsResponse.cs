@@ -11,7 +11,7 @@ public record GetShoppingListResponse
     public string Name { get; init; }
     public string Username { get; init; }
     public Guid? PostId { get; init; }
-    public IEnumerable<GetShoppingListIngredientResponse> Ingredients { get; init; }
+    public IEnumerable<GetShoppingListIngredientResponse> Ingredients { get; init; } = new List<GetShoppingListIngredientResponse>();
 }
 
 public record GetShoppingListIngredientResponse
