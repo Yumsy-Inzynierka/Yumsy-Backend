@@ -15,6 +15,7 @@ using Yumsy_Backend.Features.Posts.GetExplorePagePosts;
 using Yumsy_Backend.Features.Posts.GetPostDetails;
 using Yumsy_Backend.Features.Posts.GetHomeFeedForUser;
 using Yumsy_Backend.Features.Posts.GetNewPosts;
+using Yumsy_Backend.Features.Posts.GetPostsByTag;
 using Yumsy_Backend.Features.Posts.GetSavedPosts;
 using Yumsy_Backend.Features.Posts.GetTopDailyPosts;
 using Yumsy_Backend.Features.Posts.Likes.LikeComment;
@@ -96,6 +97,7 @@ builder.Services.AddScoped<GetTagsHandler>();
 builder.Services.AddScoped<SearchPostsHandler>();
 builder.Services.AddScoped<SearchUsersHandler>();
 builder.Services.AddScoped<DeletePostHandler>();
+builder.Services.AddScoped<GetPostsByTagHandler>();
 //to be removed:
 builder.Services.AddScoped<DropSeenPostHandler>();
 
@@ -138,6 +140,7 @@ builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 builder.Services.AddScoped<IValidator<SearchPostsRequest>, SearchPostsValidator>();
 builder.Services.AddScoped<IValidator<SearchUsersRequest>, SearchUsersValidator>();
 builder.Services.AddScoped<IValidator<DeletePostRequest>, DeletePostValidator>();
+builder.Services.AddScoped<IValidator<GetPostsByTagRequest>, GetPostsByTagValidator>();
 
 builder.Services.AddSingleton<IExceptionStatusCodeMapper, ExceptionStatusCodeMapper>();
 builder.Services.AddScoped<IAppEventLogger, AppEventLogger>();
