@@ -19,7 +19,7 @@ public class GetPostsByTagController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("/by-tag")]
+    [HttpGet("by-tag")]
     public async Task<ActionResult<GetPostsByTagResponse>> Handle([FromQuery] GetPostsByTagRequest getPostsByTagRequest,
         CancellationToken cancellationToken)
     {
