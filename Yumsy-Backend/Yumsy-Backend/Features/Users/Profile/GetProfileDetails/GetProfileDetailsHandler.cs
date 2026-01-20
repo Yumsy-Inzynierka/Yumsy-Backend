@@ -51,6 +51,7 @@ public class GetProfileDetailsHandler
             Bio = profile.Bio,
             ProfilePicture = profile.ProfilePicture,
             ProfilePosts = profile.Posts
+                .OrderByDescending(p => p.PostedDate)
                 .Select(p => new GetProfileDetailsPostsResponse
                 {
                     Id = p.Id,
