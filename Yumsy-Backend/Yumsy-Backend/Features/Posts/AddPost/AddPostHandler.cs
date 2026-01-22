@@ -52,7 +52,13 @@ public class AddPostHandler
                 {
                     TagId = t.Id
                 })
-                .ToList()
+                .ToList(),
+            
+            IngredientPosts = request.Body.Ingredients
+                .Select(i => new IngredientPost
+                {
+                    IngredientId = i.Id
+                }).ToList()
         };
         
         await using var transaction =
