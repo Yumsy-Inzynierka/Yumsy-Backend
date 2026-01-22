@@ -32,6 +32,7 @@ public class GetShoppingListsHandler
             .ThenInclude(post => post.CreatedBy)
             .Include(sl => sl.IngredientShoppingLists)
             .ThenInclude(isl => isl.Ingredient)
+            .OrderByDescending(sl => sl.Id)
             .ToListAsync();
 
         var responseLists = shoppingLists.Select(sl => new GetShoppingListResponse

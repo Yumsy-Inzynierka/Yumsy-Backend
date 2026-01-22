@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Yumsy_Backend.Persistence.DbContext;
 using Yumsy_Backend.Persistence.Models;
+using UUIDNext;
 
 namespace Yumsy_Backend.Features.ShoppingLists.CreateShoppingList;
 
@@ -35,7 +36,7 @@ public class CreateShoppingListHandler
 
         var shoppingList = new ShoppingList
         {
-            Id = Guid.NewGuid(),
+            Id = Uuid.NewDatabaseFriendly(Database.PostgreSql),
             Title = request.Body.Title,
             UserId = request.UserId,
             IngredientShoppingLists = request.Body.Ingredients
