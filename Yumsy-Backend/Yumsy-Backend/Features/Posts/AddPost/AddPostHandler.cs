@@ -57,7 +57,8 @@ public class AddPostHandler
             IngredientPosts = request.Body.Ingredients
                 .Select(i => new IngredientPost
                 {
-                    IngredientId = i.Id
+                    IngredientId = i.Id,
+                    Quantity = i.Quantity
                 }).ToList()
         };
         
