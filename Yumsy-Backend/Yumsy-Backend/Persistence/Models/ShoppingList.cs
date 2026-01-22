@@ -21,7 +21,7 @@ public class ShoppingList
     public Guid? CreatedFromId { get; set; }
     
     [ForeignKey(nameof(CreatedFromId))]
-    public Post CreatedFrom { get; set; }
+    public Post? CreatedFrom { get; set; }
 
     public ICollection<IngredientShoppingList> IngredientShoppingLists { get; set; } = new HashSet<IngredientShoppingList>();
     
