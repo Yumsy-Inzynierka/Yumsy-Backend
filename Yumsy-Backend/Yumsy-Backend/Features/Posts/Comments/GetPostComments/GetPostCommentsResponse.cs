@@ -2,6 +2,7 @@ namespace Yumsy_Backend.Features.Posts.Comments.GetPostComments;
 
 public record GetPostCommentsResponse
 {
+    public string? UserProfilePictureUrl { get; init; }
     public List<GetPostCommentResponse> Comments { get; init; } = new();
 }
 

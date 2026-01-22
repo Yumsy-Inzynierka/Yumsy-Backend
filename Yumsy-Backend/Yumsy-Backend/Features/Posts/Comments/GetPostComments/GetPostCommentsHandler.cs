@@ -39,6 +39,10 @@ public class GetPostCommentsHandler
             .Select(l => l.CommentId)
             .ToListAsync(cancellationToken);
 
+        var userProfilePictureUrl = await _dbContext.Users
+            .Where(u => u.Id == request.UserId)
+            .Select(u => u.ProfilePicture).FirstOrDefaultAsync();
+        
         var responseComments = comments.Select(c => new GetPostCommentResponse
         {
             Id = c.Id,
@@ -70,6 +74,7 @@ public class GetPostCommentsHandler
 
         return new GetPostCommentsResponse
         {
+            UserProfilePictureUrl = userProfilePictureUrl,
             Comments = responseComments
         };
     }
